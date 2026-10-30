@@ -68,12 +68,14 @@ class Runner:
     def create_owner(self, last_name):
         r = self.post("/owners/new", self.owner_form(lastName=last_name))
         m = self.owner_id_from(r)
+        self.follow(r)  # consume el flash para no contaminar el caso siguiente
         if r.status_code != 302 or not m:
             raise RuntimeError(f"No se pudo preparar propietario {last_name}: {r.status_code}")
         return m
 
     def create_pet(self, owner_id, name, birth="2022-05-10", ptype="cat"):
         r = self.post(f"/owners/{owner_id}/pets/new", {"name": name, "birthDate": birth, "type": ptype})
+        self.follow(r)
         if r.status_code != 302:
             raise RuntimeError(f"No se pudo preparar mascota {name}: {r.status_code}")
         return self.pet_id(owner_id, name)
@@ -91,6 +93,30 @@ class Runner:
             if mname and mid and mname.group(1).strip() == name:
                 return int(mid.group(1))
         return None
+
+    @staticmethod
+    def field_error_msg(html_text, field):
+        """Texto del mensaje de error mostrado junto al campo, o None."""
+        import html as _h
+        m = re.search(rf'has-error[^>]*>\s*<label[^>]*for="{re.escape(field)}".*?<span class="help-inline">(.*?)</span>',
+                      html_text, re.S)
+        return _h.unescape(m.group(1).strip()) if m else None
+
+    @staticmethod
+    def flash(html_text):
+        """Mensaje de exito (flash) mostrado en la pagina de detalle, o None."""
+        m = re.search(r'id="success-message">\s*<span>(.*?)</span>', html_text)
+        return m.group(1).strip() if m else None
+
+    def follow(self, resp):
+        """Sigue de inmediato una redireccion 302 (consume el mensaje flash)."""
+        loc = resp.headers.get("Location", "")
+        if resp.status_code != 302 or not loc:
+            return None
+        path = re.sub(r";jsessionid=[^/?#]*", "", loc)
+        if path.startswith("http"):
+            path = "/" + path.split("/", 3)[3]
+        return self.get(path)
 
     @staticmethod
     def has_field_error(html, field):

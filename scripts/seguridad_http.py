@@ -176,7 +176,8 @@ def s08():
              "Se rechaza con un error controlado; la mascota de B no cambia; no se crean registros",
              f"GET HTTP {g.status_code}; POST HTTP {r.status_code}; mascota B modificada={b_changed}; "
              f"A recibio mascota={a_gained}; traza={trace}",
-             (not b_changed) and (not a_gained) and r.status_code >= 400 and not trace, ev)
+             # Revision 30/10/2026: el esperado exige un rechazo controlado; un 5xx no lo es.
+             (not b_changed) and (not a_gained) and 400 <= r.status_code < 500 and g.status_code < 500 and not trace, ev)
 
 
 # S09 Recurso inexistente y divulgacion de informacion

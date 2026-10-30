@@ -1,0 +1,10 @@
+GET http://localhost:8080/owners?lastName=FgSXYJY
+
+HTTP 302
+Location: http://localhost:8080/owners/181
+Content-Language: en
+Content-Length: 0
+Date: Fri, 30 Oct 2026 08:27:29 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+

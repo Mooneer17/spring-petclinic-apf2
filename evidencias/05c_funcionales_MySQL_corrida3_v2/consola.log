@@ -1,0 +1,32 @@
+[OK ] F01 Registro de propietario con datos válidos -> HTTP 302, id=179; mensaje='New Owner Created'; datos=sí
+[OK ] F02 Registro rechazado: teléfono de 9 dígitos -> HTTP 200; mensaje en telephone='Telephone must be a 10-digit number'; no guardado=sí
+[OK ] F03 Registro rechazado: teléfono de 11 dígitos -> HTTP 200; mensaje en telephone='Telephone must be a 10-digit number'; no guardado=sí
+[OK ] F04 Registro rechazado: teléfono con letras -> HTTP 200; mensaje en telephone='Telephone must be a 10-digit number'; no guardado=sí
+[OK ] F05 Registro rechazado: dirección vacía y ciudad en blanco -> HTTP 200; mensaje en address='must not be blank'; mensaje en city='must not be blank'; no guardado=sí
+[OK ] F06 Límite de longitud del apellido (30/31) -> 30 -> HTTP 302; 31 -> HTTP 200, mensaje en lastName='size must be between 0 and 30'
+[OK ] F07 Búsqueda con coincidencia única -> HTTP 302 -> /owners/181; apellido en detalle=sí
+[OK ] F08 Búsqueda por prefijo con varias coincidencias -> HTTP 200; ambos listados=sí
+[OK ] F09 Búsqueda sin resultados -> HTTP 200; mensaje presente=sí
+[OK ] F10 Búsqueda con espacios al inicio y al final -> HTTP 302 -> /owners/184
+[OK ] F11 Búsqueda con apellido vacío (todos) -> HTTP 200; listado paginado=sí
+[OK ] F12 Actualización válida de teléfono y ciudad -> HTTP 302 -> /owners/185; mensaje='Owner Values Updated'; persistido=sí
+[OK ] F13 Actualización rechazada: teléfono de 5 dígitos -> HTTP 200; mensaje en telephone='Telephone must be a 10-digit number'; teléfono conservado=sí
+[OK ] F14 Actualización rechazada: nombre vacío -> HTTP 200; mensaje en firstName='must not be blank'; nombre conservado=sí
+[OK ] F15 Registro de mascota válida -> HTTP 302; mensaje='New Pet has been Added'; petId=261; datos=sí
+[OK ] F16 Registro rechazado: nombre vacío -> HTTP 200; mensaje en name='is required'; sin mascota registrada=sí
+[OK ] F17 Registro rechazado: nombre duplicado (distinta capitalización) -> HTTP 200; mensaje en name='is already in use'; mascotas con ese nombre=1
+[OK ] F18 Registro rechazado: nacimiento futuro (mañana) -> HTTP 200; mensaje en birthDate='invalid date'; sin mascota registrada=sí
+[OK ] F19 Límite: fecha de nacimiento igual a hoy -> HTTP 302; mensaje='New Pet has been Added'
+[OK ] F20 Límite de longitud del nombre de mascota (30/31) -> 30 -> HTTP 302; 31 -> HTTP 200, mensaje en name='Name must be no more than 30 characters'
+[OK ] F21 Registro rechazado: sin fecha de nacimiento -> HTTP 200; mensaje en birthDate='is required'; sin mascota registrada=sí
+[OK ] F22 Edición válida de nombre, tipo y fecha -> HTTP 302; mensaje='Pet details has been edited'; mismo id=sí; datos=sí
+[OK ] F23 Edición rechazada: renombrar a un nombre ya usado -> HTTP 200; mensaje en name='is already in use'; Max sin cambios=sí
+[OK ] F24 Edición rechazada: fecha de nacimiento futura -> HTTP 200; mensaje en birthDate='invalid date'; fecha conservada=sí
+[OK ] F25 Edición rechazada: nombre vacío (persistencia, complementa CP05) -> HTTP 200; mensaje en name='is required'; nombre conservado=sí
+[OK ] F26 Registro de visita válida (mañana) -> HTTP 302; mensaje='Your visit has been booked'; visita visible=sí
+[OK ] F27 Visita rechazada: fecha de hoy (límite) -> HTTP 200; mensaje en date='Visit date must be in the future'; no registrada=sí
+[OK ] F28 Visita rechazada: fecha pasada -> HTTP 200; mensaje en date='Visit date must be in the future'; no registrada=sí
+[OK ] F29 Visita rechazada: descripción vacía -> HTTP 200; mensaje en description='must not be blank'; no registrada=sí
+[OK ] F30 Visita rechazada: descripción solo con espacios -> HTTP 200; mensaje en description='must not be blank'; no registrada=sí
+[OK ] F31 Límite de longitud de la descripción (255/256) -> 255 -> HTTP 302, mensaje='Your visit has been booked'; 256 -> HTTP 200, mensaje en description='size must be between 0 and 255'
+{"Aprobado": 31, "Fallido": 0, "Bloqueado": 0, "Observacion": 0, "Total": 31}

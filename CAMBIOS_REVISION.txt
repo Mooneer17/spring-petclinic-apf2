@@ -1,0 +1,99 @@
+APF2 - REVISIÓN DEL 30/10/2026: CAMBIOS REALIZADOS Y PENDIENTES
+================================================================
+
+FUENTES DISPONIBLES EN ESTA REVISIÓN
+- Disponibles y usadas: informe (PDF/DOCX), presentación (PPTX), matriz XLSX original,
+  scripts, código de pruebas, evidencias de todas las ejecuciones del 29/10/2026,
+  rúbrica APF2 (idéntica a la del paquete inicial) y materiales de clase S07 a S11.
+- La matriz NO es reconstruida: es la generada a partir de las ejecuciones; en esta
+  revisión se le añadieron campos documentales.
+- Distinción usada en todos los documentos:
+  * Resultados descritos y respaldados por evidencia conservada (ejecuciones del 29/10).
+  * Reclasificaciones documentales (sin volver a ejecutar): S08.
+  * Ejecución nueva en esta revisión: corrida 3 de F01-F31 (30/10/2026, 03:27, MySQL).
+
+1. S08 Y MÉTRICAS
+- S08: Aprobado -> Fallido. Reclasificación documental, sin nueva ejecución.
+  Motivo: el esperado exige un rechazo con error controlado; el obtenido es HTTP 500 por
+  NullPointerException. La integridad de la mascota se cumple, pero el manejo del error no.
+  El esperado no se modificó. DEF-P01 sigue abierto.
+- S07: se mantiene Aprobado (se cumplen rechazo, ausencia de registro y ausencia de traza).
+- S09: se mantiene Aprobado (la aplicación detecta la condición, lanza una excepción
+  explícita y no expone trazas). El código 500 en lugar de 404 queda en OBS-02.
+  Interpretación alternativa documentada: si "error controlado" exige 4xx, S09 sería
+  fallido y los totales pasarían a 43 / 7 / 86,0 %.
+- Criterio automático de S08 en scripts/seguridad_http.py ajustado (exige 4xx, no 500).
+  El script ajustado no se volvió a ejecutar.
+- Totales verificados contra el conjunto completo:
+  51 casos | 44 aprobados | 6 fallidos | 1 observación | 0 bloqueados |
+  50 evaluables | 44/50 = 88,0 %.
+  Fallidos: S02, S08, S11, S12, S13, E01.
+- Actualizados en informe (7.2, 13, 16, 17, 17.6), PPT (portada, seguridad, incidencias,
+  métricas, revisión) y XLSX (fórmulas recalculadas, sin errores).
+
+2. DOCUMENTACIÓN DE CASOS
+- Cada caso tiene ahora: ID, requisito o control, objetivo, precondiciones, datos, pasos
+  numerados, esperado, obtenido, estado y evidencia (hoja Casos y Anexo F del informe).
+- Técnica de diseño por caso: valores límite (11 casos), partición de equivalencia (18),
+  escenario positivo (9); F26 aplica dos técnicas. No se usaron tablas de decisión ni
+  transición de estados, y no se declaran.
+- Origen de los pasos: documentado (procedimiento de los scripts y clases ejecutadas).
+  No se añadieron pasos propuestos.
+- Nueva corrida 3 de F01-F31 con el script v2: verifica código HTTP, mensaje exacto
+  (error de campo o de éxito) y persistencia. Resultado: 31/31 aprobados.
+  Las corridas 1 y 2 (script v1) se conservan; su limitación queda en INC-T03.
+- Campo "Responsable" añadido y marcado como pendiente (no consta en las fuentes).
+
+3. E01
+- No existe registro de sesión exploratoria (charter, timebox, bitácora de decisiones,
+  debrief). Se renombró a "prueba adicional de concurrencia" y se explicó el motivo.
+- Se conservan los hallazgos (mascotas desvinculadas, HTTP 500 en MySQL), la traza SQL
+  y las limitaciones. Se aclara que no es una prueba de estrés.
+
+4. CARGA
+- Sección 12 renombrada "Pruebas básicas de carga local". Se documentan operaciones y
+  pesos (40/40/10/10 %), VU (10 y 30), ramp-up (2 y 3 VU/s), duración sostenida (180 s),
+  ausencia de ramp-down, pausas (1-2 s), calentamiento (60 s), entorno, métricas,
+  umbrales del equipo (decisión académica) y una ejecución por escenario.
+- La baja del p95 con 30 VU se presenta como hipótesis no verificada.
+- Locust se mantiene; no se añadieron pruebas de estrés.
+
+5. HTTP, INTERFAZ Y REST
+- Se aclara que Petclinic usa formularios HTML, no una API REST con JSON ni microservicios.
+- Se distinguen solicitudes HTTP reales (F, S, E01), navegador automatizado (N01-N08) y
+  MockMvc (CP06). No hubo pruebas manuales y no se presentan como tales.
+
+6. SEGURIDAD
+- Presentada como análisis básico de vulnerabilidades en instancia local; no es pentest
+  ni auditoría.
+- Categorías: autenticación, autorización, integridad propietario-mascota, validación
+  de entradas y configuración. Sin cuentas ni roles: no hay pruebas de autorización.
+  S07 y S08 se describen como integridad, no como autorización.
+- Para cada hallazgo (DEF-P01, SEC-01 a SEC-04, OBS-01, OBS-02): evidencia, impacto,
+  severidad justificada, recomendación (no implementada) y estado (sección 13.5).
+
+7. ALCANCE Y CÓDIGO
+- No se modificó código de producción ni se cerraron defectos.
+- Referencias APA añadidas para los materiales de clase S07 a S11.
+
+ARCHIVOS MODIFICADOS
+- informe/10_Segundo_Avance_APF2.pdf y .docx (39 páginas)
+- presentacion/10Grupo_Segundo_Avance.pptx (17 diapositivas; nuevas: técnicas de diseño y
+  revisión del 30/10)
+- matriz/APF2_Matriz_Casos_Incidencias_Metricas.xlsx (nuevas columnas y hoja Historico_F_S)
+- scripts/funcionales_http.py (v2), scripts/funcionales_http_v1.py (conservado),
+  scripts/apf_common.py, scripts/seguridad_http.py (criterio de S08)
+- evidencias/05c_funcionales_MySQL_corrida3_v2/ (nueva)
+- GUIA_REPRODUCCION.md, PENDIENTES.md, este archivo
+
+PENDIENTES (no resueltos en esta revisión)
+- Responsable de ejecución y revisión de cada caso.
+- Prueba manual en navegador, si el docente la exige.
+- Confirmar con el docente la decisión sobre S09 (aprobado frente a fallido).
+- Repetir los escenarios de carga (al menos tres veces) y, si es posible, con el
+  generador en otra máquina.
+- E01 como sesión exploratoria solo si se ejecuta una sesión nueva con su registro.
+- Corregir DEF-P01, DEF-P02, DEF-P03 y SEC-01 a SEC-04 (fuera del alcance) y reejecutar
+  S08, E01 y S02, S11, S12, S13.
+- Probar herramientas/ejecutar_apf2.ps1 en Windows.
+- Cobertura parcial de RF01 (teléfono vacío) y RF03 (dirección o ciudad vacías).
