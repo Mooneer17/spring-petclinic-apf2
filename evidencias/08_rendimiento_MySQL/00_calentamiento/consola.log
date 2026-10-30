@@ -1,0 +1,31 @@
+[2026-10-29 19:18:41,576] vm/INFO/locust.main: Starting Locust 2.47.0
+[2026-10-29 19:18:41,578] vm/INFO/locust.main: Run time limit set to 60 seconds
+[2026-10-29 19:18:41,580] vm/INFO/locust.runners: Ramping to 10 users at a rate of 2.00 per second
+[2026-10-29 19:18:45,585] vm/INFO/locust.runners: All users spawned: {"Recepcionista": 10} (10 total users)
+[2026-10-29 19:19:41,578] vm/INFO/locust.main: --run-time limit reached, shutting down
+[2026-10-29 19:19:41,594] vm/INFO/locust.main: Shutting down (exit code 0)
+Type     Name                                                                          # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s
+--------|----------------------------------------------------------------------------|-------|-------------|-------|-------|-------|-------|--------|-----------
+GET      GET /owners/[id]                                                                 140     0(0.00%) |     22      13      74     21 |    2.35        0.00
+GET      GET /owners/[id] (preparacion)                                                    10     0(0.00%) |     63      33     112     54 |    0.17        0.00
+GET      GET /owners/find                                                                  40     0(0.00%) |     12       7      50     10 |    0.67        0.00
+GET      GET /owners?lastName                                                             152     0(0.00%) |     13       5     118     12 |    2.55        0.00
+POST     POST /owners/new (preparacion)                                                    10     0(0.00%) |     77      18     288     29 |    0.17        0.00
+POST     POST /pets/new (preparacion)                                                      10     0(0.00%) |     88      38     210     68 |    0.17        0.00
+POST     POST /visits/new                                                                  48     0(0.00%) |     27      16      66     25 |    0.80        0.00
+--------|----------------------------------------------------------------------------|-------|-------------|-------|-------|-------|-------|--------|-----------
+         Aggregated                                                                       410     0(0.00%) |     22       5     288     18 |    6.88        0.00
+
+Response time percentiles (approximated)
+Type     Name                                                                                  50%    66%    75%    80%    90%    95%    98%    99%  99.9% 99.99%   100% # reqs
+--------|--------------------------------------------------------------------------------|--------|------|------|------|------|------|------|------|------|------|------|------
+GET      GET /owners/[id]                                                                       21     23     26     27     30     35     45     47     74     74     74    140
+GET      GET /owners/[id] (preparacion)                                                         54     63     67    110    110    110    110    110    110    110    110     10
+GET      GET /owners/find                                                                       10     11     12     14     19     36     51     51     51     51     51     40
+GET      GET /owners?lastName                                                                   12     13     15     15     17     21     27     89    120    120    120    152
+POST     POST /owners/new (preparacion)                                                         29     31     32    270    290    290    290    290    290    290    290     10
+POST     POST /pets/new (preparacion)                                                           68     69     70    210    210    210    210    210    210    210    210     10
+POST     POST /visits/new                                                                       25     27     29     30     34     58     66     66     66     66     66     48
+--------|--------------------------------------------------------------------------------|--------|------|------|------|------|------|------|------|------|------|------|------
+         Aggregated                                                                             18     21     25     27     33     53     74    120    290    290    290    410
+

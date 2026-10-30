@@ -1,0 +1,17 @@
+AMBIENTE DE EJECUCION APF2 (Claude, contenedor Linux)
+Fecha: 2026-10-29T19:27:30-05:00
+SO: Ubuntu 24.04.5 LTS / kernel 6.18.44-fc-v185
+CPU: 2 vCPU  Intel(R) Xeon(R) Processor @ 2.10GHz
+Memoria: 7.8Gi
+Java: openjdk version "21.0.12.1" 2026-08-18
+Java: OpenJDK Runtime Environment (build 21.0.12.1+1-1-24.04.4-Ubuntu)
+Java: OpenJDK 64-Bit Server VM (build 21.0.12.1+1-1-24.04.4-Ubuntu, mixed mode, sharing)
+Maven Wrapper: Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)
+MySQL: /usr/sbin/mysqld  Ver 8.0.46-0ubuntu0.24.04.4 for Linux on x86_64 ((Ubuntu))
+H2: 2.4.240 (dependencia del proyecto)
+Python: Python 3.13.18
+Locust: locust 2.47.0 from /usr/local/lib/python3.13/site-packages/locust (Python 3.13.18)
+Playwright (Python): Version: 1.63.0
+Commit base: 500158f732419217507c7656904b8e6aa1bcc0d6
+JAR evaluado: spring-petclinic-4.0.0-SNAPSHOT.jar sha256=b854bc9b2da7909b1a8c1e717dbb39e3dfbcbab72714d73a43c7ce4a0478144d
+Zona horaria de ejecucion: America/Lima

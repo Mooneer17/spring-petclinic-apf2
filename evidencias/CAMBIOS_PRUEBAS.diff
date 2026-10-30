@@ -1,0 +1,94 @@
+diff -ru -N avance2/Avance_2_Para_Claude/proyecto/src/test/java/org/springframework/samples/petclinic/owner/AvanceIntegrationTests.java out/APF2_Entregable/proyecto/src/test/java/org/springframework/samples/petclinic/owner/AvanceIntegrationTests.java
+--- avance2/Avance_2_Para_Claude/proyecto/src/test/java/org/springframework/samples/petclinic/owner/AvanceIntegrationTests.java	2026-10-29 18:50:42.000000000 -0500
++++ out/APF2_Entregable/proyecto/src/test/java/org/springframework/samples/petclinic/owner/AvanceIntegrationTests.java	2026-10-29 19:40:15.475774044 -0500
+@@ -41,6 +41,15 @@
+ 		return o;
+ 	}
+ 
++	/**
++	 * Prepara una mascota persistida para el propietario indicado.
++	 * <p>
++	 * Correccion INC-T01 (instrumento de prueba): la version inicial devolvia la
++	 * instancia transitoria {@code p}. Como el propietario ya existe,
++	 * {@code saveAndFlush} ejecuta {@code merge} y la cascada persiste una copia
++	 * gestionada; {@code p} conserva {@code id == null}. Ahora la mascota se recupera
++	 * desde la base de datos, de modo que su identificador es el realmente asignado.
++	 */
+ 	private Pet pet(Owner o) {
+ 		Pet p = new Pet();
+ 		p.setName("LunaAPF");
+@@ -48,7 +57,11 @@
+ 		p.setType(types.findPetTypes().iterator().next());
+ 		o.addPet(p);
+ 		owners.saveAndFlush(o);
+-		return p;
++		em.clear();
++		Pet persisted = owners.findById(o.getId()).orElseThrow().getPet("LunaAPF", true);
++		assertThat(persisted).as("fixture: mascota persistida").isNotNull();
++		assertThat(persisted.getId()).as("fixture: id asignado por la base de datos").isNotNull();
++		return persisted;
+ 	}
+ 
+ 	@Test
+diff -ru -N avance2/Avance_2_Para_Claude/proyecto/src/test/java/org/springframework/samples/petclinic/owner/DiagnosticoFixtureTests.java out/APF2_Entregable/proyecto/src/test/java/org/springframework/samples/petclinic/owner/DiagnosticoFixtureTests.java
+--- avance2/Avance_2_Para_Claude/proyecto/src/test/java/org/springframework/samples/petclinic/owner/DiagnosticoFixtureTests.java	1969-12-31 19:00:00.000000000 -0500
++++ out/APF2_Entregable/proyecto/src/test/java/org/springframework/samples/petclinic/owner/DiagnosticoFixtureTests.java	2026-10-29 19:40:15.476558073 -0500
+@@ -0,0 +1,58 @@
++package org.springframework.samples.petclinic.owner;
++
++import java.time.LocalDate;
++
++import jakarta.persistence.EntityManager;
++import org.junit.jupiter.api.Test;
++import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.boot.test.context.SpringBootTest;
++import org.springframework.transaction.annotation.Transactional;
++
++import static org.assertj.core.api.Assertions.assertThat;
++
++/**
++ * Diagnostico de INC-T01. No es un caso del APF; documenta el mecanismo que provoco las
++ * fallas iniciales de CP04 y CP06 replicando el helper pet() original.
++ */
++@SpringBootTest(properties = "spring.docker.compose.enabled=false")
++@Transactional
++class DiagnosticoFixtureTests {
++
++	@Autowired
++	OwnerRepository owners;
++
++	@Autowired
++	PetTypeRepository types;
++
++	@Autowired
++	EntityManager em;
++
++	@Test
++	void DIAG01_originalHelperReturnsTransientPetWithoutId() {
++		Owner o = new Owner();
++		o.setFirstName("Ana");
++		o.setLastName("DiagAPF");
++		o.setAddress("Av. Central 123");
++		o.setCity("Lima");
++		o.setTelephone("9876543210");
++		owners.saveAndFlush(o);
++
++		Pet p = new Pet();
++		p.setName("LunaDiag");
++		p.setBirthDate(LocalDate.of(2022, 5, 10));
++		p.setType(types.findPetTypes().iterator().next());
++		o.addPet(p);
++		Owner returned = owners.saveAndFlush(o);
++
++		// La instancia creada por el test no recibe ID: la cascada MERGE persistio otra.
++		assertThat(p.getId()).isNull();
++		assertThat(em.contains(p)).isFalse();
++
++		// La mascota si existe en la base de datos con ID asignado.
++		em.clear();
++		Pet stored = owners.findById(returned.getId()).orElseThrow().getPet("LunaDiag", true);
++		assertThat(stored).isNotNull();
++		assertThat(stored.getId()).isNotNull();
++	}
++
++}

@@ -1,0 +1,71 @@
+2026-10-30T00:17:48.734105Z conn=45 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:48.737514Z conn=48 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:48.737891Z conn=45 update pets set owner_id=115 where id=175
+2026-10-30T00:17:48.740611Z conn=48 update pets set owner_id=115 where id=176
+2026-10-30T00:17:48.751732Z conn=47 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:48.753452Z conn=46 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:48.754722Z conn=47 update pets set owner_id=null where owner_id=115 and id=175
+2026-10-30T00:17:48.756953Z conn=47 update pets set owner_id=115 where id=177
+2026-10-30T00:17:48.757292Z conn=46 update pets set owner_id=null where owner_id=115 and id=175
+2026-10-30T00:17:48.762523Z conn=46 update pets set owner_id=115 where id=178
+2026-10-30T00:17:48.814211Z conn=48 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:48.818967Z conn=46 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:48.819513Z conn=45 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:48.819733Z conn=47 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:48.820791Z conn=48 update pets set owner_id=116 where id=179
+2026-10-30T00:17:48.821853Z conn=46 update pets set owner_id=116 where id=180
+2026-10-30T00:17:48.822554Z conn=47 update pets set owner_id=116 where id=182
+2026-10-30T00:17:48.825958Z conn=45 update pets set owner_id=116 where id=181
+2026-10-30T00:17:48.883806Z conn=46 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:48.885338Z conn=46 update pets set owner_id=117 where id=183
+2026-10-30T00:17:48.888318Z conn=45 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:48.890223Z conn=47 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:48.890602Z conn=48 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:48.893237Z conn=45 update pets set owner_id=117 where id=184
+2026-10-30T00:17:48.895004Z conn=48 update pets set owner_id=117 where id=186
+2026-10-30T00:17:48.896244Z conn=47 update pets set owner_id=117 where id=185
+2026-10-30T00:17:48.955612Z conn=45 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:48.960248Z conn=45 update pets set owner_id=118 where id=187
+2026-10-30T00:17:48.975188Z conn=46 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:48.975208Z conn=48 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:48.976606Z conn=47 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:48.978379Z conn=46 update pets set owner_id=null where owner_id=118 and id=187
+2026-10-30T00:17:48.979026Z conn=48 update pets set owner_id=null where owner_id=118 and id=187
+2026-10-30T00:17:48.979151Z conn=46 update pets set owner_id=118 where id=188
+2026-10-30T00:17:48.980360Z conn=47 update pets set owner_id=null where owner_id=118 and id=187
+2026-10-30T00:17:48.984806Z conn=48 update pets set owner_id=118 where id=189
+2026-10-30T00:17:48.990433Z conn=47 update pets set owner_id=118 where id=190
+2026-10-30T00:17:49.071554Z conn=45 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:49.072205Z conn=47 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:49.074090Z conn=45 update pets set owner_id=119 where id=191
+2026-10-30T00:17:49.076039Z conn=46 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:49.076177Z conn=47 update pets set owner_id=119 where id=192
+2026-10-30T00:17:49.084663Z conn=46 update pets set owner_id=119 where id=193
+2026-10-30T00:17:49.089491Z conn=48 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:49.093564Z conn=48 update pets set owner_id=119 where id=194
+2026-10-30T00:17:49.171238Z conn=45 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:49.172761Z conn=45 update pets set owner_id=120 where id=195
+2026-10-30T00:17:49.181163Z conn=47 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:49.183089Z conn=48 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:49.186862Z conn=46 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:49.188282Z conn=48 update pets set owner_id=null where owner_id=120 and id=195
+2026-10-30T00:17:49.189082Z conn=47 update pets set owner_id=120 where id=196
+2026-10-30T00:17:49.190678Z conn=48 update pets set owner_id=120 where id=197
+2026-10-30T00:17:49.191345Z conn=46 update pets set owner_id=null where owner_id=120 and id=195
+2026-10-30T00:17:49.197198Z conn=46 update pets set owner_id=120 where id=198
+2026-10-30T00:17:49.258249Z conn=48 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:49.259683Z conn=48 update pets set owner_id=121 where id=199
+2026-10-30T00:17:49.261564Z conn=45 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:49.263511Z conn=46 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:49.265330Z conn=45 update pets set owner_id=121 where id=200
+2026-10-30T00:17:49.266413Z conn=47 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:49.266492Z conn=46 update pets set owner_id=121 where id=201
+2026-10-30T00:17:49.267560Z conn=47 update pets set owner_id=121 where id=202
+2026-10-30T00:17:49.351808Z conn=47 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:49.353273Z conn=47 update pets set owner_id=122 where id=203
+2026-10-30T00:17:49.355210Z conn=45 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:49.356440Z conn=45 update pets set owner_id=122 where id=204
+2026-10-30T00:17:49.356962Z conn=48 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:49.358185Z conn=48 update pets set owner_id=122 where id=205
+2026-10-30T00:17:49.359254Z conn=46 insert into pets (birth_date,name,type_id) values ('2022-05-10','Gemela',1)
+2026-10-30T00:17:49.362810Z conn=46 update pets set owner_id=122 where id=206

@@ -1,0 +1,92 @@
+{
+  "bd": "MySQL traza",
+  "propietarios": 8,
+  "solicitudes_por_propietario": 4,
+  "conteo_respuestas": {
+    "302": 11,
+    "500": 21
+  },
+  "propietarios_con_mas_de_una": 0,
+  "detalle": [
+    {
+      "owner": 115,
+      "respuestas": [
+        "302",
+        "500",
+        "302",
+        "500"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 116,
+      "respuestas": [
+        "500",
+        "500",
+        "302",
+        "500"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 117,
+      "respuestas": [
+        "500",
+        "302",
+        "500",
+        "500"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 118,
+      "respuestas": [
+        "302",
+        "500",
+        "302",
+        "500"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 119,
+      "respuestas": [
+        "302",
+        "500",
+        "500",
+        "500"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 120,
+      "respuestas": [
+        "302",
+        "500",
+        "500",
+        "302"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 121,
+      "respuestas": [
+        "500",
+        "500",
+        "302",
+        "500"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 122,
+      "respuestas": [
+        "500",
+        "500",
+        "302",
+        "500"
+      ],
+      "mascotas_guardadas": 1
+    }
+  ]
+}

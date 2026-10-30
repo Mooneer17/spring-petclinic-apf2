@@ -1,0 +1,12 @@
+POST http://localhost:8080/owners/new
+BODY: firstName=Ana&lastName=SnBDHIY&address=Av.+Central+123&city=Lima&telephone=9876543210
+
+HTTP 302
+Set-Cookie: JSESSIONID=2A00A6B38ACE349217D6C62331284D3C; Path=/; HttpOnly
+Location: http://localhost:8080/owners/81;jsessionid=2A00A6B38ACE349217D6C62331284D3C
+Content-Language: en
+Content-Length: 0
+Date: Fri, 30 Oct 2026 00:14:04 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+

@@ -1,0 +1,11 @@
+POST http://localhost:8080/owners/62/pets/38/edit
+BODY: name=Lunita&birthDate=2021-03-15&type=dog
+
+HTTP 302
+Location: http://localhost:8080/owners/62
+Content-Language: en
+Content-Length: 0
+Date: Fri, 30 Oct 2026 00:13:57 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+

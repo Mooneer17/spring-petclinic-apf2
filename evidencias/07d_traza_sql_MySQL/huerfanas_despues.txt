@@ -1,0 +1,13 @@
+id	name	owner_id
+79	Gemela	NULL
+83	Gemela	NULL
+91	Gemela	NULL
+95	Gemela	NULL
+123	Gemela	NULL
+142	Gemela	NULL
+145	Gemela	NULL
+161	Gemela	NULL
+165	Gemela	NULL
+175	Gemela	NULL
+187	Gemela	NULL
+195	Gemela	NULL

@@ -1,0 +1,10 @@
+GET http://localhost:8080/login
+
+HTTP 404
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Fri, 30 Oct 2026 00:14:03 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+
+{"timestamp":"2026-10-30T00:14:03.883Z","status":404,"error":"Not Found","path":"/login"}

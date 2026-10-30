@@ -1,0 +1,14 @@
+[Observacion] S01 Verificacion de autenticacion existente -> /=200; /owners/find=200; /owners?lastName==200; /owners/1=200; /owners/1/edit=200; /vets.html=200; /owners/new=200; /login=404
+[FAIL] S02 Exposicion de endpoints de administracion (Actuator) -> /actuator=200; /actuator/env=200; /actuator/configprops=200; /actuator/beans=200; /actuator/mappings=200; /actuator/heapdump(HEAD)=404
+[OK ] S03 XSS almacenado en direccion y ciudad -> etiqueta sin escapar=False; escapada=True
+[OK ] S04 Inyeccion SQL en lastName -> [' OR '1'='1] HTTP 200 not_found=True; [x%' OR 1=1 --] HTTP 200 not_found=True; [" ; DROP TABLE owners; --] HTTP 200 not_found=True; tabla owners operativa=True
+[OK ] S05 Asignacion masiva: id=1 enviado al crear propietario -> HTTP 302; nuevo id=73; propietario 1 sin cambios=True
+[OK ] S06 Manipulacion del id en la actualizacion del propietario -> HTTP 302 -> http://localhost:8080/owners/74; B modificado=False; A modificado=True
+[OK ] S07 Visita a una mascota que no pertenece al propietario de la URL -> GET HTTP 500; POST HTTP 500; visita registrada=False; traza=False
+[OK ] S08 Edicion de una mascota que pertenece a otro propietario -> GET HTTP 500; POST HTTP 500; mascota B modificada=False; A recibio mascota=False; traza=False
+[OK ] S09 Propietario inexistente y divulgacion en la pagina de error -> HTTP 500; traza=False; mensaje interno visible=False
+[OK ] S10 Entradas sobredimensionadas -> 256 -> 200/True; ciudad 81 -> 200/True; 20000 -> 200/True
+[FAIL] S11 Proteccion CSRF en formularios -> token en formulario=False; POST HTTP 302
+[FAIL] S12 Cabeceras de seguridad HTTP en la pagina principal -> X-Content-Type-Options=False; X-Frame-Options=False; Content-Security-Policy=False; Cache-Control=False
+[FAIL] S13 Identificador de sesion expuesto en la URL de redireccion -> HTTP 302; Location contiene jsessionid=True
+{"Aprobado": 8, "Fallido": 4, "Bloqueado": 0, "Observacion": 1, "Total": 13}

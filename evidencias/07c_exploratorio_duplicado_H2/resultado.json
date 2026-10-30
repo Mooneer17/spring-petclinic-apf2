@@ -1,0 +1,212 @@
+{
+  "bd": "H2 2.4.240 (modo archivo)",
+  "propietarios": 20,
+  "solicitudes_por_propietario": 4,
+  "conteo_respuestas": {
+    "302": 38,
+    "200_error_name": 42
+  },
+  "propietarios_con_mas_de_una": 0,
+  "detalle": [
+    {
+      "owner": 11,
+      "respuestas": [
+        "302",
+        "200_error_name",
+        "200_error_name",
+        "200_error_name"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 12,
+      "respuestas": [
+        "302",
+        "302",
+        "200_error_name",
+        "200_error_name"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 13,
+      "respuestas": [
+        "302",
+        "200_error_name",
+        "302",
+        "200_error_name"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 14,
+      "respuestas": [
+        "302",
+        "200_error_name",
+        "200_error_name",
+        "200_error_name"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 15,
+      "respuestas": [
+        "302",
+        "302",
+        "200_error_name",
+        "200_error_name"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 16,
+      "respuestas": [
+        "200_error_name",
+        "200_error_name",
+        "302",
+        "302"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 17,
+      "respuestas": [
+        "302",
+        "200_error_name",
+        "200_error_name",
+        "302"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 18,
+      "respuestas": [
+        "302",
+        "200_error_name",
+        "302",
+        "200_error_name"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 19,
+      "respuestas": [
+        "302",
+        "302",
+        "200_error_name",
+        "200_error_name"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 20,
+      "respuestas": [
+        "302",
+        "200_error_name",
+        "302",
+        "200_error_name"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 21,
+      "respuestas": [
+        "302",
+        "200_error_name",
+        "200_error_name",
+        "302"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 22,
+      "respuestas": [
+        "302",
+        "200_error_name",
+        "200_error_name",
+        "200_error_name"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 23,
+      "respuestas": [
+        "200_error_name",
+        "302",
+        "302",
+        "200_error_name"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 24,
+      "respuestas": [
+        "200_error_name",
+        "200_error_name",
+        "302",
+        "302"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 25,
+      "respuestas": [
+        "302",
+        "200_error_name",
+        "200_error_name",
+        "302"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 26,
+      "respuestas": [
+        "302",
+        "200_error_name",
+        "302",
+        "200_error_name"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 27,
+      "respuestas": [
+        "302",
+        "302",
+        "302",
+        "200_error_name"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 28,
+      "respuestas": [
+        "302",
+        "200_error_name",
+        "200_error_name",
+        "302"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 29,
+      "respuestas": [
+        "302",
+        "200_error_name",
+        "200_error_name",
+        "302"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 30,
+      "respuestas": [
+        "302",
+        "302",
+        "200_error_name",
+        "200_error_name"
+      ],
+      "mascotas_guardadas": 1
+    }
+  ]
+}

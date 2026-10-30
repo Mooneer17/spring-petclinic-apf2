@@ -1,0 +1,11 @@
+POST http://localhost:8080/owners/74/edit
+BODY: firstName=Ana&lastName=SaBDHIY&address=Av.+Central+123&city=Cusco&telephone=9876543210&id=75
+
+HTTP 302
+Location: http://localhost:8080/owners/74
+Content-Language: en
+Content-Length: 0
+Date: Fri, 30 Oct 2026 00:14:04 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+

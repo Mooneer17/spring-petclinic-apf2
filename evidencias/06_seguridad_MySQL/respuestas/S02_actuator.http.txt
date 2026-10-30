@@ -1,0 +1,10 @@
+GET http://localhost:8080/actuator
+
+HTTP 200
+Content-Type: application/vnd.spring-boot.actuator.v3+json
+Content-Length: 1751
+Date: Fri, 30 Oct 2026 00:14:03 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+
+{"_links":{"self":{"href":"http://localhost:8080/actuator","templated":false},"beans":{"href":"http://localhost:8080/actuator/beans","templated":false},"conditions":{"href":"http://localhost:8080/actuator/conditions","templated":false},"configprops":{"href":"http://localhost:8080/actuator/configprops","templated":false},"configprops-prefix":{"href":"http://localhost:8080/actuator/configprops/{prefix}","templated":true},"env":{"href":"http://localhost:8080/actuator/env","templated":false},"env-toMatch":{"href":"http://localhost:8080/actuator/env/{toMatch}","templated":true},"info":{"href":"http://localhost:8080/actuator/info","templated":false},"loggers":{"href":"http://localhost:8080/actuator/loggers","templated":false},"loggers-name":{"href":"http://localhost:8080/actuator/loggers/{name}","templated":true},"threaddump":{"href":"http://localhost:8080/actuator/threaddump","templated":false},"sbom":{"href":"http://localhost:8080/actuator/sbom","templated":false},"sbom-id":{"href":"http://localhost:8080/actuator/sbom/{id}","templated":true},"scheduledtasks":{"href":"http://localhost:8080/actuator/scheduledtasks","templated":false},"mappings":{"href":"http://localhost:8080/actuator/mappings","templated":false},"caches":{"href":"http://localhost:8080/actuator/caches","templated":false},"caches-cache":{"href":"http://localhost:8080/actuator/caches/{cache}","templated":true},"health":{"href":"http://localhost:8080/actuator/health","templated":false},"health-path":{"href":"http://localhost:8080/actuator/health/{*path}","templated":true},"metrics":{"href":"http://localhost:8080/actuator/metrics","templated":false},"metrics-requiredMetricName":{"href":"http://localhost:8080/actuator/metrics/{requiredMetricName}","templated":true}}}
