@@ -1,0 +1,10 @@
+GET http://localhost:8080/owners?lastName=FgUCHIY
+
+HTTP 302
+Location: http://localhost:8080/owners/48
+Content-Language: en
+Content-Length: 0
+Date: Fri, 30 Oct 2026 00:13:56 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+

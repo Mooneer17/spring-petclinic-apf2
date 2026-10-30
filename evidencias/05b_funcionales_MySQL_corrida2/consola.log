@@ -1,0 +1,32 @@
+[OK ] F01 Registro de propietario con datos validos -> HTTP 302 -> http://localhost:8080/owners/46; detalle con datos=True
+[OK ] F02 Registro rechazado: telefono de 9 digitos -> HTTP 200; error telephone=True; no guardado=True
+[OK ] F03 Registro rechazado: telefono de 11 digitos -> HTTP 200; error telephone=True; no guardado=True
+[OK ] F04 Registro rechazado: telefono con letras -> HTTP 200; error telephone=True; no guardado=True
+[OK ] F05 Registro rechazado: direccion vacia y ciudad en blanco -> HTTP 200; address=True; city=True
+[OK ] F06 Limite de longitud del apellido (30/31) -> 30 -> HTTP 302; 31 -> HTTP 200, error=True
+[OK ] F07 Busqueda con coincidencia unica -> HTTP 302 -> http://localhost:8080/owners/48
+[OK ] F08 Busqueda por prefijo con varias coincidencias -> HTTP 200; ambos listados=True
+[OK ] F09 Busqueda sin resultados -> HTTP 200; mensaje=True
+[OK ] F10 Busqueda con espacios al inicio y al final -> HTTP 302 -> http://localhost:8080/owners/51
+[OK ] F11 Busqueda con apellido vacio (todos) -> HTTP 200; listado paginado=True
+[OK ] F12 Actualizacion valida de telefono y ciudad -> HTTP 302 -> http://localhost:8080/owners/52; persistido=True
+[OK ] F13 Actualizacion rechazada: telefono de 5 digitos -> HTTP 200; error=True; sin cambios=True
+[OK ] F14 Actualizacion rechazada: nombre vacio -> HTTP 200; error=True; nombre conservado=True
+[OK ] F15 Registro de mascota valida -> HTTP 302; petId=34
+[OK ] F16 Registro rechazado: nombre vacio -> HTTP 200; error name=True
+[OK ] F17 Registro rechazado: nombre duplicado (distinta capitalizacion) -> HTTP 200; error=True; mascotas con ese nombre=1
+[OK ] F18 Registro rechazado: nacimiento futuro (manana) -> HTTP 200; error birthDate=True
+[OK ] F19 Limite: fecha de nacimiento igual a hoy -> HTTP 302
+[OK ] F20 Limite de longitud del nombre de mascota (30/31) -> 30 -> HTTP 302; 31 -> HTTP 200, error=True
+[OK ] F21 Registro rechazado: sin fecha de nacimiento -> HTTP 200; error birthDate=True
+[OK ] F22 Edicion valida de nombre, tipo y fecha -> HTTP 302; mismo id=True
+[OK ] F23 Edicion rechazada: renombrar a un nombre ya usado -> HTTP 200; error=True; Max sin cambios=True
+[OK ] F24 Edicion rechazada: fecha de nacimiento futura -> HTTP 200; error=True; fecha conservada=True
+[OK ] F25 Edicion rechazada: nombre vacio (persistencia, complementa CP05) -> HTTP 200; error=True; conservado=True
+[OK ] F26 Registro de visita valida (manana) -> HTTP 302; visita visible=True
+[OK ] F27 Visita rechazada: fecha de hoy (limite) -> HTTP 200; error date=True; no registrada=True
+[OK ] F28 Visita rechazada: fecha pasada -> HTTP 200; error date=True; no registrada=True
+[OK ] F29 Visita rechazada: descripcion vacia -> HTTP 200; error description=True; no registrada=True
+[OK ] F30 Visita rechazada: descripcion solo con espacios -> HTTP 200; error description=True; no registrada=True
+[OK ] F31 Limite de longitud de la descripcion (255/256) -> 255 -> HTTP 302; 256 -> HTTP 200, error=True
+{"Aprobado": 31, "Fallido": 0, "Bloqueado": 0, "Observacion": 0, "Total": 31}

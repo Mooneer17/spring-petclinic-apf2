@@ -1,0 +1,18 @@
+-------------------------------------------------------------------------------
+Test set: org.springframework.samples.petclinic.owner.AvanceIntegrationTests
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 13.44 s <<< FAILURE! -- in org.springframework.samples.petclinic.owner.AvanceIntegrationTests
+org.springframework.samples.petclinic.owner.AvanceIntegrationTests.CP06_registerVisitViaWebAndReload -- Time elapsed: 1.105 s <<< FAILURE!
+java.lang.AssertionError: Range for response status value 404 expected:<REDIRECTION> but was:<CLIENT_ERROR>
+	at org.springframework.test.util.AssertionErrors.fail(AssertionErrors.java:62)
+	at org.springframework.test.util.AssertionErrors.assertEquals(AssertionErrors.java:129)
+	at org.springframework.test.web.servlet.result.StatusResultMatchers.lambda$is3xxRedirection$0(StatusResultMatchers.java:88)
+	at org.springframework.test.web.servlet.MockMvc$1.andExpect(MockMvc.java:212)
+	at org.springframework.samples.petclinic.owner.AvanceIntegrationTests.CP06_registerVisitViaWebAndReload(AvanceIntegrationTests.java:100)
+
+org.springframework.samples.petclinic.owner.AvanceIntegrationTests.CP04_savePetWithCorrectOwner -- Time elapsed: 0.119 s <<< FAILURE!
+java.lang.AssertionError: 
+
+Expecting actual not to be null
+	at org.springframework.samples.petclinic.owner.AvanceIntegrationTests.CP04_savePetWithCorrectOwner(AvanceIntegrationTests.java:86)
+

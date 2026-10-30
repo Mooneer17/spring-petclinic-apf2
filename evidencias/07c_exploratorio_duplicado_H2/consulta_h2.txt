@@ -1,0 +1,6 @@
+HUERFANAS
+18
+(1 row, 20 ms)
+GEMELA_TOTAL
+38
+(1 row, 7 ms)

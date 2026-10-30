@@ -1,0 +1,11 @@
+POST http://localhost:8080/owners/40/pets/28/visits/new
+BODY: date=2026-10-30&description=Control+general
+
+HTTP 302
+Location: http://localhost:8080/owners/40
+Content-Language: en
+Content-Length: 0
+Date: Fri, 30 Oct 2026 00:13:23 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+

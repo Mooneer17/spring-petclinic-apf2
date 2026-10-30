@@ -1,0 +1,46 @@
+{
+  "fecha": "2026-10-29T19:26:24-05:00",
+  "apellido": "NavegadorESUGL",
+  "capturas": [
+    {
+      "captura": "N01_RF01_telefono_9_digitos_rechazado.png",
+      "url": "http://localhost:8080/owners/new",
+      "nota": "Formulario devuelto con error en telefono"
+    },
+    {
+      "captura": "N02_RF01_propietario_registrado.png",
+      "url": "http://localhost:8080/owners/173;jsessionid=E179954236D20F91B4B737D068CA4F8A",
+      "nota": "Detalle del propietario recien creado"
+    },
+    {
+      "captura": "N03_RF02_busqueda_por_apellido.png",
+      "url": "http://localhost:8080/owners/173",
+      "nota": "Busqueda con coincidencia unica redirige al detalle"
+    },
+    {
+      "captura": "N04_RF03_propietario_actualizado.png",
+      "url": "http://localhost:8080/owners/173",
+      "nota": "Telefono actualizado a 9123456780"
+    },
+    {
+      "captura": "N05_RF04_mascota_registrada.png",
+      "url": "http://localhost:8080/owners/173",
+      "nota": "Mascota Luna asociada al propietario"
+    },
+    {
+      "captura": "N06_RF05_fecha_futura_rechazada.png",
+      "url": "http://localhost:8080/owners/173/pets/257/edit",
+      "nota": "Error en fecha de nacimiento futura"
+    },
+    {
+      "captura": "N07_RF05_mascota_actualizada.png",
+      "url": "http://localhost:8080/owners/173",
+      "nota": "Mascota renombrada a Lunita, tipo dog"
+    },
+    {
+      "captura": "N08_RF06_visita_registrada.png",
+      "url": "http://localhost:8080/owners/173",
+      "nota": "Visita de manana registrada para la mascota"
+    }
+  ]
+}

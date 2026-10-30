@@ -1,0 +1,12 @@
+POST http://localhost:8080/owners/new
+BODY: firstName=Ana&lastName=FaKBHIY&address=Av.+Central+123&city=Lima&telephone=9876543210
+
+HTTP 302
+Set-Cookie: JSESSIONID=1B17EDC77748B809C7C7DA4AE380B65A; Path=/; HttpOnly
+Location: http://localhost:8080/owners/20;jsessionid=1B17EDC77748B809C7C7DA4AE380B65A
+Content-Language: en
+Content-Length: 0
+Date: Fri, 30 Oct 2026 00:13:20 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+
