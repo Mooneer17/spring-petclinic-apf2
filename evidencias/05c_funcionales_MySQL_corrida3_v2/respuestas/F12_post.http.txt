@@ -1,0 +1,11 @@
+POST http://localhost:8080/owners/185/edit
+BODY: firstName=Ana&lastName=FlSXYJY&address=Av.+Central+123&city=Arequipa&telephone=9123456780
+
+HTTP 302
+Location: http://localhost:8080/owners/185
+Content-Language: en
+Content-Length: 0
+Date: Fri, 30 Oct 2026 08:27:30 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+

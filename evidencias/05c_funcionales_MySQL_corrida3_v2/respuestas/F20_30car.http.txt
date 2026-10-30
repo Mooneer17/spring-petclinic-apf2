@@ -1,0 +1,11 @@
+POST http://localhost:8080/owners/193/pets/new
+BODY: name=NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN&birthDate=2022-05-10&type=dog
+
+HTTP 302
+Location: http://localhost:8080/owners/193
+Content-Language: en
+Content-Length: 0
+Date: Fri, 30 Oct 2026 08:27:31 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+
