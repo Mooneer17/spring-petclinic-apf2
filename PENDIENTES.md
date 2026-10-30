@@ -5,7 +5,7 @@ Lo que sigue NO está hecho o no fue verificado. No debe presentarse como termin
 ## Requiere acción del equipo
 1. **Responsables por caso.** Las fuentes recibidas no indican quién ejecutó o revisó cada caso. Registrarlo en la matriz (hoja Casos) y en la sección 8.4 del informe.
 2. **Prueba manual en navegador.** Los flujos se recorrieron con Chromium automatizado (Playwright). Si el docente exige una prueba manual, un integrante debe repetir N01-N08 a mano y guardar sus capturas.
-3. **Repositorio del equipo.** No existe un fork publicado. Publicarlo con `proyecto/`, `scripts/` y `evidencias/`, y añadir su URL al informe (secciones 8.2 y 20).
+3. **Acceso del docente al repositorio.** Publicado en https://github.com/Mooneer17/spring-petclinic-apf2. Si es privado, invitar al docente como colaborador.
 4. **Ejecución en Windows.** `herramientas/ejecutar_apf2.ps1` no se probó en Windows: el ambiente de ejecución fue Linux. El script `ejecutar_apf2.sh` sí se probó (acción `casos-mysql`, 7 de 7).
 5. **Revisión del texto.** Verificar que el título actualizado de la carátula sea aceptable para el docente.
 
