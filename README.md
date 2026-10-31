@@ -3,7 +3,7 @@
 Segundo avance del proyecto final del curso Pruebas de Software. Repositorio de evidencias, pruebas y scripts del Grupo 10.
 
 - Informe: [informe/10_Segundo_Avance_APF2.pdf](informe/10_Segundo_Avance_APF2.pdf) (editable: .docx)
-- Presentación para la defensa (40 diapositivas, con 10 de evidencia): [presentacion/APF2_Presentacion_Ampliada_v4.pptx](presentacion/APF2_Presentacion_Ampliada_v4.pptx). Versión anterior: [presentacion/10Grupo_Segundo_Avance.pptx](presentacion/10Grupo_Segundo_Avance.pptx)
+- Presentación para la defensa (51 diapositivas, con evidencias de cada tipo de prueba y conclusiones): [presentacion/APF2_Presentacion_APF2.pptx](presentacion/APF2_Presentacion_APF2.pptx). Versión anterior: [presentacion/10Grupo_Segundo_Avance.pptx](presentacion/10Grupo_Segundo_Avance.pptx)
 - Menú de demostración en vivo sobre MySQL: [demo/GUIA_DEMO_MYSQL.md](demo/GUIA_DEMO_MYSQL.md)
 - Ejecuciones de demostración del 30/10/2026: [nuevas_evidencias/](nuevas_evidencias/) (informe, sección 17.7)
 - Matriz de casos, incidencias y métricas: [matriz/APF2_Matriz_Casos_Incidencias_Metricas.xlsx](matriz/APF2_Matriz_Casos_Incidencias_Metricas.xlsx)
@@ -19,15 +19,15 @@ Spring Petclinic, commit `500158f732419217507c7656904b8e6aa1bcc0d6` (Spring Boot
 | Carpeta | Contenido |
 |---|---|
 | `informe/` | Informe APF2 en PDF y DOCX editable (carátula original, secciones 1 a 20) |
-| `presentacion/` | PPTX para la defensa: versión ampliada v4 (con evidencias de 10 pruebas) y versión anterior |
+| `presentacion/` | PPTX para la defensa (`APF2_Presentacion_APF2.pptx`) y versión anterior |
 | `matriz/` | XLSX original de las ejecuciones (no reconstruida): trazabilidad, 51 casos con objetivo, técnica y pasos, históricos, 15 incidencias, métricas con fórmulas y rendimiento |
 | `proyecto/` | Código oficial del commit más `AvanceUnitTests`, `AvanceIntegrationTests` (corregido) y `DiagnosticoFixtureTests` |
 | `scripts/` | Pruebas HTTP (funcionales v2 y v1, seguridad, E01), navegador, Locust y `ejecutar_apf2.sh` |
-| `herramientas/` | `ejecutar.ps1` original y `ejecutar_apf2.ps1` (Windows) con el JDK portátil verificado |
+| `herramientas/` | `ejecutar.ps1` original, `ejecutar_apf2.ps1` (Windows) con el JDK portátil verificado y `medir_arranque.ps1` (tiempo de arranque con MySQL) |
 | `evidencias/` | Logs, reportes y respuestas HTTP por ejecución (ver tabla del punto 4) |
 | `documentos_apf1/` | PDF y PPTX del primer avance, sin cambios |
 | `demo/` | Menú de demostración (`demo_mysql.ps1`), ejecutor de un caso (`demo_caso.py`) y guion (`GUIA_DEMO_MYSQL.md`) |
-| `nuevas_evidencias/` | Ejecuciones del 30/10/2026 con el menú: PC Windows (`*_DEMO_MySQL`) y entorno de prueba Linux (`20261030-1907_Linux_entorno_prueba`) |
+| `nuevas_evidencias/` | Ejecuciones del 30/10/2026 con el menú: PC Windows (`*_DEMO_MySQL`) y entorno Linux (`20261030-1907_Linux_entorno_prueba`); registros de arranque con MySQL (`arranque_MySQL_Linux`) |
 | `APF2_Programa.code-workspace`, `apf2.ps1`, `Abrir_en_VSCode.bat` | Espacio de trabajo de VS Code con las tareas de H2 y de la demostración MySQL |
 
 Solo cambiaron archivos de prueba. `evidencias/CAMBIOS_PRUEBAS.diff` contiene el diff completo contra el paquete recibido.
@@ -92,5 +92,7 @@ SELECT id, name, owner_id FROM petclinic.pets WHERE owner_id IS NULL;
 | `nuevas_evidencias/20261030-175550_DEMO_MySQL` | PC Windows | CP05 | Aprobado |
 | `nuevas_evidencias/20261030-181439_DEMO_MySQL` | PC Windows, MySQL 8.0.46 | F01 (propietario id 12) | Aprobado |
 | `nuevas_evidencias/20261030-1907_Linux_entorno_prueba` | Linux, MySQL 8.0.46 | CP02, CP06, F02, F27, S04, S08, S12 | 5 aprobados; S08 y S12 fallidos, como en el informe |
+
+| `nuevas_evidencias/arranque_MySQL_Linux` | Linux, MySQL 8.0.46 | Arranque de la aplicación (evaluación complementaria, informe 12.5) | 7,745 s en la instancia de la prueba de carga; sin criterio de aceptación |
 
 Las ejecuciones se reportan por separado; no se suman a los 51 casos.

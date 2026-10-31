@@ -106,3 +106,11 @@ ACTUALIZACION 30/10/2026 (tarde)
 - Informe: nueva seccion 17.7 (ejecuciones de demostracion) con tabla y figuras 3 y 4; las figuras del anexo pasan a 5 y 6.
 - Presentacion ampliada v4: diapositivas de demostracion y 10 diapositivas de evidencia (codigo, resultado esperado y log).
 - No se modifico el codigo de produccion ni los resultados del informe (51 casos, 44/6/1, 88,0 %).
+
+ACTUALIZACION 30/10/2026 (noche)
+- Informe: subseccion 12.5 (tiempo de arranque con MySQL, evaluacion complementaria) y seccion 18 con las
+  conclusiones del segundo avance. Docente: Francisco Rodolfo Cabello Calero.
+- Presentacion: APF2_Presentacion_APF2.pptx, con evidencias de resultados (CP04/CP06, F01-F31, S01-S13, E01,
+  carga y arranque) y conclusiones. Reemplaza a la version ampliada v4.
+- nuevas_evidencias/arranque_MySQL_Linux y herramientas/medir_arranque.ps1. La medicion en el PC Windows queda pendiente.
+- Matriz: redaccion de AMB-01 (entorno de ejecucion en la nube). Sin cambios en casos, estados ni metricas.
