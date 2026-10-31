@@ -1,0 +1,33 @@
+{
+  "meta": {
+    "suite": "funcionales_http_v2",
+    "base_url": "http://localhost:8081",
+    "bd": "MySQL 8.0.46 (Linux, entorno de prueba)",
+    "inicio": "2026-10-30T19:08:05-05:00",
+    "fin": "2026-10-30T19:08:05-05:00"
+  },
+  "resumen": {
+    "Aprobado": 1,
+    "Fallido": 0,
+    "Bloqueado": 0,
+    "Observacion": 0,
+    "Total": 1
+  },
+  "casos": [
+    {
+      "id": "F02",
+      "requisito": "RF01",
+      "nivel": "Funcional HTTP real",
+      "titulo": "Registro rechazado: teléfono de 9 dígitos",
+      "datos": "teléfono='987654321'",
+      "pasos": "1) Enviar POST /owners/new con el teléfono indicado. 2) Verificar el mensaje del campo. 3) Buscar el apellido usado para confirmar que no se guardó.",
+      "esperado": "200 con 'Telephone must be a 10-digit number' en telephone; el propietario no se guarda",
+      "obtenido": "HTTP 200; mensaje en telephone='Telephone must be a 10-digit number'; no guardado=sí",
+      "estado": "Aprobado",
+      "evidencia": "respuestas/F02_post.http.txt",
+      "notas": "",
+      "bd": "MySQL 8.0.46 (Linux, entorno de prueba)",
+      "suite": "funcionales_http_v2"
+    }
+  ]
+}

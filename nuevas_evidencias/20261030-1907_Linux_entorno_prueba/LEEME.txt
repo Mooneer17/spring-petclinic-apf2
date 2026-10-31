@@ -1,0 +1,4 @@
+Ejecuciones del 30/10/2026 (19:07-19:08) en el entorno de prueba Linux con MySQL 8.0.46,
+usadas en las diapositivas de evidencia de CP02, CP06, F02, F27, S04, S08 y S12.
+No son ejecuciones del PC Windows. Las del PC Windows estan en las carpetas *_DEMO_MySQL.
+Resultados: CP02, CP06, F02, F27 y S04 aprobados; S08 y S12 fallidos (igual que en el informe).

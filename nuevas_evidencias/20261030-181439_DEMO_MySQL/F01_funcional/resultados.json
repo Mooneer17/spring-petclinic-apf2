@@ -1,0 +1,33 @@
+{
+  "meta": {
+    "suite": "demo_F01",
+    "base_url": "http://localhost:8081",
+    "bd": "MySQL 8.0.46 (PC Windows)",
+    "inicio": "2026-10-30T18:14:52-05:00",
+    "fin": "2026-10-30T18:14:53-05:00"
+  },
+  "resumen": {
+    "Aprobado": 1,
+    "Fallido": 0,
+    "Bloqueado": 0,
+    "Observacion": 0,
+    "Total": 1
+  },
+  "casos": [
+    {
+      "id": "F01",
+      "requisito": "RF01",
+      "nivel": "Funcional HTTP real",
+      "titulo": "Registro de propietario con datos validos",
+      "datos": "Ana DemoF01ORZMY, Av. Central 123, Lima, 9876543210",
+      "pasos": "1) Enviar POST /owners/new con los datos. 2) Seguir la redireccion al detalle. 3) Verificar mensaje y datos mostrados.",
+      "esperado": "302 a /owners/{id}; mensaje 'New Owner Created'; el detalle muestra los datos registrados",
+      "obtenido": "HTTP 302, id=12; mensaje='New Owner Created'; datos=si",
+      "estado": "Aprobado",
+      "evidencia": "respuestas/F01_post.http.txt",
+      "notas": "",
+      "bd": "MySQL 8.0.46 (PC Windows)",
+      "suite": "demo_F01"
+    }
+  ]
+}

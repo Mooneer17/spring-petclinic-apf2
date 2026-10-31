@@ -1,0 +1,15 @@
+﻿CASO Y TIPO         : CP05 - Prueba unitaria
+QUE SE COMPRUEBA    : La validacion del nombre de mascota (PetValidator)
+AMBIENTE Y URL      : Sin acceso a base de datos (JUnit + Bean Validation, sin Spring)
+RESULTADO ESPERADO  : Nombre vacio: error en name; 'Luna': sin errores
+RESULTADO OBTENIDO  : El nombre vacio genero error en name y 'Luna' no genero errores.
+ESTADO              : APROBADO
+DURACION            : 6.1 s en total (incluye arranque de Maven; metodo de prueba: 0.323 s)
+RUTA DE EVIDENCIA   : C:\Users\pc\Desktop\APF2_Programa\nuevas_evidencias\20261030-175550_DEMO_MySQL\CP05_unitaria
+Referencia en el informe: CP05 Aprobado
+LOG RESUMIDO (completo en la ruta de evidencia):
+  Running org.springframework.samples.petclinic.owner.AvanceUnitTests
+  Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.342 s -- in org.springframework.samples.petclinic.owner.AvanceUnitTests
+  BUILD SUCCESS
+  Total time:  4.138 s
+Ejecucion de demostracion: nueva y separada de las evidencias historicas.

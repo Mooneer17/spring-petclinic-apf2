@@ -1,0 +1,33 @@
+{
+  "meta": {
+    "suite": "seguridad_http",
+    "base_url": "http://localhost:8081",
+    "bd": "MySQL 8.0.46 (Linux, entorno de prueba)",
+    "inicio": "2026-10-30T19:08:07-05:00",
+    "fin": "2026-10-30T19:08:07-05:00"
+  },
+  "resumen": {
+    "Aprobado": 0,
+    "Fallido": 1,
+    "Bloqueado": 0,
+    "Observacion": 0,
+    "Total": 1
+  },
+  "casos": [
+    {
+      "id": "S08",
+      "requisito": "RF05",
+      "nivel": "Seguridad basica HTTP",
+      "titulo": "Edicion de una mascota que pertenece a otro propietario",
+      "datos": "propietario A=309; mascota de B=374",
+      "pasos": "GET y POST /owners/A/pets/{mascotaB}/edit",
+      "esperado": "Se rechaza con un error controlado; la mascota de B no cambia; no se crean registros",
+      "obtenido": "GET HTTP 500; POST HTTP 500; mascota B modificada=False; A recibio mascota=False; traza=False",
+      "estado": "Fallido",
+      "evidencia": "respuestas/S08_post.http.txt",
+      "notas": "",
+      "bd": "MySQL 8.0.46 (Linux, entorno de prueba)",
+      "suite": "seguridad_http"
+    }
+  ]
+}

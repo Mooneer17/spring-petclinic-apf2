@@ -3,7 +3,9 @@
 Segundo avance del proyecto final del curso Pruebas de Software. Repositorio de evidencias, pruebas y scripts del Grupo 10.
 
 - Informe: [informe/10_Segundo_Avance_APF2.pdf](informe/10_Segundo_Avance_APF2.pdf) (editable: .docx)
-- Presentación: [presentacion/10Grupo_Segundo_Avance.pptx](presentacion/10Grupo_Segundo_Avance.pptx)
+- Presentación para la defensa (40 diapositivas, con 10 de evidencia): [presentacion/APF2_Presentacion_Ampliada_v4.pptx](presentacion/APF2_Presentacion_Ampliada_v4.pptx). Versión anterior: [presentacion/10Grupo_Segundo_Avance.pptx](presentacion/10Grupo_Segundo_Avance.pptx)
+- Menú de demostración en vivo sobre MySQL: [demo/GUIA_DEMO_MYSQL.md](demo/GUIA_DEMO_MYSQL.md)
+- Ejecuciones de demostración del 30/10/2026: [nuevas_evidencias/](nuevas_evidencias/) (informe, sección 17.7)
 - Matriz de casos, incidencias y métricas: [matriz/APF2_Matriz_Casos_Incidencias_Metricas.xlsx](matriz/APF2_Matriz_Casos_Incidencias_Metricas.xlsx)
 - Cambios de la revisión del 30/10/2026: [CAMBIOS_REVISION.txt](CAMBIOS_REVISION.txt)
 - Pendientes declarados: [PENDIENTES.md](PENDIENTES.md)
@@ -17,13 +19,16 @@ Spring Petclinic, commit `500158f732419217507c7656904b8e6aa1bcc0d6` (Spring Boot
 | Carpeta | Contenido |
 |---|---|
 | `informe/` | Informe APF2 en PDF y DOCX editable (carátula original, secciones 1 a 20) |
-| `presentacion/` | PPTX para la defensa, con notas del orador en cada diapositiva |
+| `presentacion/` | PPTX para la defensa: versión ampliada v4 (con evidencias de 10 pruebas) y versión anterior |
 | `matriz/` | XLSX original de las ejecuciones (no reconstruida): trazabilidad, 51 casos con objetivo, técnica y pasos, históricos, 15 incidencias, métricas con fórmulas y rendimiento |
 | `proyecto/` | Código oficial del commit más `AvanceUnitTests`, `AvanceIntegrationTests` (corregido) y `DiagnosticoFixtureTests` |
 | `scripts/` | Pruebas HTTP (funcionales v2 y v1, seguridad, E01), navegador, Locust y `ejecutar_apf2.sh` |
 | `herramientas/` | `ejecutar.ps1` original y `ejecutar_apf2.ps1` (Windows) con el JDK portátil verificado |
 | `evidencias/` | Logs, reportes y respuestas HTTP por ejecución (ver tabla del punto 4) |
 | `documentos_apf1/` | PDF y PPTX del primer avance, sin cambios |
+| `demo/` | Menú de demostración (`demo_mysql.ps1`), ejecutor de un caso (`demo_caso.py`) y guion (`GUIA_DEMO_MYSQL.md`) |
+| `nuevas_evidencias/` | Ejecuciones del 30/10/2026 con el menú: PC Windows (`*_DEMO_MySQL`) y entorno de prueba Linux (`20261030-1907_Linux_entorno_prueba`) |
+| `APF2_Programa.code-workspace`, `apf2.ps1`, `Abrir_en_VSCode.bat` | Espacio de trabajo de VS Code con las tareas de H2 y de la demostración MySQL |
 
 Solo cambiaron archivos de prueba. `evidencias/CAMBIOS_PRUEBAS.diff` contiene el diff completo contra el paquete recibido.
 
@@ -79,9 +84,22 @@ SELECT id, name, owner_id FROM petclinic.pets WHERE owner_id IS NULL;
 | `08_rendimiento_MySQL` | Carga básica local: calentamiento, 10 y 30 VU | 0 errores; p95 21 y 16 ms |
 | `09_navegador_MySQL` | N01-N08 | 8 capturas |
 
-Las ejecuciones se reportan por separado; no se suman.
+### Ejecuciones de demostración (30/10/2026)
 
-## 5. Guion breve para la defensa
+| Carpeta | Equipo | Casos | Resultado |
+|---|---|---|---|
+| `nuevas_evidencias/20261030-151820_DEMO_MySQL`, `20261030-175503_DEMO_MySQL` | PC Windows | CP01 (dos veces) | Aprobado |
+| `nuevas_evidencias/20261030-175550_DEMO_MySQL` | PC Windows | CP05 | Aprobado |
+| `nuevas_evidencias/20261030-181439_DEMO_MySQL` | PC Windows, MySQL 8.0.46 | F01 (propietario id 12) | Aprobado |
+| `nuevas_evidencias/20261030-1907_Linux_entorno_prueba` | Linux, MySQL 8.0.46 | CP02, CP06, F02, F27, S04, S08, S12 | 5 aprobados; S08 y S12 fallidos, como en el informe |
+
+Las ejecuciones se reportan por separado; no se suman a los 51 casos.
+
+## 5. Demostración en vivo (MySQL)
+
+Con la aplicación en `http://localhost:8081` (perfil mysql), en VS Code: **Terminal > Run Task... > APF2: Preparar dependencias de la demo** (una vez, con internet) y luego **APF2: Demostración en vivo — MySQL**. El menú ofrece 22 pruebas de seis tipos (unitarias, integración, funcionales, seguridad, carga y concurrencia). Cada ejecución muestra una ficha con esperado, obtenido, estado y log resumido, y guarda su evidencia en `nuevas_evidencias/<fecha-hora>_DEMO_MySQL/`. Carga y E01 piden confirmación. La contraseña de MySQL se pide oculta y no se guarda. Detalle en `demo/GUIA_DEMO_MYSQL.md`.
+
+## 6. Guion breve para la defensa
 
 1. **Decisión de fondo.** No se modificó Petclinic. Solo se corrigieron instrumentos de prueba, y cada defecto del producto se reporta con una corrección propuesta.
 2. **CP04 y CP06.** Fallaban igual en Windows, Linux, H2 y MySQL. El helper `pet()` devolvía la instancia transitoria: `saveAndFlush` sobre un propietario existente ejecuta `merge` y la cascada persiste una copia. DIAG01 lo demuestra. Las aserciones no se tocaron.

@@ -1,0 +1,19 @@
+﻿CASO Y TIPO         : F01 - Prueba funcional por HTTP real
+QUE SE COMPRUEBA    : Registrar un propietario con datos validos desde el formulario
+AMBIENTE Y URL      : http://localhost:8081 (app con perfil mysql) - MySQL 8.0.46 (PC Windows)
+RESULTADO ESPERADO  : 302 a /owners/{id}; mensaje 'New Owner Created'; el detalle muestra los datos registrados
+RESULTADO OBTENIDO  : HTTP 302, id=12; mensaje='New Owner Created'; datos=si
+ESTADO              : APROBADO
+DURACION            : 1.0 s
+RUTA DE EVIDENCIA   : C:\Users\pc\Desktop\APF2_Programa\nuevas_evidencias\20261030-181439_DEMO_MySQL\F01_funcional
+Propietario creado: id=12, apellido=DemoF01ORZMY
+Confirmacion directa en MySQL: no verificado (OperationalError: (1045, "Access denied for user 'petclinic'@'localhost' (using password: YES)"))
+Consulta para Workbench: SELECT * FROM petclinic.owners WHERE id = 12;
+Datos: este registro queda guardado en MySQL (es ficticio y se reconoce por el prefijo DemoF01).
+Referencia en el informe: F01 Aprobado
+LOG RESUMIDO (completo en la ruta de evidencia):
+  POST http://localhost:8081/owners/new -> HTTP 302, Location: http://localhost:8081/owners/12;jsessionid=ACC2E72D1772941923B7FBE102C24847
+  GET http://localhost:8081/owners/12 -> HTTP 200
+  [OK ] F01 Registro de propietario con datos validos -> HTTP 302, id=12; mensaje='New Owner Created'; datos=si
+  Confirmacion en MySQL: no verificado (OperationalError: (1045, "Access denied for user 'petclinic'@'localhost' (using password: YES)"))
+Ejecucion de demostracion: nueva y separada de las evidencias historicas.

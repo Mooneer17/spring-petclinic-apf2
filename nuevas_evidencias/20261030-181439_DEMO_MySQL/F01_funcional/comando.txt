@@ -1,0 +1,1 @@
+python "C:\Users\pc\Desktop\APF2_Programa\demo\demo_caso.py" --caso F01 --base http://localhost:8081 --out "C:\Users\pc\Desktop\APF2_Programa\nuevas_evidencias\20261030-181439_DEMO_MySQL\F01_funcional" --bd "MySQL 8.0.46 (PC Windows)"

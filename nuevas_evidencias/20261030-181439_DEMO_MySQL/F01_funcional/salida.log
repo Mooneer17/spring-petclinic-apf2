@@ -1,0 +1,3 @@
+[OK ] F01 Registro de propietario con datos validos -> HTTP 302, id=12; mensaje='New Owner Created'; datos=si
+Confirmacion en MySQL: no verificado (OperationalError: (1045, "Access denied for user 'petclinic'@'localhost' (using password: YES)"))
+{"Aprobado": 1, "Fallido": 0, "Bloqueado": 0, "Observacion": 0, "Total": 1}

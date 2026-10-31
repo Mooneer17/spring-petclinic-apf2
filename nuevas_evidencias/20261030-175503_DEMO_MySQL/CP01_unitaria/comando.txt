@@ -1,0 +1,1 @@
+mvnw.cmd -B -o "-Dmaven.repo.local=C:\Users\pc\Desktop\APF2_Defensa\paquete\APF2_Entregable\.runtime\m2" test "-Dtest=AvanceUnitTests#CP01_telephoneNineDigitsRejectedTenAccepted" -Dsurefire.failIfNoSpecifiedTests=false

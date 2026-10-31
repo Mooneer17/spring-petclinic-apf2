@@ -1,0 +1,33 @@
+{
+  "meta": {
+    "suite": "funcionales_http_v2",
+    "base_url": "http://localhost:8081",
+    "bd": "MySQL 8.0.46 (Linux, entorno de prueba)",
+    "inicio": "2026-10-30T19:08:06-05:00",
+    "fin": "2026-10-30T19:08:06-05:00"
+  },
+  "resumen": {
+    "Aprobado": 1,
+    "Fallido": 0,
+    "Bloqueado": 0,
+    "Observacion": 0,
+    "Total": 1
+  },
+  "casos": [
+    {
+      "id": "F27",
+      "requisito": "RF06",
+      "nivel": "Funcional HTTP real",
+      "titulo": "Visita rechazada: fecha de hoy (límite)",
+      "datos": "fecha=2026-10-30",
+      "pasos": "1) Crear propietario y mascota. 2) POST /owners/{o}/pets/{p}/visits/new con el dato indicado. 3) Verificar el mensaje. 4) Consultar el detalle.",
+      "esperado": "200 con 'Visit date must be in the future' en date; no se registra la visita",
+      "obtenido": "HTTP 200; mensaje en date='Visit date must be in the future'; no registrada=sí",
+      "estado": "Aprobado",
+      "evidencia": "respuestas/F27_post.http.txt",
+      "notas": "",
+      "bd": "MySQL 8.0.46 (Linux, entorno de prueba)",
+      "suite": "funcionales_http_v2"
+    }
+  ]
+}

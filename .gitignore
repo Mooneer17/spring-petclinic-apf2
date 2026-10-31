@@ -1,5 +1,5 @@
 .runtime/
-nuevas_evidencias/
 proyecto/target/
 __pycache__/
 *.pyc
+proyecto/.runtime/

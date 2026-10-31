@@ -1,0 +1,23 @@
+{
+  "caso": {
+    "id": "F01",
+    "requisito": "RF01",
+    "nivel": "Funcional HTTP real",
+    "titulo": "Registro de propietario con datos validos",
+    "datos": "Ana DemoF01ORZMY, Av. Central 123, Lima, 9876543210",
+    "pasos": "1) Enviar POST /owners/new con los datos. 2) Seguir la redireccion al detalle. 3) Verificar mensaje y datos mostrados.",
+    "esperado": "302 a /owners/{id}; mensaje 'New Owner Created'; el detalle muestra los datos registrados",
+    "obtenido": "HTTP 302, id=12; mensaje='New Owner Created'; datos=si",
+    "estado": "Aprobado",
+    "evidencia": "respuestas/F01_post.http.txt",
+    "notas": "",
+    "bd": "MySQL 8.0.46 (PC Windows)",
+    "suite": "demo_F01"
+  },
+  "extra": {
+    "owner_id": 12,
+    "apellido": "DemoF01ORZMY",
+    "sql": "SELECT * FROM petclinic.owners WHERE id = 12;",
+    "mysql": "no verificado (OperationalError: (1045, \"Access denied for user 'petclinic'@'localhost' (using password: YES)\"))"
+  }
+}
