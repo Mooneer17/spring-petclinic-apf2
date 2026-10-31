@@ -1,0 +1,17 @@
+Arranque de Spring Petclinic con MySQL 8.0.46 (evaluacion complementaria)
+Entorno: contenedor Linux de 2 vCPU compartidos, Java 21.0.12.1, JAR spring-petclinic-4.0.0-SNAPSHOT
+(commit 500158f), iniciado con "java -jar ... --spring.profiles.active=mysql" (sin Maven).
+Copias sin modificar de los registros originales de la aplicacion (ver SHA256SUMS.txt).
+
+Archivo                                   Hora de "Started"     Started in   process running for   Uso
+20261029-1918_app_mysql_rendimiento.log   29/10/2026 19:18:27   7,745 s      8,504 s               Instancia de la prueba de carga (seccion 12)
+20261029-1912_app_mysql.log               29/10/2026 19:12:44   7,715 s      8,425 s               Ejecucion inicial de pruebas HTTP
+20261030-0327_app_mysql_revision.log      30/10/2026 03:27:14   14,826 s     19,701 s              Revision del 30/10
+20261030-1907_app_mysql_8081.log          30/10/2026 19:07:23   26,657 s     29,209 s              Evidencias de demostracion (puerto 8081)
+
+"Started ... in X seconds": tiempo que informa Spring Boot desde el inicio de la aplicacion hasta quedar lista.
+"process running for Y": tiempo desde el inicio del proceso Java. No incluye compilacion ni Maven.
+No se midio el tiempo hasta la primera respuesta HTTP. Despues del arranque de 19:18:27, el calentamiento de
+Locust empezo a las 19:18:41 y registro 404 solicitudes sin errores (evidencias/08_rendimiento_MySQL/00_calentamiento).
+Son observaciones puntuales en condiciones no controladas: no son un promedio ni una garantia de rendimiento.
+No hay medicion en el PC Windows: usar herramientas/medir_arranque.ps1.
