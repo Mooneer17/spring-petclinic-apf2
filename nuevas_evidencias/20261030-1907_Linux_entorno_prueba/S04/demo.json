@@ -1,0 +1,22 @@
+{
+  "caso": {
+    "id": "S04",
+    "requisito": "RF02",
+    "nivel": "Seguridad basica HTTP",
+    "titulo": "Inyeccion SQL en lastName",
+    "datos": "3 cargas tipicas de inyeccion",
+    "pasos": "GET /owners?lastName=<carga>",
+    "esperado": "Se tratan como texto: 200 'has not been found', sin trazas ni efectos",
+    "obtenido": "[' OR '1'='1] HTTP 200 not_found=True; [x%' OR 1=1 --] HTTP 200 not_found=True; [\" ; DROP TABLE owners; --] HTTP 200 not_found=True; tabla owners operativa=True",
+    "estado": "Aprobado",
+    "evidencia": "respuestas/S04_p0.http.txt",
+    "notas": "",
+    "bd": "MySQL 8.0.46 (Linux, entorno de prueba)",
+    "suite": "seguridad_http"
+  },
+  "extra": {
+    "tag": "KKENY",
+    "origen": "codigo original de scripts/seguridad_http.py",
+    "sql": "SELECT o.id, o.last_name, p.name AS mascota, p.birth_date, v.visit_date, v.description FROM petclinic.owners o LEFT JOIN petclinic.pets p ON p.owner_id = o.id LEFT JOIN petclinic.visits v ON v.pet_id = p.id WHERE o.last_name LIKE '%KKENY';"
+  }
+}

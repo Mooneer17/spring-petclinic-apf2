@@ -1,0 +1,15 @@
+﻿CASO Y TIPO         : CP01 - Prueba unitaria
+QUE SE COMPRUEBA    : La regla del telefono de Owner: exactamente 10 digitos
+AMBIENTE Y URL      : Sin acceso a base de datos (JUnit + Bean Validation, sin Spring)
+RESULTADO ESPERADO  : Telefono 987654321 (9 digitos) rechazado; 9876543210 (10 digitos) aceptado
+RESULTADO OBTENIDO  : El telefono de 9 digitos genero error de validacion y el de 10 digitos no genero errores.
+ESTADO              : APROBADO
+DURACION            : 15.2 s en total (incluye arranque de Maven; metodo de prueba: 0.613 s)
+RUTA DE EVIDENCIA   : C:\Users\pc\Desktop\APF2_Programa\nuevas_evidencias\20261030-175503_DEMO_MySQL\CP01_unitaria
+Referencia en el informe: CP01 Aprobado
+LOG RESUMIDO (completo en la ruta de evidencia):
+  Running org.springframework.samples.petclinic.owner.AvanceUnitTests
+  Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.630 s -- in org.springframework.samples.petclinic.owner.AvanceUnitTests
+  BUILD SUCCESS
+  Total time:  12.490 s
+Ejecucion de demostracion: nueva y separada de las evidencias historicas.

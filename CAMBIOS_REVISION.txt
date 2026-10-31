@@ -97,3 +97,12 @@ PENDIENTES (no resueltos en esta revisión)
   S08, E01 y S02, S11, S12, S13.
 - Probar herramientas/ejecutar_apf2.ps1 en Windows.
 - Cobertura parcial de RF01 (teléfono vacío) y RF03 (dirección o ciudad vacías).
+
+
+ACTUALIZACION 30/10/2026 (tarde)
+- Menu de demostracion en vivo sobre MySQL (demo/): 22 pruebas, ficha por ejecucion y evidencia en nuevas_evidencias/.
+- nuevas_evidencias/: ejecuciones reales en el PC Windows (CP01 x2, CP05, F01: aprobadas) y en un entorno de prueba
+  Linux con MySQL 8.0.46 (CP02, CP06, F02, F27, S04 aprobadas; S08 y S12 fallidas, igual que en el informe).
+- Informe: nueva seccion 17.7 (ejecuciones de demostracion) con tabla y figuras 3 y 4; las figuras del anexo pasan a 5 y 6.
+- Presentacion ampliada v4: diapositivas de demostracion y 10 diapositivas de evidencia (codigo, resultado esperado y log).
+- No se modifico el codigo de produccion ni los resultados del informe (51 casos, 44/6/1, 88,0 %).

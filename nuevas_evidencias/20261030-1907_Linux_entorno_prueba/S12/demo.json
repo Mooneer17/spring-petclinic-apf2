@@ -1,0 +1,18 @@
+{
+  "caso": {
+    "id": "S12",
+    "requisito": "Transversal",
+    "nivel": "Seguridad basica HTTP",
+    "titulo": "Cabeceras de seguridad HTTP en la pagina principal",
+    "datos": "GET /",
+    "pasos": "Inspeccionar cabeceras de respuesta",
+    "esperado": "Presencia de cabeceras defensivas basicas",
+    "obtenido": "X-Content-Type-Options=False; X-Frame-Options=False; Content-Security-Policy=False; Cache-Control=False",
+    "estado": "Fallido",
+    "evidencia": "respuestas/S12_get.http.txt",
+    "notas": "",
+    "bd": "MySQL 8.0.46 (Linux, entorno de prueba)",
+    "suite": "demo_S12"
+  },
+  "extra": {}
+}

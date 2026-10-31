@@ -1,0 +1,33 @@
+{
+  "meta": {
+    "suite": "demo_S12",
+    "base_url": "http://localhost:8081",
+    "bd": "MySQL 8.0.46 (Linux, entorno de prueba)",
+    "inicio": "2026-10-30T19:08:07-05:00",
+    "fin": "2026-10-30T19:08:07-05:00"
+  },
+  "resumen": {
+    "Aprobado": 0,
+    "Fallido": 1,
+    "Bloqueado": 0,
+    "Observacion": 0,
+    "Total": 1
+  },
+  "casos": [
+    {
+      "id": "S12",
+      "requisito": "Transversal",
+      "nivel": "Seguridad basica HTTP",
+      "titulo": "Cabeceras de seguridad HTTP en la pagina principal",
+      "datos": "GET /",
+      "pasos": "Inspeccionar cabeceras de respuesta",
+      "esperado": "Presencia de cabeceras defensivas basicas",
+      "obtenido": "X-Content-Type-Options=False; X-Frame-Options=False; Content-Security-Policy=False; Cache-Control=False",
+      "estado": "Fallido",
+      "evidencia": "respuestas/S12_get.http.txt",
+      "notas": "",
+      "bd": "MySQL 8.0.46 (Linux, entorno de prueba)",
+      "suite": "demo_S12"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "caso": {
+    "id": "F27",
+    "requisito": "RF06",
+    "nivel": "Funcional HTTP real",
+    "titulo": "Visita rechazada: fecha de hoy (límite)",
+    "datos": "fecha=2026-10-30",
+    "pasos": "1) Crear propietario y mascota. 2) POST /owners/{o}/pets/{p}/visits/new con el dato indicado. 3) Verificar el mensaje. 4) Consultar el detalle.",
+    "esperado": "200 con 'Visit date must be in the future' en date; no se registra la visita",
+    "obtenido": "HTTP 200; mensaje en date='Visit date must be in the future'; no registrada=sí",
+    "estado": "Aprobado",
+    "evidencia": "respuestas/F27_post.http.txt",
+    "notas": "",
+    "bd": "MySQL 8.0.46 (Linux, entorno de prueba)",
+    "suite": "funcionales_http_v2"
+  },
+  "extra": {
+    "tag": "KKENY",
+    "origen": "codigo original de scripts/funcionales_http.py",
+    "sql": "SELECT o.id, o.last_name, p.name AS mascota, p.birth_date, v.visit_date, v.description FROM petclinic.owners o LEFT JOIN petclinic.pets p ON p.owner_id = o.id LEFT JOIN petclinic.visits v ON v.pet_id = p.id WHERE o.last_name LIKE '%KKENY';"
+  }
+}

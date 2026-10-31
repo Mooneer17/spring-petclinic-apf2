@@ -1,0 +1,10 @@
+﻿CASO Y TIPO         : CP01 - Prueba unitaria
+QUE SE COMPRUEBA    : La regla del telefono de Owner: exactamente 10 digitos
+AMBIENTE Y URL      : Sin acceso a base de datos (JUnit + Bean Validation, sin Spring)
+RESULTADO ESPERADO  : Telefono 987654321 (9 digitos) rechazado; 9876543210 (10 digitos) aceptado
+RESULTADO OBTENIDO  : El telefono de 9 digitos genero error de validacion y el de 10 digitos no genero errores.
+ESTADO              : APROBADO
+DURACION            : 7.1 s en total (incluye arranque de Maven; metodo de prueba: 0.566 s)
+RUTA DE EVIDENCIA   : C:\Users\pc\Desktop\APF2_Programa\nuevas_evidencias\20261030-151820_DEMO_MySQL\CP01_unitaria
+Referencia en el informe: CP01 Aprobado
+Ejecucion de demostracion: nueva y separada de las evidencias historicas.

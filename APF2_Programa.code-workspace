@@ -1,0 +1,189 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "task.allowAutomaticTasks": "off",
+    "files.exclude": {
+      "**/target": true,
+      ".runtime": true,
+      "**/.mvn": true,
+      "**/.devcontainer": true,
+      "**/.github": true,
+      "**/k8s": true,
+      "**/gradle": true,
+      "**/gradlew*": true,
+      "**/build.gradle": true,
+      "**/settings.gradle": true,
+      "**/.gitpod.yml": true,
+      "**/__pycache__": true
+    },
+    "terminal.integrated.fontSize": 16,
+    "workbench.editorAssociations": {
+      "*.md": "vscode.markdown.preview.editor"
+    }
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "APF2: Demostración en vivo — MySQL",
+        "type": "process",
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder}\\demo\\demo_mysql.ps1"
+        ],
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated",
+          "focus": true,
+          "clear": true
+        }
+      },
+      {
+        "label": "APF2: Preparar dependencias de la demo (antes de exponer)",
+        "type": "process",
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder}\\demo\\demo_mysql.ps1",
+          "-Preparar"
+        ],
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated",
+          "focus": true,
+          "clear": true
+        }
+      },
+      {
+        "label": "APF2: Abrir la aplicación MySQL en el navegador (8081)",
+        "type": "process",
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-Command",
+          "Start-Process 'http://localhost:8081'"
+        ],
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "silent"
+        }
+      },
+      {
+        "label": "APF2: Abrir la carpeta de nuevas evidencias",
+        "type": "process",
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-Command",
+          "$d = Join-Path '${workspaceFolder}' 'nuevas_evidencias'; New-Item -ItemType Directory -Force $d | Out-Null; Start-Process explorer.exe $d"
+        ],
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "silent"
+        }
+      },
+      {
+        "label": "1) Ejecutar pruebas CP01-CP06 y DIAG01 (H2)",
+        "type": "process",
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder}\\apf2.ps1",
+          "-Accion",
+          "pruebas"
+        ],
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated",
+          "clear": true
+        }
+      },
+      {
+        "label": "2) Levantar Petclinic (H2)",
+        "type": "process",
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder}\\apf2.ps1",
+          "-Accion",
+          "app"
+        ],
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated",
+          "clear": true
+        },
+        "isBackground": true
+      },
+      {
+        "label": "3) Abrir la aplicación H2 en el navegador (8080)",
+        "type": "process",
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-Command",
+          "Start-Process 'http://localhost:8080'"
+        ],
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "silent"
+        }
+      },
+      {
+        "label": "4) Abrir el visor de evidencias",
+        "type": "process",
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-Command",
+          "Start-Process -FilePath \"${workspaceFolder}\\ABRIR_PRIMERO_Evidencias.html\""
+        ],
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "silent"
+        }
+      },
+      {
+        "label": "5) Pruebas funcionales y de seguridad (requiere app levantada y Python)",
+        "type": "process",
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder}\\apf2.ps1",
+          "-Accion",
+          "funcionales"
+        ],
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated",
+          "clear": true
+        }
+      }
+    ]
+  }
+}
