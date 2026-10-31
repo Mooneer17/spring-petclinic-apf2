@@ -94,24 +94,3 @@ SELECT id, name, owner_id FROM petclinic.pets WHERE owner_id IS NULL;
 | `nuevas_evidencias/20261030-1907_Linux_entorno_prueba` | Linux, MySQL 8.0.46 | CP02, CP06, F02, F27, S04, S08, S12 | 5 aprobados; S08 y S12 fallidos, como en el informe |
 
 Las ejecuciones se reportan por separado; no se suman a los 51 casos.
-
-## 5. Demostración en vivo (MySQL)
-
-Con la aplicación en `http://localhost:8081` (perfil mysql), en VS Code: **Terminal > Run Task... > APF2: Preparar dependencias de la demo** (una vez, con internet) y luego **APF2: Demostración en vivo — MySQL**. El menú ofrece 22 pruebas de seis tipos (unitarias, integración, funcionales, seguridad, carga y concurrencia). Cada ejecución muestra una ficha con esperado, obtenido, estado y log resumido, y guarda su evidencia en `nuevas_evidencias/<fecha-hora>_DEMO_MySQL/`. Carga y E01 piden confirmación. La contraseña de MySQL se pide oculta y no se guarda. Detalle en `demo/GUIA_DEMO_MYSQL.md`.
-
-## 6. Guion breve para la defensa
-
-1. **Decisión de fondo.** No se modificó Petclinic. Solo se corrigieron instrumentos de prueba, y cada defecto del producto se reporta con una corrección propuesta.
-2. **CP04 y CP06.** Fallaban igual en Windows, Linux, H2 y MySQL. El helper `pet()` devolvía la instancia transitoria: `saveAndFlush` sobre un propietario existente ejecuta `merge` y la cascada persiste una copia. DIAG01 lo demuestra. Las aserciones no se tocaron.
-3. **Funcionales.** 31 casos diseñados con valores límite (9/10/11 dígitos, 30/31 y 255/256 caracteres, hoy/mañana) y partición de equivalencia (numérico frente a letras, vacío, duplicado). La corrida 3 verifica código, mensaje y persistencia. Son formularios HTML, no una API REST.
-4. **Hallazgo principal (E01, prueba adicional de concurrencia; no es exploratoria ni de estrés).** Un doble envío del alta de mascota confirma con 302 un registro que queda con `owner_id` nulo (traza: `update pets set owner_id=null ...`). En MySQL, además, el duplicado devuelve HTTP 500.
-5. **Carga básica local.** 0 errores en 4 804 solicitudes. Los 10 y 30 VU y los umbrales son decisiones académicas; una ejecución por escenario; no mide capacidad máxima.
-6. **Seguridad básica.** Análisis básico, no pentest ni auditoría. No hay autenticación ni roles (no se inventó un login). Funcionan el escape de XSS, el tratamiento de inyección SQL y el bloqueo del id. S08 falla por un error no controlado. Faltan protección de Actuator, CSRF y cabeceras.
-7. **Límites.** Ver `PENDIENTES.md`.
-
-Preguntas probables:
-- *¿Por qué E01 no es un falso positivo?* Porque se contaron las filas con `owner_id` nulo directamente en la base (MySQL y H2) y la traza SQL registra la sentencia que las desvincula.
-- *¿Por qué S08 es fallido y S07 aprobado si ambos devuelven 500?* El esperado de S08 exige un error controlado y hubo una NullPointerException no controlada (DEF-P01). El esperado de S07 exige rechazo, ningún registro y ninguna traza, y los tres se cumplen; el código 500 se registra en OBS-02.
-- *¿S08 se volvió a ejecutar?* No. Fue una reclasificación documental del 30/10/2026 frente al esperado ya documentado.
-- *¿S07 y S08 son pruebas de autorización?* No: sin usuarios ni roles no hay autorización que probar. Comprueban la integridad de la relación propietario–mascota.
-- *¿Por qué el p95 baja con 30 usuarios?* No se atribuye a la carga. Una hipótesis, no verificada, es que la JVM y las cachés seguían optimizándose durante el primer escenario.
