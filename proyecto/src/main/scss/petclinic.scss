@@ -19,6 +19,8 @@ $spring-green:      #6db33f;
 $spring-dark-green: #5fa134;
 $spring-brown:      #34302D;
 $spring-grey:       #838789;
+// APF3 A11Y-02: gris del menu con contraste 5.39:1 sobre $spring-brown (WCAG 1.4.3)
+$spring-grey-nav:   #a3a7a9;
 $spring-light-grey: #f1f1f1;
 
 $body-bg:                           $spring-light-grey;
@@ -58,7 +60,7 @@ $table-border-color:                      $spring-brown;
 }
 
 .nav > li > a {
-  color: $spring-grey;
+  color: $spring-grey-nav;
 }
 
 .btn-primary {
