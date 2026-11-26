@@ -77,18 +77,7 @@
     </tr>
 
   </table>
-  <script>
-    // Function to hide the success and error messages after 3 seconds
-    function hideMessages() {
-      setTimeout(function () {
-        document.getElementById("success-message").style.display = "none";
-        document.getElementById("error-message").style.display = "none";
-      }, 3000); // 3000 milliseconds (3 seconds)
-    }
-
-    // Call the function to hide messages
-    hideMessages();
-  </script>
+  <script th:src="@{/resources/js/hide-messages.js}"></script>
 
 </body>
 
