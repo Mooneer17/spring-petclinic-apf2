@@ -21,12 +21,14 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -67,7 +69,8 @@ class PetController {
 	@ModelAttribute("owner")
 	public Owner findOwner(@PathVariable("ownerId") int ownerId) {
 		Optional<Owner> optionalOwner = this.owners.findById(ownerId);
-		Owner owner = optionalOwner.orElseThrow(() -> new IllegalArgumentException(
+		Owner owner = optionalOwner.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+
 				"Owner not found with id: " + ownerId + ". Please ensure the ID is correct "));
 		return owner;
 	}
@@ -81,9 +84,17 @@ class PetController {
 		}
 
 		Optional<Owner> optionalOwner = this.owners.findById(ownerId);
-		Owner owner = optionalOwner.orElseThrow(() -> new IllegalArgumentException(
+		Owner owner = optionalOwner.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+
 				"Owner not found with id: " + ownerId + ". Please ensure the ID is correct "));
-		return owner.getPet(petId);
+		Pet pet = owner.getPet(petId);
+		if (pet == null) {
+			// DEF-P01: la mascota no pertenece a este propietario; antes producía HTTP
+			// 500
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+					"Pet with id " + petId + " not found for owner with id " + ownerId + ".");
+		}
+		return pet;
 	}
 
 	@InitBinder("owner")
