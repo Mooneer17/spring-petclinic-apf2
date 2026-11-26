@@ -9529,4 +9529,14 @@ strong {
     margin-top: 10px;
     margin-bottom: 30px; } }
 
+/* APF3 REG-01 (SEC-03): anchos de columnas movidos desde estilos en linea (bloqueados por la CSP) */
+.col-owner-name {
+  width: 150px; }
+
+.col-owner-address {
+  width: 200px; }
+
+.col-owner-telephone {
+  width: 120px; }
+
 /*# sourceMappingURL=../../../../../../target/petclinic.css.map */

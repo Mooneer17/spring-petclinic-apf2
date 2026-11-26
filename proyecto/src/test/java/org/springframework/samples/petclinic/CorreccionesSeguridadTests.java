@@ -95,4 +95,15 @@ class CorreccionesSeguridadTests {
 		assertThat(get("/owners/999999").statusCode()).isEqualTo(404);
 	}
 
+	@Test
+	void r01PaginasSinEstilosEnLineaBloqueadosPorLaCsp() throws Exception {
+		// Regresion REG-01 encontrada en la prueba de compatibilidad: la CSP de SEC-03 bloqueaba
+		// los atributos style de la lista de propietarios y del menu.
+		for (String path : new String[] { "/", "/owners/find", "/owners?lastName=", "/owners/1", "/owners/new",
+				"/owners/1/pets/new", "/owners/1/pets/1/visits/new", "/vets.html" }) {
+			String body = get(path).body();
+			assertThat(body).as(path).doesNotContainPattern("<[^>]*\\sstyle(=|>|\\s)");
+		}
+	}
+
 }
