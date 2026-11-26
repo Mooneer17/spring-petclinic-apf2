@@ -35,6 +35,7 @@ import java.util.Optional;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -87,6 +88,13 @@ class PetControllerTests {
 	}
 
 	@Test
+	void initUpdateFormForPetOfAnotherOwnerReturnsNotFound() throws Exception {
+		// APF3, DEF-P01: antes, NullPointerException y HTTP 500
+		mockMvc.perform(get("/owners/{ownerId}/pets/{petId}/edit", TEST_OWNER_ID, 999))
+			.andExpect(status().isNotFound());
+	}
+
+	@Test
 	void initCreationForm() throws Exception {
 		mockMvc.perform(get("/owners/{ownerId}/pets/new", TEST_OWNER_ID))
 			.andExpect(status().isOk())
@@ -96,6 +104,8 @@ class PetControllerTests {
 
 	@Test
 	void processCreationFormSuccess() throws Exception {
+		// APF3: el alta ahora usa addPetIfNameAvailable (transacción con bloqueo)
+		given(this.owners.addPetIfNameAvailable(eq(TEST_OWNER_ID), any(Pet.class))).willReturn(true);
 		mockMvc
 			.perform(post("/owners/{ownerId}/pets/new", TEST_OWNER_ID).param("name", "Betty")
 				.param("type", "hamster")
@@ -163,8 +173,37 @@ class PetControllerTests {
 		}
 
 		@Test
+		void processCreationFormWithMySqlDuplicateEntry() throws Exception {
+			// APF3, DEF-P03: mensaje de MySQL para la restricción sin nombre
+			given(owners.addPetIfNameAvailable(eq(TEST_OWNER_ID), any(Pet.class)))
+				.willThrow(new DataIntegrityViolationException("could not execute statement",
+						new java.sql.SQLIntegrityConstraintViolationException(
+								"Duplicate entry '1-Betty' for key 'pets.owner_id'")));
+			mockMvc
+				.perform(post("/owners/{ownerId}/pets/new", TEST_OWNER_ID).param("name", "Betty")
+					.param("type", "hamster")
+					.param("birthDate", "2015-02-12"))
+				.andExpect(model().attributeHasFieldErrorCode("pet", "name", "duplicate"))
+				.andExpect(status().isOk())
+				.andExpect(view().name("pets/createOrUpdatePetForm"));
+		}
+
+		@Test
+		void processCreationFormWithNameTakenWhileWaitingForLock() throws Exception {
+			// APF3, DEF-P02: otra solicitud registró el mismo nombre antes de obtener el
+			// bloqueo
+			given(owners.addPetIfNameAvailable(eq(TEST_OWNER_ID), any(Pet.class))).willReturn(false);
+			mockMvc
+				.perform(post("/owners/{ownerId}/pets/new", TEST_OWNER_ID).param("name", "Betty")
+					.param("type", "hamster")
+					.param("birthDate", "2015-02-12"))
+				.andExpect(model().attributeHasFieldErrorCode("pet", "name", "duplicate"))
+				.andExpect(status().isOk());
+		}
+
+		@Test
 		void processCreationFormWithDataIntegrityViolation() throws Exception {
-			given(owners.saveAndFlush(any(Owner.class)))
+			given(owners.addPetIfNameAvailable(eq(TEST_OWNER_ID), any(Pet.class)))
 				.willThrow(new DataIntegrityViolationException("Duplicate key: unique_owner_pet_name"));
 			mockMvc
 				.perform(post("/owners/{ownerId}/pets/new", TEST_OWNER_ID).param("name", "Betty")

@@ -116,8 +116,8 @@ class PetController {
 	}
 
 	@PostMapping("/pets/new")
-	public String processCreationForm(Owner owner, @Valid Pet pet, BindingResult result,
-			RedirectAttributes redirectAttributes) {
+	public String processCreationForm(@PathVariable("ownerId") int ownerId, Owner owner, @Valid Pet pet,
+			BindingResult result, RedirectAttributes redirectAttributes) {
 
 		if (StringUtils.hasText(pet.getName()) && pet.isNew() && owner.getPet(pet.getName(), true) != null) {
 			result.rejectValue("name", "duplicate", "already exists");
@@ -132,14 +132,18 @@ class PetController {
 			return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
 		}
 
+		boolean added;
 		try {
-			owner.addPet(pet);
-			this.owners.saveAndFlush(owner);
+			// DEF-P02: alta dentro de una transacción con el propietario bloqueado
+			added = this.owners.addPetIfNameAvailable(ownerId, pet);
 		}
 		catch (DataIntegrityViolationException ex) {
 			if (!isDuplicatePetNameViolation(ex)) {
 				throw ex;
 			}
+			added = false;
+		}
+		if (!added) {
 			result.rejectValue("name", "duplicate", "already exists");
 			return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
 		}
@@ -211,8 +215,11 @@ class PetController {
 	}
 
 	private boolean isDuplicatePetNameViolation(DataIntegrityViolationException ex) {
-		String message = ex.getMessage();
-		return message != null && message.toLowerCase().contains("unique_owner_pet_name");
+		// DEF-P03: en H2 la restricción se llama unique_owner_pet_name; en MySQL no
+		// tiene nombre y el mensaje es "Duplicate entry '...' for key 'pets.owner_id'"
+		String message = (ex.getMessage() + " " + ex.getMostSpecificCause().getMessage()).toLowerCase();
+		return message.contains("unique_owner_pet_name")
+				|| (message.contains("duplicate entry") && message.contains("pets.owner_id"));
 	}
 
 }
