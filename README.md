@@ -1,4 +1,37 @@
-# Spring Petclinic · APF2 · Pruebas de Software (UTP)
+# Spring Petclinic · APF2 y APF3 · Pruebas de Software (UTP)
+
+## APF3 · Tercer avance (26/11/2026)
+
+- Informe: [informe/APF3_Tercer_Avance.pdf](informe/APF3_Tercer_Avance.pdf) (editable: .docx)
+- Matriz actualizada: [matriz/APF3_Matriz_Casos_Incidencias_Metricas.xlsx](matriz/APF3_Matriz_Casos_Incidencias_Metricas.xlsx) (hojas nuevas: Regresion, Compatibilidad_PC, Accesibilidad, Metricas_APF3)
+- Ficha de la prueba de usabilidad: [apf3/usabilidad/Ficha_Usabilidad_APF3.xlsx](apf3/usabilidad/Ficha_Usabilidad_APF3.xlsx)
+- Evidencias del APF3: [apf3/ev/](apf3/ev/)
+- Código corregido: rama [`correcciones-apf3`](https://github.com/Mooneer17/spring-petclinic-apf2/tree/correcciones-apf3). La rama `main` conserva en `proyecto/` la versión evaluada (original más las pruebas del APF2).
+
+| Commit (rama correcciones-apf3) | Corrige | Comprobación |
+|---|---|---|
+| `f29532e` | DEF-P01, OBS-02: 404 para propietario o mascota inexistente o ajena | S07, S08, S09 |
+| `9a7a344` | DEF-P02, DEF-P03: alta de mascota con el propietario bloqueado | E01 (0 huérfanas, 0 HTTP 500) |
+| `d354bd2` | SEC-01, SEC-03, SEC-04: Actuator, cabeceras y sesión solo por cookie | S02, S12, S13 |
+| `4061dd6` | REG-01: estilos en línea movidos a CSS (regresión de la CSP) | prueba r01, consola sin errores |
+| `aea22f6` | A11Y-01 a A11Y-05: idioma, contraste, nombre del logo, alt y etiqueta | axe-core 33 → 0, AccesibilidadBasicaTests |
+
+Resultados principales: suite de regresión RG01–RG06 aprobada en las tres rondas; aprobación de 88,7 % a 98,1 % (54 casos, incluidos F32–F34); suite del proyecto con 101 pruebas y 0 fallos; Chrome, Firefox y WebKit de escritorio sin errores. SEC-02 (CSRF) queda abierto y aplazado.
+
+Pendiente del APF3: prueba en celular o emulador Android y sesiones de usabilidad con el grupo (ver [PENDIENTES.md](PENDIENTES.md)).
+
+Ejecución de las pruebas nuevas (desde `scripts/`, con la aplicación corregida en el puerto 8082):
+
+```bash
+git checkout correcciones-apf3 && (cd proyecto && ./mvnw test)
+python3 funcionales_apf3.py --base http://localhost:8082 --out salida/rf01 --bd MySQL
+python3 responsive_playwright.py --base http://localhost:8082 --out salida/compat --perfiles D
+npm install axe-core@4 && python3 accesibilidad_axe.py --base http://localhost:8082 --out salida/a11y --axe node_modules/axe-core/axe.min.js
+```
+
+---
+
+## APF2 · Segundo avance
 
 Segundo avance del proyecto final del curso Pruebas de Software. Repositorio de evidencias, pruebas y scripts del Grupo 10.
 
