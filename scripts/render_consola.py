@@ -53,9 +53,9 @@ def mvn_total(path):
 
 # 1. Regresion: resumen de las tres rondas
 L = []
-for etiqueta, base, junit in [("R0 original (main 5f76e05)", "04_regresion_MySQL/original/", "04_regresion_MySQL/original/junit_mysql.log"),
-                              ("R1 corregida (d354bd2)", "04_regresion_MySQL/corregida/", "04_regresion_MySQL/corregida/junit_mysql.log"),
-                              ("R2 corregida final (c6ba298 = aea22f6 sin comentarios)", "08_regresion_ronda2_MySQL/", "08_regresion_ronda2_MySQL/junit_mysql.log")]:
+for etiqueta, base, junit in [("R0 original (main 884ba77)", "04_regresion_MySQL/original/", "04_regresion_MySQL/original/junit_mysql.log"),
+                              ("R1 corregida (e96fb0a)", "04_regresion_MySQL/corregida/", "04_regresion_MySQL/corregida/junit_mysql.log"),
+                              ("R2 corregida final (c6ba298 = 257e0ee sin comentarios)", "08_regresion_ronda2_MySQL/", "08_regresion_ronda2_MySQL/junit_mysql.log")]:
     L += [f"# {etiqueta}",
           "funcionales F01-F31: " + tail(base + "funcionales_consola.log")[0],
           "seguridad   S01-S13: " + tail(base + "seguridad_consola.log")[0],
@@ -91,7 +91,7 @@ pick += [l.rstrip() for l in t if 'id="main-navbar" style>' in l][:1]
 i = next(k for k, l in enumerate(t) if l.startswith("not to contain pattern"))
 pick += t[i:i + 2]
 L = ["# Antes del ajuste (prueba r01 sobre la version con la CSP de SEC-03)"] + [p.replace("org.springframework.samples.petclinic.", "") for p in pick]
-L += ["", "# Despues del ajuste (commit 4061dd6): suite completa", mvn_total("06_regresion_CSP/suite_completa_despues.log")]
+L += ["", "# Despues del ajuste (commit c9b4e70): suite completa", mvn_total("06_regresion_CSP/suite_completa_despues.log")]
 render("consola_REG01.png", "REG-01: estilos en linea bloqueados por la CSP (06_regresion_CSP/test_antes_del_ajuste.log y suite_completa_despues.log)", L)
 
 # 5. Cabeceras S12 / S13

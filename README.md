@@ -12,11 +12,11 @@
 
 | Commit (rama correcciones-apf3) | Corrige | Comprobación |
 |---|---|---|
-| `f29532e` | DEF-P01, OBS-02: 404 para propietario o mascota inexistente o ajena | S07, S08, S09 |
-| `9a7a344` | DEF-P02, DEF-P03: alta de mascota con el propietario bloqueado | E01 (0 huérfanas, 0 HTTP 500) |
-| `d354bd2` | SEC-01, SEC-03, SEC-04: Actuator, cabeceras y sesión solo por cookie | S02, S12, S13 |
-| `4061dd6` | REG-01: estilos en línea movidos a CSS (regresión de la CSP) | prueba r01, consola sin errores |
-| `aea22f6` | A11Y-01 a A11Y-05: idioma, contraste, nombre del logo, alt y etiqueta | axe-core 33 → 0, AccesibilidadBasicaTests |
+| `4e4281d` | DEF-P01, OBS-02: 404 para propietario o mascota inexistente o ajena | S07, S08, S09 |
+| `495881b` | DEF-P02, DEF-P03: alta de mascota con el propietario bloqueado | E01 (0 huérfanas, 0 HTTP 500) |
+| `e96fb0a` | SEC-01, SEC-03, SEC-04: Actuator, cabeceras y sesión solo por cookie | S02, S12, S13 |
+| `c9b4e70` | REG-01: estilos en línea movidos a CSS (regresión de la CSP) | prueba r01, consola sin errores |
+| `257e0ee` | A11Y-01 a A11Y-05: idioma, contraste, nombre del logo, alt y etiqueta | axe-core 33 → 0, AccesibilidadBasicaTests |
 
 Resultados principales: suite de regresión RG01–RG06 aprobada en las tres rondas; aprobación de 88,7 % a 98,1 % (54 casos, incluidos F32–F34); suite del proyecto con 101 pruebas y 0 fallos; Chrome, Firefox y WebKit de escritorio sin errores. SEC-02 (CSRF) queda abierto y aplazado; MOV-01 (móvil) queda abierto con corrección propuesta.
 
