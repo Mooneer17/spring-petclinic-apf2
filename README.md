@@ -6,6 +6,7 @@
 - Matriz actualizada: [matriz/APF3_Matriz_Casos_Incidencias_Metricas.xlsx](matriz/APF3_Matriz_Casos_Incidencias_Metricas.xlsx) (hojas nuevas: Regresion, Compatibilidad_PC, Accesibilidad, Metricas_APF3)
 - Ficha de la prueba de usabilidad: [apf3/usabilidad/Ficha_Usabilidad_APF3.xlsx](apf3/usabilidad/Ficha_Usabilidad_APF3.xlsx)
 - Evidencias del APF3: [apf3/ev/](apf3/ev/)
+- Prueba móvil (preparada, pendiente de ejecutar): guía [apf3/movil/GUIA_PRUEBA_MOVIL.md](apf3/movil/GUIA_PRUEBA_MOVIL.md), script `apf3/movil/movil.ps1`, medición automática `apf3/movil/movil_cdp.py` y registro `apf3/movil/Registro_Prueba_Movil_APF3.xlsx`
 - Código corregido: rama [`correcciones-apf3`](https://github.com/Mooneer17/spring-petclinic-apf2/tree/correcciones-apf3). La rama `main` conserva en `proyecto/` la versión evaluada (original más las pruebas del APF2).
 
 | Commit (rama correcciones-apf3) | Corrige | Comprobación |
