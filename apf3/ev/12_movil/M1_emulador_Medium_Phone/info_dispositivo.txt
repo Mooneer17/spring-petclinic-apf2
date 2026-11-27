@@ -1,0 +1,10 @@
+﻿Fecha: 2026-11-26 22:38:30 -05:00
+Tipo: emulador de Android Studio (AVD)
+AVD: Medium_Phone
+Fabricante: Google
+Modelo: sdk_gphone16k_x86_64
+Android: 17 (API 37)
+Chrome: versionName=150.0.7871.126     versionName=145.0.7632.218
+Pantalla: Physical size: 1080x2400
+Densidad: Physical density: 420
+PC: DESKTOP-33ASVHN, Microsoft Windows 11 Pro

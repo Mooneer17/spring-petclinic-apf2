@@ -1,7 +1,7 @@
 # Pendientes y limitaciones
 
 ## APF3 (26/11/2026)
-1. **Prueba en celular.** La compatibilidad móvil (sección 14.2, escenarios CO-M01 a CO-M04) no se ha ejecutado. Todo está preparado en apf3/movil/ (guía, script, medición automática y registro): emulador de Android Studio y, si es posible, un celular del grupo.
+1. **MOV-01.** En el emulador Android (26/11/2026), la lista de propietarios no cabe en vertical: Telephone y Pets quedan fuera. Corrección propuesta: table-responsive o columnas apiladas. Opcional: repetir la prueba en un teléfono físico.
 2. **Sesiones de usabilidad.** 2 o 3 integrantes deben completar las 7 tareas de apf3/usabilidad/Ficha_Usabilidad_APF3.xlsx; luego se completa la sección 14.3.
 3. **SEC-02 (CSRF)** sigue abierto: requiere Spring Security, fuera de RF01–RF06.
 4. **Responsables por caso** (punto 1 del APF2) siguen sin registrar.

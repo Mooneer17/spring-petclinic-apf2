@@ -1,0 +1,273 @@
+{
+  "fecha": "2026-11-26T22:52:42-05:00",
+  "base": "http://10.0.2.2:8080",
+  "dispositivo": "AVD Medium_Phone (Android 17, Chrome 150)",
+  "orientacion": "horizontal",
+  "paginas": [
+    {
+      "viewport": "914x307",
+      "dpr": 2.625,
+      "orientacion_real": "landscape-primary",
+      "ancho_documento": 914,
+      "desborde_horizontal": false,
+      "interactivos": 2,
+      "objetivos_menores_24px": 0,
+      "ejemplos_pequenos": [],
+      "fuente_minima_px": 18,
+      "toggler_visible": true,
+      "titulo": "PetClinic :: a Spring Framework demonstration",
+      "lang": "en",
+      "pagina": "inicio",
+      "ruta": "/",
+      "http": 200,
+      "errores_consola": [],
+      "captura": "inicio.png"
+    },
+    {
+      "viewport": "914x307",
+      "dpr": 2.625,
+      "orientacion_real": "landscape-primary",
+      "ancho_documento": 914,
+      "desborde_horizontal": false,
+      "interactivos": 5,
+      "objetivos_menores_24px": 0,
+      "ejemplos_pequenos": [],
+      "fuente_minima_px": 16,
+      "toggler_visible": true,
+      "titulo": "PetClinic :: a Spring Framework demonstration",
+      "lang": "en",
+      "pagina": "buscar_propietario",
+      "ruta": "/owners/find",
+      "http": 200,
+      "errores_consola": [],
+      "captura": "buscar_propietario.png"
+    },
+    {
+      "viewport": "914x307",
+      "dpr": 2.625,
+      "orientacion_real": "landscape-primary",
+      "ancho_documento": 914,
+      "desborde_horizontal": false,
+      "interactivos": 11,
+      "objetivos_menores_24px": 8,
+      "ejemplos_pequenos": [
+        {
+          "tag": "a",
+          "texto": "George Franklin",
+          "w": 121,
+          "h": 19
+        },
+        {
+          "tag": "a",
+          "texto": "Betty Davis",
+          "w": 86,
+          "h": 19
+        },
+        {
+          "tag": "a",
+          "texto": "Harold Davis",
+          "w": 96,
+          "h": 19
+        },
+        {
+          "tag": "a",
+          "texto": "Peter McTavish",
+          "w": 115,
+          "h": 19
+        },
+        {
+          "tag": "a",
+          "texto": "2",
+          "w": 10,
+          "h": 19
+        },
+        {
+          "tag": "a",
+          "texto": "3",
+          "w": 10,
+          "h": 19
+        }
+      ],
+      "fuente_minima_px": 16,
+      "toggler_visible": true,
+      "titulo": "PetClinic :: a Spring Framework demonstration",
+      "lang": "en",
+      "pagina": "lista_propietarios",
+      "ruta": "/owners?lastName=",
+      "http": 200,
+      "errores_consola": [],
+      "captura": "lista_propietarios.png"
+    },
+    {
+      "viewport": "914x307",
+      "dpr": 2.625,
+      "orientacion_real": "landscape-primary",
+      "ancho_documento": 914,
+      "desborde_horizontal": false,
+      "interactivos": 6,
+      "objetivos_menores_24px": 2,
+      "ejemplos_pequenos": [
+        {
+          "tag": "a",
+          "texto": "Edit Pet",
+          "w": 60,
+          "h": 19
+        },
+        {
+          "tag": "a",
+          "texto": "Add Visit",
+          "w": 68,
+          "h": 19
+        }
+      ],
+      "fuente_minima_px": 16,
+      "toggler_visible": true,
+      "titulo": "PetClinic :: a Spring Framework demonstration",
+      "lang": "en",
+      "pagina": "detalle_propietario",
+      "ruta": "/owners/1",
+      "http": 200,
+      "errores_consola": [],
+      "captura": "detalle_propietario.png"
+    },
+    {
+      "viewport": "914x307",
+      "dpr": 2.625,
+      "orientacion_real": "landscape-primary",
+      "ancho_documento": 914,
+      "desborde_horizontal": false,
+      "interactivos": 8,
+      "objetivos_menores_24px": 0,
+      "ejemplos_pequenos": [],
+      "fuente_minima_px": 16,
+      "toggler_visible": true,
+      "titulo": "PetClinic :: a Spring Framework demonstration",
+      "lang": "en",
+      "pagina": "nuevo_propietario",
+      "ruta": "/owners/new",
+      "http": 200,
+      "errores_consola": [],
+      "captura": "nuevo_propietario.png"
+    },
+    {
+      "viewport": "914x307",
+      "dpr": 2.625,
+      "orientacion_real": "landscape-primary",
+      "ancho_documento": 914,
+      "desborde_horizontal": false,
+      "interactivos": 6,
+      "objetivos_menores_24px": 1,
+      "ejemplos_pequenos": [
+        {
+          "tag": "select",
+          "texto": "bird\ncat\ndog\nhamster\nlizard\nsnake",
+          "w": 84,
+          "h": 22
+        }
+      ],
+      "fuente_minima_px": 16,
+      "toggler_visible": true,
+      "titulo": "PetClinic :: a Spring Framework demonstration",
+      "lang": "en",
+      "pagina": "nueva_mascota",
+      "ruta": "/owners/1/pets/new",
+      "http": 200,
+      "errores_consola": [],
+      "captura": "nueva_mascota.png"
+    },
+    {
+      "viewport": "914x307",
+      "dpr": 2.625,
+      "orientacion_real": "landscape-primary",
+      "ancho_documento": 914,
+      "desborde_horizontal": false,
+      "interactivos": 5,
+      "objetivos_menores_24px": 0,
+      "ejemplos_pequenos": [],
+      "fuente_minima_px": 16,
+      "toggler_visible": true,
+      "titulo": "PetClinic :: a Spring Framework demonstration",
+      "lang": "en",
+      "pagina": "nueva_visita",
+      "ruta": "/owners/1/pets/1/visits/new",
+      "http": 200,
+      "errores_consola": [],
+      "captura": "nueva_visita.png"
+    },
+    {
+      "viewport": "914x307",
+      "dpr": 2.625,
+      "orientacion_real": "landscape-primary",
+      "ancho_documento": 914,
+      "desborde_horizontal": false,
+      "interactivos": 5,
+      "objetivos_menores_24px": 3,
+      "ejemplos_pequenos": [
+        {
+          "tag": "a",
+          "texto": "2",
+          "w": 10,
+          "h": 19
+        },
+        {
+          "tag": "a",
+          "texto": "/vets.html?page=2",
+          "w": 9,
+          "h": 16
+        },
+        {
+          "tag": "a",
+          "texto": "/vets.html?page=2",
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fuente_minima_px": 16,
+      "toggler_visible": true,
+      "titulo": "PetClinic :: a Spring Framework demonstration",
+      "lang": "en",
+      "pagina": "veterinarios",
+      "ruta": "/vets.html",
+      "http": 200,
+      "errores_consola": [],
+      "captura": "veterinarios.png"
+    },
+    {
+      "viewport": "914x307",
+      "dpr": 2.625,
+      "orientacion_real": "landscape-primary",
+      "ancho_documento": 914,
+      "desborde_horizontal": false,
+      "interactivos": 2,
+      "objetivos_menores_24px": 0,
+      "ejemplos_pequenos": [],
+      "fuente_minima_px": 16,
+      "toggler_visible": true,
+      "titulo": "PetClinic :: a Spring Framework demonstration",
+      "lang": "en",
+      "pagina": "error",
+      "ruta": "/oups",
+      "http": 500,
+      "errores_consola": [
+        "Failed to load resource: the server responded with a status of 500 ()"
+      ],
+      "captura": "error.png"
+    }
+  ],
+  "navegador": "150.0.7871.126",
+  "user_agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Mobile Safari/537.36",
+  "menu": {
+    "aplica": true,
+    "visibles_antes": 0,
+    "visibles_abierto": 4,
+    "visibles_cerrado": 0,
+    "funciona": true
+  },
+  "resumen": {
+    "paginas": 9,
+    "http_200": 8,
+    "con_desborde": 0,
+    "errores_consola": 0,
+    "fuente_minima_px": 16
+  }
+}

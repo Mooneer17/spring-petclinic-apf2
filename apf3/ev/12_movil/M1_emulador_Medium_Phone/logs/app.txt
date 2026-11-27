@@ -1,0 +1,3 @@
+[jue 26/11/2026 22:15:21.79] app 
+app iniciada en otra ventana 
+LISTO 

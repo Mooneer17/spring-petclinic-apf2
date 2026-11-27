@@ -1,0 +1,20 @@
+﻿[2026-11-26 22:54:29] > url http://10.0.2.2:8080/
+Starting: Intent { act=android.intent.action.VIEW dat=http://10.0.2.2:8080/... pkg=com.android.chrome }
+[2026-11-26 22:54:29] > esperar 4
+[2026-11-26 22:54:33] > tap 975 291
+[2026-11-26 22:54:34] > esperar 2
+[2026-11-26 22:54:36] > captura CO-M02_menu_abierto
+/sdcard/apf3_captura.png: 1 file pulled, 0 skipped. 85.1 MB/s (376604 bytes in 0.004s)
+[2026-11-26 22:54:36] > url http://10.0.2.2:8080/owners?lastName=
+Starting: Intent { act=android.intent.action.VIEW dat=http://10.0.2.2:8080/... pkg=com.android.chrome }
+[2026-11-26 22:54:36] > esperar 4
+[2026-11-26 22:54:40] > tap 447 1741
+[2026-11-26 22:54:40] > esperar 3
+[2026-11-26 22:54:43] > captura CO-M04_toque1_siguiente
+/sdcard/apf3_captura.png: 1 file pulled, 0 skipped. 72.3 MB/s (246948 bytes in 0.003s)
+[2026-11-26 22:54:43] > url http://10.0.2.2:8080/owners/new
+Starting: Intent { act=android.intent.action.VIEW dat=http://10.0.2.2:8080/... pkg=com.android.chrome }
+[2026-11-26 22:54:43] > esperar 4
+[2026-11-26 22:54:47] > captura CO-M03_formulario_propietario
+/sdcard/apf3_captura.png: 1 file pulled, 0 skipped. 66.0 MB/s (142607 bytes in 0.002s)
+[2026-11-26 22:54:48] FIN

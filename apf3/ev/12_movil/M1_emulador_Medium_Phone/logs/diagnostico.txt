@@ -1,0 +1,17 @@
+[jue 26/11/2026 22:14:28.95] diagnostico 
+JAVA: ok
+openjdk version "21.0.13" 2026-10-20 LTS
+OpenJDK Runtime Environment Temurin-21.0.13+9 (build 21.0.13+9-LTS)
+OpenJDK 64-Bit Server VM Temurin-21.0.13+9 (build 21.0.13+9-LTS, mixed mode, sharing)
+SDK=C:\Users\pc\AppData\Local\Android\Sdk
+ADB: ok
+EMULADOR: ok
+--- AVD disponibles
+Medium_Phone
+Pixel_9_Pro_Fold
+--- dispositivos adb
+List of devices attached
+
+--- python
+Python 3.14.6
+LISTO 

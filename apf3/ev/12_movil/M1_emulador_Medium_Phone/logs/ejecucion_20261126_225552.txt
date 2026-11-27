@@ -1,0 +1,58 @@
+﻿[2026-11-26 22:55:52] > url http://10.0.2.2:8080/
+Starting: Intent { act=android.intent.action.VIEW dat=http://10.0.2.2:8080/... pkg=com.android.chrome }
+[2026-11-26 22:55:52] > esperar 4
+[2026-11-26 22:55:56] > tap 975 291
+[2026-11-26 22:55:56] > esperar 2
+[2026-11-26 22:55:58] > tap 264 663
+[2026-11-26 22:55:58] > esperar 3
+[2026-11-26 22:56:01] > captura CO-M02_opcion_find_owners
+/sdcard/apf3_captura.png: 1 file pulled, 0 skipped. 44.0 MB/s (107546 bytes in 0.002s)
+[2026-11-26 22:56:02] > url http://10.0.2.2:8080/owners?page=2
+Starting: Intent { act=android.intent.action.VIEW dat=http://10.0.2.2:8080/... pkg=com.android.chrome }
+[2026-11-26 22:56:02] > esperar 4
+[2026-11-26 22:56:06] > tap 411 1677
+[2026-11-26 22:56:06] > esperar 3
+[2026-11-26 22:56:09] > captura CO-M04_toque2_anterior
+/sdcard/apf3_captura.png: 1 file pulled, 0 skipped. 90.8 MB/s (263153 bytes in 0.003s)
+[2026-11-26 22:56:09] > tap 492 1741
+[2026-11-26 22:56:09] > esperar 3
+[2026-11-26 22:56:12] > captura CO-M04_toque3_ultima
+/sdcard/apf3_captura.png: 1 file pulled, 0 skipped. 43.7 MB/s (133871 bytes in 0.003s)
+[2026-11-26 22:56:13] > url http://10.0.2.2:8080/owners?page=2
+Starting: Intent { act=android.intent.action.VIEW dat=http://10.0.2.2:8080/... pkg=com.android.chrome }
+[2026-11-26 22:56:13] > esperar 4
+[2026-11-26 22:56:17] > tap 450 1677
+[2026-11-26 22:56:17] > esperar 3
+[2026-11-26 22:56:20] > captura CO-M04_toque4_siguiente
+/sdcard/apf3_captura.png: 1 file pulled, 0 skipped. 68.0 MB/s (156553 bytes in 0.002s)
+[2026-11-26 22:56:20] > url http://10.0.2.2:8080/owners?page=2
+Starting: Intent { act=android.intent.action.VIEW dat=http://10.0.2.2:8080/... pkg=com.android.chrome }
+[2026-11-26 22:56:20] > esperar 4
+[2026-11-26 22:56:24] > tap 366 1677
+[2026-11-26 22:56:24] > esperar 3
+[2026-11-26 22:56:27] > captura CO-M04_toque5_primera
+/sdcard/apf3_captura.png: 1 file pulled, 0 skipped. 75.5 MB/s (262966 bytes in 0.003s)
+[2026-11-26 22:56:27] > url http://10.0.2.2:8080/owners/new
+Starting: Intent { act=android.intent.action.VIEW dat=http://10.0.2.2:8080/... pkg=com.android.chrome }
+[2026-11-26 22:56:27] > esperar 4
+[2026-11-26 22:56:31] > tap 540 636
+[2026-11-26 22:56:31] > esperar 2
+[2026-11-26 22:56:33] > captura CO-M03_teclado_abierto
+/sdcard/apf3_captura.png: 1 file pulled, 0 skipped. 59.4 MB/s (171621 bytes in 0.003s)
+[2026-11-26 22:56:34] > texto Movil
+[2026-11-26 22:56:34] > tecla 61
+[2026-11-26 22:56:34] > texto Tactil
+[2026-11-26 22:56:34] > tecla 61
+[2026-11-26 22:56:34] > texto Av. Toque 10
+[2026-11-26 22:56:35] > tecla 61
+[2026-11-26 22:56:35] > texto Lima
+[2026-11-26 22:56:35] > tecla 61
+[2026-11-26 22:56:35] > esperar 1
+[2026-11-26 22:56:36] > captura CO-M03_teclado_telefono
+/sdcard/apf3_captura.png: 1 file pulled, 0 skipped. 49.4 MB/s (187479 bytes in 0.004s)
+[2026-11-26 22:56:37] > texto 9876543210
+[2026-11-26 22:56:37] > tecla 4
+[2026-11-26 22:56:37] > esperar 2
+[2026-11-26 22:56:39] > captura CO-M03_antes_de_enviar
+/sdcard/apf3_captura.png: 1 file pulled, 0 skipped. 115.0 MB/s (1399090 bytes in 0.012s)
+[2026-11-26 22:56:40] FIN

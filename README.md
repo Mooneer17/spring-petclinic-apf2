@@ -7,7 +7,7 @@
 - Matriz actualizada: [matriz/APF3_Matriz_Casos_Incidencias_Metricas.xlsx](matriz/APF3_Matriz_Casos_Incidencias_Metricas.xlsx) (hojas nuevas: Regresion, Compatibilidad_PC, Accesibilidad, Metricas_APF3)
 - Ficha de la prueba de usabilidad: [apf3/usabilidad/Ficha_Usabilidad_APF3.xlsx](apf3/usabilidad/Ficha_Usabilidad_APF3.xlsx)
 - Evidencias del APF3: [apf3/ev/](apf3/ev/)
-- Prueba móvil (preparada, pendiente de ejecutar): guía [apf3/movil/GUIA_PRUEBA_MOVIL.md](apf3/movil/GUIA_PRUEBA_MOVIL.md), script `apf3/movil/movil.ps1`, medición automática `apf3/movil/movil_cdp.py` y registro `apf3/movil/Registro_Prueba_Movil_APF3.xlsx`
+- Prueba móvil: ejecutada en el emulador de Android Studio (Android 17, Chrome 150). Evidencias en [apf3/ev/12_movil/](apf3/ev/12_movil/) y registro en `apf3/movil/Registro_Prueba_Movil_APF3.xlsx`; 3 de 4 escenarios aprobados, CO-M01 fallido por MOV-01 (lista de propietarios cortada en vertical)
 - Código corregido: rama [`correcciones-apf3`](https://github.com/Mooneer17/spring-petclinic-apf2/tree/correcciones-apf3). La rama `main` conserva en `proyecto/` la versión evaluada (original más las pruebas del APF2).
 
 | Commit (rama correcciones-apf3) | Corrige | Comprobación |
@@ -18,9 +18,9 @@
 | `4061dd6` | REG-01: estilos en línea movidos a CSS (regresión de la CSP) | prueba r01, consola sin errores |
 | `aea22f6` | A11Y-01 a A11Y-05: idioma, contraste, nombre del logo, alt y etiqueta | axe-core 33 → 0, AccesibilidadBasicaTests |
 
-Resultados principales: suite de regresión RG01–RG06 aprobada en las tres rondas; aprobación de 88,7 % a 98,1 % (54 casos, incluidos F32–F34); suite del proyecto con 101 pruebas y 0 fallos; Chrome, Firefox y WebKit de escritorio sin errores. SEC-02 (CSRF) queda abierto y aplazado.
+Resultados principales: suite de regresión RG01–RG06 aprobada en las tres rondas; aprobación de 88,7 % a 98,1 % (54 casos, incluidos F32–F34); suite del proyecto con 101 pruebas y 0 fallos; Chrome, Firefox y WebKit de escritorio sin errores. SEC-02 (CSRF) queda abierto y aplazado; MOV-01 (móvil) queda abierto con corrección propuesta.
 
-Pendiente del APF3: prueba en celular o emulador Android y sesiones de usabilidad con el grupo (ver [PENDIENTES.md](PENDIENTES.md)).
+Pendiente del APF3: sesiones de usabilidad con el grupo y corrección de MOV-01 (ver [PENDIENTES.md](PENDIENTES.md)).
 
 Ejecución de las pruebas nuevas (desde `scripts/`, con la aplicación corregida en el puerto 8082):
 

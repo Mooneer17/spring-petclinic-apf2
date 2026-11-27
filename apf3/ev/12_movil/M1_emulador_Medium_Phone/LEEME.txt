@@ -1,0 +1,14 @@
+Prueba de compatibilidad movil (APF3, seccion 14.2) - 26/11/2026, 22:38 a 23:03 (hora de Lima)
+Dispositivo M1: emulador de Android Studio, AVD Medium_Phone, Android 17 (API 37), Chrome 150.0.7871.126, 1080x2400 px, 420 dpi.
+Aplicacion: version corregida (rama correcciones-apf3) en la PC del equipo, puerto 8080, H2; abierta desde el emulador en http://10.0.2.2:8080.
+Interaccion: toques y texto enviados con adb (input tap / input text), que el sistema recibe como eventos de pantalla tactil y teclado virtual.
+Chrome del emulador en modo de pruebas (--disable-fre) para omitir la pantalla de bienvenida; por eso aparece el aviso "Chrome is loading flags from a command-line file".
+El teclado virtual se ve en modo compacto porque la PC tiene teclado fisico conectado al emulador.
+Contenido:
+  info_dispositivo.txt            datos del dispositivo (adb)
+  medicion_vertical/, medicion_horizontal/   medicion automatica de las 9 paginas (movil_cdp.py) con capturas
+  capturas/                       capturas del telefono por escenario (CO-M01 a CO-M04)
+  capturas/CO-M03_antes_de_enviar.png  primer intento fallido de CO-M03: la tecla Atras enviada por el equipo cerro Chrome (error del procedimiento, no de la aplicacion); se repitio
+  capturas/prueba_inicio*.png     preparacion (bienvenida de Chrome y aviso de notificaciones)
+  logs/                           registro de cada ejecucion; ejecucion.txt dejo de actualizarse por un bloqueo del archivo y se paso a un archivo por ejecucion
+  herramientas/                   ejecutar.ps1 y ejecutar.bat usados para enviar los pasos al emulador

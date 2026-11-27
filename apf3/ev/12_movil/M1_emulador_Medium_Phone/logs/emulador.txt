@@ -1,0 +1,3 @@
+[jue 26/11/2026 22:16:19.54] emulador Medium_Phone 
+emulador iniciado: Medium_Phone 
+LISTO 

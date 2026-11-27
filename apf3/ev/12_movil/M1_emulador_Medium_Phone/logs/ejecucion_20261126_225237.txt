@@ -1,0 +1,33 @@
+﻿[2026-11-26 22:52:37] > rotar 1
+[2026-11-26 22:52:37] > esperar 4
+[2026-11-26 22:52:41] > medir horizontal sin AVD Medium_Phone (Android 17, Chrome 150)
+inicio                 HTTP 200  914x307   desborde=False  obj<24px=0  fuente_min=18  consola=0
+buscar_propietario     HTTP 200  914x307   desborde=False  obj<24px=0  fuente_min=16  consola=0
+lista_propietarios     HTTP 200  914x307   desborde=False  obj<24px=8  fuente_min=16  consola=0
+detalle_propietario    HTTP 200  914x307   desborde=False  obj<24px=2  fuente_min=16  consola=0
+nuevo_propietario      HTTP 200  914x307   desborde=False  obj<24px=0  fuente_min=16  consola=0
+nueva_mascota          HTTP 200  914x307   desborde=False  obj<24px=1  fuente_min=16  consola=0
+nueva_visita           HTTP 200  914x307   desborde=False  obj<24px=0  fuente_min=16  consola=0
+veterinarios           HTTP 200  914x307   desborde=False  obj<24px=3  fuente_min=16  consola=0
+error                  HTTP 500  914x307   desborde=False  obj<24px=0  fuente_min=16  consola=1
+menu: {'aplica': True, 'visibles_antes': 0, 'visibles_abierto': 4, 'visibles_cerrado': 0, 'funciona': True}
+resumen: {'paginas': 9, 'http_200': 8, 'con_desborde': 0, 'errores_consola': 0, 'fuente_minima_px': 16}
+[2026-11-26 22:52:53] > rotar 0
+[2026-11-26 22:52:53] > esperar 3
+[2026-11-26 22:52:56] > url http://10.0.2.2:8080/owners?lastName=
+Starting: Intent { act=android.intent.action.VIEW dat=http://10.0.2.2:8080/... pkg=com.android.chrome }
+[2026-11-26 22:52:56] > esperar 5
+[2026-11-26 22:53:01] > captura CO-M01_lista_vertical
+/sdcard/apf3_captura.png: 1 file pulled, 0 skipped. 64.8 MB/s (262741 bytes in 0.004s)
+[2026-11-26 22:53:01] > rotar 1
+[2026-11-26 22:53:01] > esperar 5
+[2026-11-26 22:53:06] > captura CO-M01_lista_horizontal
+/sdcard/apf3_captura.png: 1 file pulled, 0 skipped. 54.8 MB/s (170173 bytes in 0.003s)
+[2026-11-26 22:53:07] > rotar 0
+[2026-11-26 22:53:07] > esperar 3
+[2026-11-26 22:53:10] > url http://10.0.2.2:8080/
+Starting: Intent { act=android.intent.action.VIEW dat=http://10.0.2.2:8080/... pkg=com.android.chrome }
+[2026-11-26 22:53:10] > esperar 5
+[2026-11-26 22:53:15] > captura CO-M02_menu_cerrado
+/sdcard/apf3_captura.png: 1 file pulled, 0 skipped. 90.5 MB/s (354387 bytes in 0.004s)
+[2026-11-26 22:53:15] FIN
