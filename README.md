@@ -3,7 +3,7 @@
 ## APF3 · Tercer avance (26/11/2026)
 
 - Informe: [informe/APF3_Tercer_Avance.pdf](informe/APF3_Tercer_Avance.pdf) (editable: .docx)
-- Presentación: [presentacion/APF3_Presentacion.pptx](presentacion/APF3_Presentacion.pptx) (18 diapositivas con guion en las notas)
+- Presentación: [presentacion/APF3_Presentacion.pptx](presentacion/APF3_Presentacion.pptx) (23 diapositivas con guion en las notas)
 - Matriz actualizada: [matriz/APF3_Matriz_Casos_Incidencias_Metricas.xlsx](matriz/APF3_Matriz_Casos_Incidencias_Metricas.xlsx) (hojas nuevas: Regresion, Compatibilidad_PC, Accesibilidad, Metricas_APF3)
 - Ficha de la prueba de usabilidad: [apf3/usabilidad/Ficha_Usabilidad_APF3.xlsx](apf3/usabilidad/Ficha_Usabilidad_APF3.xlsx)
 - Evidencias del APF3: [apf3/ev/](apf3/ev/)
