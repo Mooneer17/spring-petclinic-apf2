@@ -1,0 +1,5 @@
+5ece9b7 Mooneer17 2026-11-26 DEF-P01 y OBS-02: responder 404 cuando el propietario o la mascota no existen o no corresponden
+df7eeea Mooneer17 2026-11-26 DEF-P02 y DEF-P03: alta de mascota en una transacción con el propietario bloqueado
+b2e4b91 Mooneer17 2026-11-26 SEC-01, SEC-03 y SEC-04: Actuator restringido, cabeceras defensivas y sesión solo por cookie
+2847021 Mooneer17 2026-11-26 REG-01 (SEC-03): mover estilos en línea a CSS para que la CSP no los bloquee
+168453f Mooneer17 2026-11-26 A11Y-01 a A11Y-05: idioma, contraste del menú, nombre del logo, alt y etiqueta de búsqueda

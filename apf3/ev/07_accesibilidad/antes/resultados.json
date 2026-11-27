@@ -1,0 +1,708 @@
+{
+  "base": "http://localhost:8082",
+  "fecha": "2026-11-26T17:02:53",
+  "estandar": [
+    "wcag2a",
+    "wcag2aa",
+    "wcag21a",
+    "wcag21aa"
+  ],
+  "paginas": [
+    {
+      "pagina": "inicio",
+      "ruta": "/",
+      "violaciones": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "descripcion": "Elements must meet minimum color contrast ratio thresholds",
+          "criterio": [
+            "wcag2aa",
+            "wcag143"
+          ],
+          "nodos": 3,
+          "ejemplo": "<span>Find Owners</span>"
+        },
+        {
+          "id": "html-has-lang",
+          "impacto": "serious",
+          "descripcion": "<html> element must have a lang attribute",
+          "criterio": [
+            "wcag311"
+          ],
+          "nodos": 1,
+          "ejemplo": "<html>"
+        },
+        {
+          "id": "image-alt",
+          "impacto": "critical",
+          "descripcion": "Images must have alternative text",
+          "criterio": [
+            "wcag111"
+          ],
+          "nodos": 1,
+          "ejemplo": "<img class=\"img-responsive\" src=\"/resources/images/pets.png\">"
+        },
+        {
+          "id": "link-name",
+          "impacto": "serious",
+          "descripcion": "Links must have discernible text",
+          "criterio": [
+            "wcag244",
+            "wcag412"
+          ],
+          "nodos": 1,
+          "ejemplo": "<a class=\"navbar-brand\" href=\"/\"><span></span></a>"
+        }
+      ],
+      "reglas_aprobadas": 13,
+      "revisar_manual": 0,
+      "estructura": {
+        "lang": "",
+        "titulo": "PetClinic :: a Spring Framework demonstration",
+        "h1": 0,
+        "h2": 1,
+        "imagenes_sin_alt": [
+          "/resources/images/pets.png"
+        ],
+        "campos_sin_label": [],
+        "saltar_al_contenido": false,
+        "landmark_main": false
+      },
+      "tab_elementos": 5,
+      "tab_sin_foco_visible": 0,
+      "ejemplos_sin_foco": [],
+      "orden_tab": [
+        "a",
+        "HOME",
+        "FIND OWNERS",
+        "VETERINARIANS",
+        "ERROR"
+      ]
+    },
+    {
+      "pagina": "buscar_propietario",
+      "ruta": "/owners/find",
+      "violaciones": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "descripcion": "Elements must meet minimum color contrast ratio thresholds",
+          "criterio": [
+            "wcag2aa",
+            "wcag143"
+          ],
+          "nodos": 3,
+          "ejemplo": "<span>Home</span>"
+        },
+        {
+          "id": "html-has-lang",
+          "impacto": "serious",
+          "descripcion": "<html> element must have a lang attribute",
+          "criterio": [
+            "wcag311"
+          ],
+          "nodos": 1,
+          "ejemplo": "<html>"
+        },
+        {
+          "id": "label",
+          "impacto": "critical",
+          "descripcion": "Form elements must have labels",
+          "criterio": [
+            "wcag412"
+          ],
+          "nodos": 1,
+          "ejemplo": "<input class=\"form-control\" size=\"30\" maxlength=\"80\" id=\"lastName\" name=\"lastName\" value=\"\">"
+        },
+        {
+          "id": "link-name",
+          "impacto": "serious",
+          "descripcion": "Links must have discernible text",
+          "criterio": [
+            "wcag244",
+            "wcag412"
+          ],
+          "nodos": 1,
+          "ejemplo": "<a class=\"navbar-brand\" href=\"/\"><span></span></a>"
+        }
+      ],
+      "reglas_aprobadas": 15,
+      "revisar_manual": 0,
+      "estructura": {
+        "lang": "",
+        "titulo": "PetClinic :: a Spring Framework demonstration",
+        "h1": 0,
+        "h2": 1,
+        "imagenes_sin_alt": [],
+        "campos_sin_label": [
+          "lastName"
+        ],
+        "saltar_al_contenido": false,
+        "landmark_main": false
+      },
+      "tab_elementos": 8,
+      "tab_sin_foco_visible": 0,
+      "ejemplos_sin_foco": [],
+      "orden_tab": [
+        "a",
+        "HOME",
+        "FIND OWNERS",
+        "VETERINARIANS",
+        "ERROR",
+        "lastName",
+        "Find Owner",
+        "Add Owner"
+      ]
+    },
+    {
+      "pagina": "lista_propietarios",
+      "ruta": "/owners?lastName=",
+      "violaciones": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "descripcion": "Elements must meet minimum color contrast ratio thresholds",
+          "criterio": [
+            "wcag2aa",
+            "wcag143"
+          ],
+          "nodos": 3,
+          "ejemplo": "<span>Home</span>"
+        },
+        {
+          "id": "html-has-lang",
+          "impacto": "serious",
+          "descripcion": "<html> element must have a lang attribute",
+          "criterio": [
+            "wcag311"
+          ],
+          "nodos": 1,
+          "ejemplo": "<html>"
+        },
+        {
+          "id": "link-name",
+          "impacto": "serious",
+          "descripcion": "Links must have discernible text",
+          "criterio": [
+            "wcag244",
+            "wcag412"
+          ],
+          "nodos": 1,
+          "ejemplo": "<a class=\"navbar-brand\" href=\"/\"><span></span></a>"
+        }
+      ],
+      "reglas_aprobadas": 16,
+      "revisar_manual": 0,
+      "estructura": {
+        "lang": "",
+        "titulo": "PetClinic :: a Spring Framework demonstration",
+        "h1": 0,
+        "h2": 1,
+        "imagenes_sin_alt": [],
+        "campos_sin_label": [],
+        "saltar_al_contenido": false,
+        "landmark_main": false
+      },
+      "tab_elementos": 11,
+      "tab_sin_foco_visible": 0,
+      "ejemplos_sin_foco": [],
+      "orden_tab": [
+        "a",
+        "HOME",
+        "FIND OWNERS",
+        "VETERINARIANS",
+        "ERROR",
+        "George Franklin",
+        "Betty Davis",
+        "Eduardo Rodriquez",
+        "Harold Davis",
+        "Peter McTavish",
+        "2"
+      ]
+    },
+    {
+      "pagina": "detalle_propietario",
+      "ruta": "/owners/1",
+      "violaciones": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "descripcion": "Elements must meet minimum color contrast ratio thresholds",
+          "criterio": [
+            "wcag2aa",
+            "wcag143"
+          ],
+          "nodos": 3,
+          "ejemplo": "<span>Home</span>"
+        },
+        {
+          "id": "html-has-lang",
+          "impacto": "serious",
+          "descripcion": "<html> element must have a lang attribute",
+          "criterio": [
+            "wcag311"
+          ],
+          "nodos": 1,
+          "ejemplo": "<html>"
+        },
+        {
+          "id": "link-name",
+          "impacto": "serious",
+          "descripcion": "Links must have discernible text",
+          "criterio": [
+            "wcag244",
+            "wcag412"
+          ],
+          "nodos": 1,
+          "ejemplo": "<a class=\"navbar-brand\" href=\"/\"><span></span></a>"
+        }
+      ],
+      "reglas_aprobadas": 17,
+      "revisar_manual": 0,
+      "estructura": {
+        "lang": "",
+        "titulo": "PetClinic :: a Spring Framework demonstration",
+        "h1": 0,
+        "h2": 2,
+        "imagenes_sin_alt": [],
+        "campos_sin_label": [],
+        "saltar_al_contenido": false,
+        "landmark_main": false
+      },
+      "tab_elementos": 9,
+      "tab_sin_foco_visible": 0,
+      "ejemplos_sin_foco": [],
+      "orden_tab": [
+        "a",
+        "HOME",
+        "FIND OWNERS",
+        "VETERINARIANS",
+        "ERROR",
+        "Edit Owner",
+        "Add New Pet",
+        "Edit Pet",
+        "Add Visit"
+      ]
+    },
+    {
+      "pagina": "nuevo_propietario",
+      "ruta": "/owners/new",
+      "violaciones": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "descripcion": "Elements must meet minimum color contrast ratio thresholds",
+          "criterio": [
+            "wcag2aa",
+            "wcag143"
+          ],
+          "nodos": 3,
+          "ejemplo": "<span>Home</span>"
+        },
+        {
+          "id": "html-has-lang",
+          "impacto": "serious",
+          "descripcion": "<html> element must have a lang attribute",
+          "criterio": [
+            "wcag311"
+          ],
+          "nodos": 1,
+          "ejemplo": "<html>"
+        },
+        {
+          "id": "link-name",
+          "impacto": "serious",
+          "descripcion": "Links must have discernible text",
+          "criterio": [
+            "wcag244",
+            "wcag412"
+          ],
+          "nodos": 1,
+          "ejemplo": "<a class=\"navbar-brand\" href=\"/\"><span></span></a>"
+        }
+      ],
+      "reglas_aprobadas": 18,
+      "revisar_manual": 0,
+      "estructura": {
+        "lang": "",
+        "titulo": "PetClinic :: a Spring Framework demonstration",
+        "h1": 0,
+        "h2": 1,
+        "imagenes_sin_alt": [],
+        "campos_sin_label": [],
+        "saltar_al_contenido": false,
+        "landmark_main": false
+      },
+      "tab_elementos": 11,
+      "tab_sin_foco_visible": 0,
+      "ejemplos_sin_foco": [],
+      "orden_tab": [
+        "a",
+        "HOME",
+        "FIND OWNERS",
+        "VETERINARIANS",
+        "ERROR",
+        "firstName",
+        "lastName",
+        "address",
+        "city",
+        "telephone",
+        "Add Owner"
+      ]
+    },
+    {
+      "pagina": "nuevo_propietario_con_errores",
+      "ruta": "POST:/owners/new",
+      "violaciones": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "descripcion": "Elements must meet minimum color contrast ratio thresholds",
+          "criterio": [
+            "wcag2aa",
+            "wcag143"
+          ],
+          "nodos": 3,
+          "ejemplo": "<span>Home</span>"
+        },
+        {
+          "id": "html-has-lang",
+          "impacto": "serious",
+          "descripcion": "<html> element must have a lang attribute",
+          "criterio": [
+            "wcag311"
+          ],
+          "nodos": 1,
+          "ejemplo": "<html>"
+        },
+        {
+          "id": "link-name",
+          "impacto": "serious",
+          "descripcion": "Links must have discernible text",
+          "criterio": [
+            "wcag244",
+            "wcag412"
+          ],
+          "nodos": 1,
+          "ejemplo": "<a class=\"navbar-brand\" href=\"/\"><span></span></a>"
+        }
+      ],
+      "reglas_aprobadas": 18,
+      "revisar_manual": 0,
+      "estructura": {
+        "lang": "",
+        "titulo": "PetClinic :: a Spring Framework demonstration",
+        "h1": 0,
+        "h2": 1,
+        "imagenes_sin_alt": [],
+        "campos_sin_label": [],
+        "saltar_al_contenido": false,
+        "landmark_main": false
+      },
+      "tab_elementos": 11,
+      "tab_sin_foco_visible": 0,
+      "ejemplos_sin_foco": [],
+      "orden_tab": [
+        "a",
+        "HOME",
+        "FIND OWNERS",
+        "VETERINARIANS",
+        "ERROR",
+        "firstName",
+        "lastName",
+        "address",
+        "city",
+        "telephone",
+        "Add Owner"
+      ]
+    },
+    {
+      "pagina": "nueva_mascota",
+      "ruta": "/owners/1/pets/new",
+      "violaciones": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "descripcion": "Elements must meet minimum color contrast ratio thresholds",
+          "criterio": [
+            "wcag2aa",
+            "wcag143"
+          ],
+          "nodos": 3,
+          "ejemplo": "<span>Home</span>"
+        },
+        {
+          "id": "html-has-lang",
+          "impacto": "serious",
+          "descripcion": "<html> element must have a lang attribute",
+          "criterio": [
+            "wcag311"
+          ],
+          "nodos": 1,
+          "ejemplo": "<html>"
+        },
+        {
+          "id": "link-name",
+          "impacto": "serious",
+          "descripcion": "Links must have discernible text",
+          "criterio": [
+            "wcag244",
+            "wcag412"
+          ],
+          "nodos": 1,
+          "ejemplo": "<a class=\"navbar-brand\" href=\"/\"><span></span></a>"
+        }
+      ],
+      "reglas_aprobadas": 19,
+      "revisar_manual": 0,
+      "estructura": {
+        "lang": "",
+        "titulo": "PetClinic :: a Spring Framework demonstration",
+        "h1": 0,
+        "h2": 1,
+        "imagenes_sin_alt": [],
+        "campos_sin_label": [],
+        "saltar_al_contenido": false,
+        "landmark_main": false
+      },
+      "tab_elementos": 12,
+      "tab_sin_foco_visible": 1,
+      "ejemplos_sin_foco": [
+        {
+          "tag": "input",
+          "id": "birthDate",
+          "texto": "",
+          "foco_visible": false,
+          "en_pantalla": true
+        }
+      ],
+      "orden_tab": [
+        "a",
+        "HOME",
+        "FIND OWNERS",
+        "VETERINARIANS",
+        "ERROR",
+        "name",
+        "birthDate",
+        "birthDate",
+        "birthDate",
+        "birthDate",
+        "bird\ncat\ndog\nhamster\nlizard\nsnake",
+        "Add Pet"
+      ]
+    },
+    {
+      "pagina": "nueva_visita",
+      "ruta": "/owners/1/pets/1/visits/new",
+      "violaciones": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "descripcion": "Elements must meet minimum color contrast ratio thresholds",
+          "criterio": [
+            "wcag2aa",
+            "wcag143"
+          ],
+          "nodos": 3,
+          "ejemplo": "<span>Home</span>"
+        },
+        {
+          "id": "html-has-lang",
+          "impacto": "serious",
+          "descripcion": "<html> element must have a lang attribute",
+          "criterio": [
+            "wcag311"
+          ],
+          "nodos": 1,
+          "ejemplo": "<html>"
+        },
+        {
+          "id": "link-name",
+          "impacto": "serious",
+          "descripcion": "Links must have discernible text",
+          "criterio": [
+            "wcag244",
+            "wcag412"
+          ],
+          "nodos": 1,
+          "ejemplo": "<a class=\"navbar-brand\" href=\"/\"><span></span></a>"
+        }
+      ],
+      "reglas_aprobadas": 20,
+      "revisar_manual": 1,
+      "estructura": {
+        "lang": "",
+        "titulo": "PetClinic :: a Spring Framework demonstration",
+        "h1": 0,
+        "h2": 1,
+        "imagenes_sin_alt": [],
+        "campos_sin_label": [],
+        "saltar_al_contenido": false,
+        "landmark_main": false
+      },
+      "tab_elementos": 11,
+      "tab_sin_foco_visible": 1,
+      "ejemplos_sin_foco": [
+        {
+          "tag": "input",
+          "id": "date",
+          "texto": "2026-11-27",
+          "foco_visible": false,
+          "en_pantalla": true
+        }
+      ],
+      "orden_tab": [
+        "a",
+        "HOME",
+        "FIND OWNERS",
+        "VETERINARIANS",
+        "ERROR",
+        "2026-11-27",
+        "2026-11-27",
+        "2026-11-27",
+        "2026-11-27",
+        "description",
+        "Add Visit"
+      ]
+    },
+    {
+      "pagina": "veterinarios",
+      "ruta": "/vets.html",
+      "violaciones": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "descripcion": "Elements must meet minimum color contrast ratio thresholds",
+          "criterio": [
+            "wcag2aa",
+            "wcag143"
+          ],
+          "nodos": 3,
+          "ejemplo": "<span>Home</span>"
+        },
+        {
+          "id": "html-has-lang",
+          "impacto": "serious",
+          "descripcion": "<html> element must have a lang attribute",
+          "criterio": [
+            "wcag311"
+          ],
+          "nodos": 1,
+          "ejemplo": "<html>"
+        },
+        {
+          "id": "link-name",
+          "impacto": "serious",
+          "descripcion": "Links must have discernible text",
+          "criterio": [
+            "wcag244",
+            "wcag412"
+          ],
+          "nodos": 1,
+          "ejemplo": "<a class=\"navbar-brand\" href=\"/\"><span></span></a>"
+        }
+      ],
+      "reglas_aprobadas": 16,
+      "revisar_manual": 0,
+      "estructura": {
+        "lang": "",
+        "titulo": "PetClinic :: a Spring Framework demonstration",
+        "h1": 0,
+        "h2": 1,
+        "imagenes_sin_alt": [],
+        "campos_sin_label": [],
+        "saltar_al_contenido": false,
+        "landmark_main": false
+      },
+      "tab_elementos": 6,
+      "tab_sin_foco_visible": 0,
+      "ejemplos_sin_foco": [],
+      "orden_tab": [
+        "a",
+        "HOME",
+        "FIND OWNERS",
+        "VETERINARIANS",
+        "ERROR",
+        "2"
+      ]
+    },
+    {
+      "pagina": "error",
+      "ruta": "/oups",
+      "violaciones": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "descripcion": "Elements must meet minimum color contrast ratio thresholds",
+          "criterio": [
+            "wcag2aa",
+            "wcag143"
+          ],
+          "nodos": 3,
+          "ejemplo": "<span>Home</span>"
+        },
+        {
+          "id": "html-has-lang",
+          "impacto": "serious",
+          "descripcion": "<html> element must have a lang attribute",
+          "criterio": [
+            "wcag311"
+          ],
+          "nodos": 1,
+          "ejemplo": "<html>"
+        },
+        {
+          "id": "image-alt",
+          "impacto": "critical",
+          "descripcion": "Images must have alternative text",
+          "criterio": [
+            "wcag111"
+          ],
+          "nodos": 1,
+          "ejemplo": "<img src=\"/resources/images/pets.png\">"
+        },
+        {
+          "id": "link-name",
+          "impacto": "serious",
+          "descripcion": "Links must have discernible text",
+          "criterio": [
+            "wcag244",
+            "wcag412"
+          ],
+          "nodos": 1,
+          "ejemplo": "<a class=\"navbar-brand\" href=\"/\"><span></span></a>"
+        }
+      ],
+      "reglas_aprobadas": 13,
+      "revisar_manual": 0,
+      "estructura": {
+        "lang": "",
+        "titulo": "PetClinic :: a Spring Framework demonstration",
+        "h1": 0,
+        "h2": 1,
+        "imagenes_sin_alt": [
+          "/resources/images/pets.png"
+        ],
+        "campos_sin_label": [],
+        "saltar_al_contenido": false,
+        "landmark_main": false
+      },
+      "tab_elementos": 5,
+      "tab_sin_foco_visible": 0,
+      "ejemplos_sin_foco": [],
+      "orden_tab": [
+        "a",
+        "HOME",
+        "FIND OWNERS",
+        "VETERINARIANS",
+        "ERROR"
+      ]
+    }
+  ],
+  "navegador": "Chromium 153.0.8010.12",
+  "flujo_teclado_registro_propietario": {
+    "exito": false,
+    "url_final": "/owners/new"
+  }
+}

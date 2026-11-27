@@ -1,0 +1,112 @@
+{
+  "bd": "MySQL 8.0.46 (original)",
+  "propietarios": 10,
+  "solicitudes_por_propietario": 4,
+  "conteo_respuestas": {
+    "302": 14,
+    "500": 26
+  },
+  "propietarios_con_mas_de_una": 0,
+  "detalle": [
+    {
+      "owner": 47,
+      "respuestas": [
+        "302",
+        "500",
+        "500",
+        "500"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 48,
+      "respuestas": [
+        "302",
+        "500",
+        "302",
+        "500"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 49,
+      "respuestas": [
+        "302",
+        "500",
+        "302",
+        "500"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 50,
+      "respuestas": [
+        "500",
+        "500",
+        "302",
+        "302"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 51,
+      "respuestas": [
+        "302",
+        "500",
+        "500",
+        "500"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 52,
+      "respuestas": [
+        "500",
+        "302",
+        "500",
+        "500"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 53,
+      "respuestas": [
+        "302",
+        "302",
+        "500",
+        "500"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 54,
+      "respuestas": [
+        "500",
+        "500",
+        "302",
+        "500"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 55,
+      "respuestas": [
+        "500",
+        "500",
+        "500",
+        "302"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 56,
+      "respuestas": [
+        "500",
+        "302",
+        "500",
+        "500"
+      ],
+      "mascotas_guardadas": 1
+    }
+  ]
+}

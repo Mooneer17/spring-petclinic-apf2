@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "suite": "funcionales_http_apf3",
+    "base_url": "http://localhost:8082",
+    "bd": "MySQL 8.0.46 (corregida)",
+    "inicio": "2026-11-26T18:13:39-05:00",
+    "fin": "2026-11-26T18:13:39-05:00"
+  },
+  "resumen": {
+    "Aprobado": 2,
+    "Fallido": 0,
+    "Bloqueado": 0,
+    "Observacion": 0,
+    "Total": 2
+  },
+  "casos": [
+    {
+      "id": "F32",
+      "requisito": "RF01",
+      "nivel": "Funcional HTTP real",
+      "titulo": "Registro rechazado: teléfono vacío",
+      "datos": "telephone=''",
+      "pasos": "1) Enviar POST /owners/new con el teléfono vacío. 2) Verificar los mensajes del campo. 3) Buscar el apellido usado para confirmar que no se guardó.",
+      "esperado": "200 con 'must not be blank' y 'Telephone must be a 10-digit number' en telephone; el propietario no se guarda",
+      "obtenido": "HTTP 200; mensajes en telephone=['must not be blank', 'Telephone must be a 10-digit number']; no guardado=sí",
+      "estado": "Aprobado",
+      "evidencia": "respuestas/F32_post.http.txt",
+      "notas": "",
+      "bd": "MySQL 8.0.46 (corregida)",
+      "suite": "funcionales_http_apf3"
+    },
+    {
+      "id": "F33",
+      "requisito": "RF01",
+      "nivel": "Funcional HTTP real",
+      "titulo": "Registro rechazado: nombre vacío",
+      "datos": "firstName=''",
+      "pasos": "1) Enviar POST /owners/new con el nombre vacío. 2) Verificar el mensaje del campo. 3) Buscar el apellido usado para confirmar que no se guardó.",
+      "esperado": "200 con 'must not be blank' en firstName; el propietario no se guarda",
+      "obtenido": "HTTP 200; mensajes en firstName=['must not be blank']; no guardado=sí",
+      "estado": "Aprobado",
+      "evidencia": "respuestas/F33_post.http.txt",
+      "notas": "",
+      "bd": "MySQL 8.0.46 (corregida)",
+      "suite": "funcionales_http_apf3"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+$ curl -sI http://localhost:8082/
+HTTP/1.1 200 
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Security-Policy: default-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+Referrer-Policy: strict-origin-when-cross-origin
+Cache-Control: no-cache
+Content-Type: text/html;charset=UTF-8
+Content-Language: en
+Date: Thu, 26 Nov 2026 23:04:06 GMT
+
+$ curl -s -o /dev/null -D - -X POST http://localhost:8082/owners/new --data-urlencode firstName=Ana ... telephone=9876543210 | grep -i location
+Location: http://localhost:8082/owners/11

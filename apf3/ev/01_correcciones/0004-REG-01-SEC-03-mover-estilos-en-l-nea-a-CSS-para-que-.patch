@@ -1,0 +1,117 @@
+From 2847021a49848d80d198dde74be87991754dce01 Mon Sep 17 00:00:00 2001
+From: Mooneer17 <Mooneer17@users.noreply.github.com>
+Date: Thu, 26 Nov 2026 17:13:04 -0500
+Subject: [PATCH 4/5] =?UTF-8?q?REG-01=20(SEC-03):=20mover=20estilos=20en?=
+ =?UTF-8?q?=20l=C3=ADnea=20a=20CSS=20para=20que=20la=20CSP=20no=20los=20bl?=
+ =?UTF-8?q?oquee?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+La CSP default-src 'self' añadida en SEC-03 bloqueaba los atributos style
+de la lista de propietarios y del menú. Se reemplazan por clases en
+petclinic.css/scss y se agrega una prueba que verifica que las páginas no
+tengan estilos en línea.
+---
+ .../resources/static/resources/css/petclinic.css    | 10 ++++++++++
+ src/main/resources/templates/fragments/layout.html  |  2 +-
+ src/main/resources/templates/owners/ownersList.html |  6 +++---
+ src/main/scss/petclinic.scss                        | 13 +++++++++++++
+ .../petclinic/CorreccionesSeguridadTests.java       | 11 +++++++++++
+ 5 files changed, 38 insertions(+), 4 deletions(-)
+
+diff --git a/src/main/resources/static/resources/css/petclinic.css b/src/main/resources/static/resources/css/petclinic.css
+index 5a750aa..65e9fc3 100644
+--- a/src/main/resources/static/resources/css/petclinic.css
++++ b/src/main/resources/static/resources/css/petclinic.css
+@@ -9529,4 +9529,14 @@ strong {
+     margin-top: 10px;
+     margin-bottom: 30px; } }
+ 
++/* APF3 REG-01 (SEC-03): anchos de columnas movidos desde estilos en linea (bloqueados por la CSP) */
++.col-owner-name {
++  width: 150px; }
++
++.col-owner-address {
++  width: 200px; }
++
++.col-owner-telephone {
++  width: 120px; }
++
+ /*# sourceMappingURL=../../../../../../target/petclinic.css.map */
+\ No newline at end of file
+diff --git a/src/main/resources/templates/fragments/layout.html b/src/main/resources/templates/fragments/layout.html
+index f3e7ead..b7ba45d 100644
+--- a/src/main/resources/templates/fragments/layout.html
++++ b/src/main/resources/templates/fragments/layout.html
+@@ -23,7 +23,7 @@
+       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-navbar">
+         <span class="navbar-toggler-icon"></span>
+       </button>
+-      <div class="collapse navbar-collapse" id="main-navbar" style>
++      <div class="collapse navbar-collapse" id="main-navbar">
+ 
+         <ul class="navbar-nav me-auto mb-2 mb-lg-0" th:remove="all">
+ 
+diff --git a/src/main/resources/templates/owners/ownersList.html b/src/main/resources/templates/owners/ownersList.html
+index 57ebf80..567fa47 100644
+--- a/src/main/resources/templates/owners/ownersList.html
++++ b/src/main/resources/templates/owners/ownersList.html
+@@ -9,10 +9,10 @@
+   <table id="owners" class="table table-striped">
+     <thead>
+       <tr>
+-        <th th:text="#{name}" style="width: 150px;">Name</th>
+-        <th th:text="#{address}" style="width: 200px;">Address</th>
++        <th th:text="#{name}" class="col-owner-name">Name</th>
++        <th th:text="#{address}" class="col-owner-address">Address</th>
+         <th th:text="#{city}">City</th>
+-        <th th:text="#{telephone}" style="width: 120px">Telephone</th>
++        <th th:text="#{telephone}" class="col-owner-telephone">Telephone</th>
+         <th th:text="#{pets}">Pets</th>
+       </tr>
+     </thead>
+diff --git a/src/main/scss/petclinic.scss b/src/main/scss/petclinic.scss
+index 6c0c30f..d33201d 100644
+--- a/src/main/scss/petclinic.scss
++++ b/src/main/scss/petclinic.scss
+@@ -212,3 +212,16 @@ hr {
+ @import "typography.scss";
+ @import "header.scss";
+ @import "responsive.scss";
++
++// APF3 REG-01 (SEC-03): anchos de columnas movidos desde estilos en linea (bloqueados por la CSP)
++.col-owner-name {
++  width: 150px;
++}
++
++.col-owner-address {
++  width: 200px;
++}
++
++.col-owner-telephone {
++  width: 120px;
++}
+diff --git a/src/test/java/org/springframework/samples/petclinic/CorreccionesSeguridadTests.java b/src/test/java/org/springframework/samples/petclinic/CorreccionesSeguridadTests.java
+index 30b891e..998ebc7 100644
+--- a/src/test/java/org/springframework/samples/petclinic/CorreccionesSeguridadTests.java
++++ b/src/test/java/org/springframework/samples/petclinic/CorreccionesSeguridadTests.java
+@@ -95,4 +95,15 @@ class CorreccionesSeguridadTests {
+ 		assertThat(get("/owners/999999").statusCode()).isEqualTo(404);
+ 	}
+ 
++	@Test
++	void r01PaginasSinEstilosEnLineaBloqueadosPorLaCsp() throws Exception {
++		// Regresion REG-01 encontrada en la prueba de compatibilidad: la CSP de SEC-03 bloqueaba
++		// los atributos style de la lista de propietarios y del menu.
++		for (String path : new String[] { "/", "/owners/find", "/owners?lastName=", "/owners/1", "/owners/new",
++				"/owners/1/pets/new", "/owners/1/pets/1/visits/new", "/vets.html" }) {
++			String body = get(path).body();
++			assertThat(body).as(path).doesNotContainPattern("<[^>]*\\sstyle(=|>|\\s)");
++		}
++	}
++
+ }
+-- 
+2.43.0
+

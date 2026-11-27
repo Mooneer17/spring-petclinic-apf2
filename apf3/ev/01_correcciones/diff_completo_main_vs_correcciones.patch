@@ -1,0 +1,905 @@
+diff --git a/src/main/java/org/springframework/samples/petclinic/owner/OwnerController.java b/src/main/java/org/springframework/samples/petclinic/owner/OwnerController.java
+index e5edf5b..ea4a7c1 100644
+--- a/src/main/java/org/springframework/samples/petclinic/owner/OwnerController.java
++++ b/src/main/java/org/springframework/samples/petclinic/owner/OwnerController.java
+@@ -22,10 +22,12 @@ import java.util.Optional;
+ import org.springframework.data.domain.Page;
+ import org.springframework.data.domain.PageRequest;
+ import org.springframework.data.domain.Pageable;
++import org.springframework.http.HttpStatus;
+ import org.springframework.stereotype.Controller;
+ import org.springframework.ui.Model;
+ import org.springframework.validation.BindingResult;
+ import org.springframework.web.bind.WebDataBinder;
++import org.springframework.web.server.ResponseStatusException;
+ import org.springframework.web.bind.annotation.GetMapping;
+ import org.springframework.web.bind.annotation.InitBinder;
+ import org.springframework.web.bind.annotation.ModelAttribute;
+@@ -63,10 +65,9 @@ class OwnerController {
+ 
+ 	@ModelAttribute("owner")
+ 	public Owner findOwner(@PathVariable(name = "ownerId", required = false) Integer ownerId) {
+-		return ownerId == null ? new Owner()
+-				: this.owners.findById(ownerId)
+-					.orElseThrow(() -> new IllegalArgumentException("Owner not found with id: " + ownerId
+-							+ ". Please ensure the ID is correct " + "and the owner exists in the database."));
++		return ownerId == null ? new Owner() : this.owners.findById(ownerId)
++			.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner not found with id: " + ownerId
++					+ ". Please ensure the ID is correct " + "and the owner exists in the database."));
+ 	}
+ 
+ 	@GetMapping("/owners/new")
+@@ -179,7 +180,8 @@ class OwnerController {
+ 	public ModelAndView showOwner(@PathVariable("ownerId") int ownerId) {
+ 		ModelAndView mav = new ModelAndView("owners/ownerDetails");
+ 		Optional<Owner> optionalOwner = this.owners.findById(ownerId);
+-		Owner owner = optionalOwner.orElseThrow(() -> new IllegalArgumentException(
++		Owner owner = optionalOwner.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
++
+ 				"Owner not found with id: " + ownerId + ". Please ensure the ID is correct "));
+ 		mav.addObject(owner);
+ 		return mav;
+diff --git a/src/main/java/org/springframework/samples/petclinic/owner/OwnerRepository.java b/src/main/java/org/springframework/samples/petclinic/owner/OwnerRepository.java
+index d2b3dde..e4168e2 100644
+--- a/src/main/java/org/springframework/samples/petclinic/owner/OwnerRepository.java
++++ b/src/main/java/org/springframework/samples/petclinic/owner/OwnerRepository.java
+@@ -20,6 +20,12 @@ import java.util.Optional;
+ import org.springframework.data.domain.Page;
+ import org.springframework.data.domain.Pageable;
+ import org.springframework.data.jpa.repository.JpaRepository;
++import org.springframework.data.jpa.repository.Lock;
++import org.springframework.data.jpa.repository.Query;
++import org.springframework.data.repository.query.Param;
++import org.springframework.transaction.annotation.Transactional;
++
++import jakarta.persistence.LockModeType;
+ 
+ /**
+  * Repository class for <code>Owner</code> domain objects. All method names are compliant
+@@ -59,4 +65,38 @@ public interface OwnerRepository extends JpaRepository<Owner, Integer> {
+ 	 */
+ 	Optional<Owner> findById(Integer id);
+ 
++	/**
++	 * Retrieve an {@link Owner} locking its row until the current transaction ends
++	 * (SELECT ... FOR UPDATE), so that concurrent requests for the same owner are
++	 * serialized.
++	 * @param id the id to search for
++	 * @return the locked owner, if found
++	 */
++	@Lock(LockModeType.PESSIMISTIC_WRITE)
++	@Query("SELECT owner FROM Owner owner WHERE owner.id = :id")
++	Optional<Owner> findByIdForUpdate(@Param("id") Integer id);
++
++	/**
++	 * Add a new pet to the owner inside one transaction, re-reading the owner with a
++	 * pessimistic lock. Two simultaneous requests can no longer save stale copies of the
++	 * owner that unlink each other's pets (DEF-P02), and the second request sees the pet
++	 * saved by the first one, so a duplicate name is rejected instead of failing in the
++	 * database (DEF-P03).
++	 * @param ownerId the owner id
++	 * @param pet the new pet
++	 * @return {@code true} if the pet was added, {@code false} if the owner already has a
++	 * pet with the same name
++	 */
++	@Transactional
++	default boolean addPetIfNameAvailable(Integer ownerId, Pet pet) {
++		Owner owner = findByIdForUpdate(ownerId)
++			.orElseThrow(() -> new IllegalStateException("Owner not found with id: " + ownerId));
++		if (owner.getPet(pet.getName(), true) != null) {
++			return false;
++		}
++		owner.addPet(pet);
++		saveAndFlush(owner);
++		return true;
++	}
++
+ }
+diff --git a/src/main/java/org/springframework/samples/petclinic/owner/PetController.java b/src/main/java/org/springframework/samples/petclinic/owner/PetController.java
+index 845c116..4a2229a 100644
+--- a/src/main/java/org/springframework/samples/petclinic/owner/PetController.java
++++ b/src/main/java/org/springframework/samples/petclinic/owner/PetController.java
+@@ -21,12 +21,14 @@ import java.util.Objects;
+ import java.util.Optional;
+ 
+ import org.springframework.dao.DataIntegrityViolationException;
++import org.springframework.http.HttpStatus;
+ import org.springframework.stereotype.Controller;
+ import org.springframework.ui.ModelMap;
+ import org.springframework.util.Assert;
+ import org.springframework.util.StringUtils;
+ import org.springframework.validation.BindingResult;
+ import org.springframework.web.bind.WebDataBinder;
++import org.springframework.web.server.ResponseStatusException;
+ import org.springframework.web.bind.annotation.GetMapping;
+ import org.springframework.web.bind.annotation.InitBinder;
+ import org.springframework.web.bind.annotation.ModelAttribute;
+@@ -67,7 +69,8 @@ class PetController {
+ 	@ModelAttribute("owner")
+ 	public Owner findOwner(@PathVariable("ownerId") int ownerId) {
+ 		Optional<Owner> optionalOwner = this.owners.findById(ownerId);
+-		Owner owner = optionalOwner.orElseThrow(() -> new IllegalArgumentException(
++		Owner owner = optionalOwner.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
++
+ 				"Owner not found with id: " + ownerId + ". Please ensure the ID is correct "));
+ 		return owner;
+ 	}
+@@ -81,9 +84,17 @@ class PetController {
+ 		}
+ 
+ 		Optional<Owner> optionalOwner = this.owners.findById(ownerId);
+-		Owner owner = optionalOwner.orElseThrow(() -> new IllegalArgumentException(
++		Owner owner = optionalOwner.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
++
+ 				"Owner not found with id: " + ownerId + ". Please ensure the ID is correct "));
+-		return owner.getPet(petId);
++		Pet pet = owner.getPet(petId);
++		if (pet == null) {
++			// DEF-P01: la mascota no pertenece a este propietario; antes producía HTTP
++			// 500
++			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
++					"Pet with id " + petId + " not found for owner with id " + ownerId + ".");
++		}
++		return pet;
+ 	}
+ 
+ 	@InitBinder("owner")
+@@ -105,8 +116,8 @@ class PetController {
+ 	}
+ 
+ 	@PostMapping("/pets/new")
+-	public String processCreationForm(Owner owner, @Valid Pet pet, BindingResult result,
+-			RedirectAttributes redirectAttributes) {
++	public String processCreationForm(@PathVariable("ownerId") int ownerId, Owner owner, @Valid Pet pet,
++			BindingResult result, RedirectAttributes redirectAttributes) {
+ 
+ 		if (StringUtils.hasText(pet.getName()) && pet.isNew() && owner.getPet(pet.getName(), true) != null) {
+ 			result.rejectValue("name", "duplicate", "already exists");
+@@ -121,14 +132,18 @@ class PetController {
+ 			return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
+ 		}
+ 
++		boolean added;
+ 		try {
+-			owner.addPet(pet);
+-			this.owners.saveAndFlush(owner);
++			// DEF-P02: alta dentro de una transacción con el propietario bloqueado
++			added = this.owners.addPetIfNameAvailable(ownerId, pet);
+ 		}
+ 		catch (DataIntegrityViolationException ex) {
+ 			if (!isDuplicatePetNameViolation(ex)) {
+ 				throw ex;
+ 			}
++			added = false;
++		}
++		if (!added) {
+ 			result.rejectValue("name", "duplicate", "already exists");
+ 			return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
+ 		}
+@@ -200,8 +215,11 @@ class PetController {
+ 	}
+ 
+ 	private boolean isDuplicatePetNameViolation(DataIntegrityViolationException ex) {
+-		String message = ex.getMessage();
+-		return message != null && message.toLowerCase().contains("unique_owner_pet_name");
++		// DEF-P03: en H2 la restricción se llama unique_owner_pet_name; en MySQL no
++		// tiene nombre y el mensaje es "Duplicate entry '...' for key 'pets.owner_id'"
++		String message = (ex.getMessage() + " " + ex.getMostSpecificCause().getMessage()).toLowerCase();
++		return message.contains("unique_owner_pet_name")
++				|| (message.contains("duplicate entry") && message.contains("pets.owner_id"));
+ 	}
+ 
+ }
+diff --git a/src/main/java/org/springframework/samples/petclinic/owner/VisitController.java b/src/main/java/org/springframework/samples/petclinic/owner/VisitController.java
+index b8b2700..cb8a9d8 100644
+--- a/src/main/java/org/springframework/samples/petclinic/owner/VisitController.java
++++ b/src/main/java/org/springframework/samples/petclinic/owner/VisitController.java
+@@ -19,9 +19,11 @@ import java.time.LocalDate;
+ import java.util.Map;
+ import java.util.Optional;
+ 
++import org.springframework.http.HttpStatus;
+ import org.springframework.stereotype.Controller;
+ import org.springframework.validation.BindingResult;
+ import org.springframework.web.bind.WebDataBinder;
++import org.springframework.web.server.ResponseStatusException;
+ import org.springframework.web.bind.annotation.GetMapping;
+ import org.springframework.web.bind.annotation.InitBinder;
+ import org.springframework.web.bind.annotation.ModelAttribute;
+@@ -64,12 +66,14 @@ class VisitController {
+ 	public Visit loadPetWithVisit(@PathVariable("ownerId") int ownerId, @PathVariable("petId") int petId,
+ 			Map<String, Object> model) {
+ 		Optional<Owner> optionalOwner = owners.findById(ownerId);
+-		Owner owner = optionalOwner.orElseThrow(() -> new IllegalArgumentException(
++		Owner owner = optionalOwner.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
++
+ 				"Owner not found with id: " + ownerId + ". Please ensure the ID is correct "));
+ 
+ 		Pet pet = owner.getPet(petId);
+ 		if (pet == null) {
+-			throw new IllegalArgumentException(
++			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
++
+ 					"Pet with id " + petId + " not found for owner with id " + ownerId + ".");
+ 		}
+ 		model.put("pet", pet);
+diff --git a/src/main/java/org/springframework/samples/petclinic/system/SecurityHeadersFilter.java b/src/main/java/org/springframework/samples/petclinic/system/SecurityHeadersFilter.java
+new file mode 100644
+index 0000000..b6ada36
+--- /dev/null
++++ b/src/main/java/org/springframework/samples/petclinic/system/SecurityHeadersFilter.java
+@@ -0,0 +1,53 @@
++/*
++ * Copyright 2012-2025 the original author or authors.
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      https://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++package org.springframework.samples.petclinic.system;
++
++import java.io.IOException;
++
++import org.springframework.stereotype.Component;
++import org.springframework.web.filter.OncePerRequestFilter;
++
++import jakarta.servlet.FilterChain;
++import jakarta.servlet.ServletException;
++import jakarta.servlet.http.HttpServletRequest;
++import jakarta.servlet.http.HttpServletResponse;
++
++/**
++ * APF3, SEC-03: adds basic defensive HTTP headers to every response. Static resources
++ * keep the cache headers configured by Spring; pages get {@code Cache-Control: no-cache}.
++ */
++@Component
++class SecurityHeadersFilter extends OncePerRequestFilter {
++
++	static final String CONTENT_SECURITY_POLICY = "default-src 'self'; img-src 'self' data:; object-src 'none'; "
++			+ "base-uri 'self'; form-action 'self'; frame-ancestors 'none'";
++
++	@Override
++	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
++			throws ServletException, IOException {
++		response.setHeader("X-Content-Type-Options", "nosniff");
++		response.setHeader("X-Frame-Options", "DENY");
++		response.setHeader("Content-Security-Policy", CONTENT_SECURITY_POLICY);
++		response.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
++		String path = request.getRequestURI().substring(request.getContextPath().length());
++		if (!path.startsWith("/resources/") && !path.startsWith("/webjars/")) {
++			response.setHeader("Cache-Control", "no-cache");
++		}
++		chain.doFilter(request, response);
++	}
++
++}
+diff --git a/src/main/resources/application.properties b/src/main/resources/application.properties
+index f7e8a31..a8455ca 100644
+--- a/src/main/resources/application.properties
++++ b/src/main/resources/application.properties
+@@ -18,7 +18,8 @@ spring.messages.basename=messages/messages
+ # Actuator
+ # Expose all actuator endpoints for monitoring and management purposes
+ # Don't do this in production, only for development and testing
+-management.endpoints.web.exposure.include=*
++# APF3, SEC-01: solo endpoints no sensibles (antes: *)
++management.endpoints.web.exposure.include=health,info
+ 
+ # Logging
+ logging.level.org.springframework=INFO
+@@ -27,3 +28,6 @@ logging.level.org.springframework=INFO
+ 
+ # Maximum time static resources should be cached
+ spring.web.resources.cache.cachecontrol.max-age=12h
++
++# APF3, SEC-04: la sesion viaja solo en la cookie, no en la URL (;jsessionid=)
++server.servlet.session.tracking-modes=cookie
+diff --git a/src/main/resources/static/resources/css/petclinic.css b/src/main/resources/static/resources/css/petclinic.css
+index 5a750aa..ab8ebc9 100644
+--- a/src/main/resources/static/resources/css/petclinic.css
++++ b/src/main/resources/static/resources/css/petclinic.css
+@@ -9282,7 +9282,7 @@ textarea.form-control-lg {
+   padding: 9px 12px; }
+ 
+ .nav > li > a {
+-  color: #838789; }
++  color: #a3a7a9; }
+ 
+ .btn-primary {
+   margin-top: 12px;
+@@ -9529,4 +9529,14 @@ strong {
+     margin-top: 10px;
+     margin-bottom: 30px; } }
+ 
++/* APF3 REG-01 (SEC-03): anchos de columnas movidos desde estilos en linea (bloqueados por la CSP) */
++.col-owner-name {
++  width: 150px; }
++
++.col-owner-address {
++  width: 200px; }
++
++.col-owner-telephone {
++  width: 120px; }
++
+ /*# sourceMappingURL=../../../../../../target/petclinic.css.map */
+\ No newline at end of file
+diff --git a/src/main/resources/static/resources/js/hide-messages.js b/src/main/resources/static/resources/js/hide-messages.js
+new file mode 100644
+index 0000000..4319a0c
+--- /dev/null
++++ b/src/main/resources/static/resources/js/hide-messages.js
+@@ -0,0 +1,11 @@
++// Function to hide the success and error messages after 3 seconds
++// (APF3: moved from an inline script so the Content-Security-Policy can use script-src 'self')
++function hideMessages() {
++  setTimeout(function () {
++    document.getElementById("success-message").style.display = "none";
++    document.getElementById("error-message").style.display = "none";
++  }, 3000); // 3000 milliseconds (3 seconds)
++}
++
++// Call the function to hide messages
++hideMessages();
+diff --git a/src/main/resources/templates/error.html b/src/main/resources/templates/error.html
+index aa40045..ca658b8 100644
+--- a/src/main/resources/templates/error.html
++++ b/src/main/resources/templates/error.html
+@@ -3,7 +3,7 @@
+ <html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'error')}">
+ 
+ <body>
+-  <img src="../static/resources/images/pets.png" th:src="@{/resources/images/pets.png}" />
++  <img src="../static/resources/images/pets.png" th:src="@{/resources/images/pets.png}" alt="" />
+   <!-- Title: Something happened -->
+   <h2 th:text="#{somethingHappened}">Something happened...</h2>
+ 
+diff --git a/src/main/resources/templates/fragments/layout.html b/src/main/resources/templates/fragments/layout.html
+index f3e7ead..1e608e5 100644
+--- a/src/main/resources/templates/fragments/layout.html
++++ b/src/main/resources/templates/fragments/layout.html
+@@ -1,6 +1,6 @@
+ <!DOCTYPE html>
+ 
+-<html th:fragment="layout (template, menu)" xmlns:th="https://www.thymeleaf.org">
++<html th:fragment="layout (template, menu)" xmlns:th="https://www.thymeleaf.org" th:lang="${#locale.language}">
+ 
+ <head>
+ 
+@@ -19,11 +19,11 @@
+ 
+   <nav class="navbar navbar-expand-lg navbar-dark" role="navigation">
+     <div class="container-fluid">
+-      <a class="navbar-brand" th:href="@{/}"><span></span></a>
++      <a class="navbar-brand" th:href="@{/}" th:attr="aria-label=#{home}"><span></span></a>
+       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-navbar">
+         <span class="navbar-toggler-icon"></span>
+       </button>
+-      <div class="collapse navbar-collapse" id="main-navbar" style>
++      <div class="collapse navbar-collapse" id="main-navbar">
+ 
+         <ul class="navbar-nav me-auto mb-2 mb-lg-0" th:remove="all">
+ 
+diff --git a/src/main/resources/templates/owners/findOwners.html b/src/main/resources/templates/owners/findOwners.html
+index 2b0a685..611b1db 100644
+--- a/src/main/resources/templates/owners/findOwners.html
++++ b/src/main/resources/templates/owners/findOwners.html
+@@ -9,7 +9,7 @@
+   <form th:object="${owner}" th:action="@{/owners}" method="get" class="form-horizontal" id="search-owner-form">
+     <div class="form-group">
+       <div class="control-group" id="lastNameGroup">
+-        <label class="col-sm-2 control-label" th:text="#{lastName}">Last name </label>
++        <label class="col-sm-2 control-label" for="lastName" th:text="#{lastName}">Last name </label>
+         <div class="col-sm-10">
+           <input class="form-control" th:field="*{lastName}" size="30" maxlength="80" />
+           <span class="help-inline">
+diff --git a/src/main/resources/templates/owners/ownerDetails.html b/src/main/resources/templates/owners/ownerDetails.html
+index 6c52e6a..7a5804d 100644
+--- a/src/main/resources/templates/owners/ownerDetails.html
++++ b/src/main/resources/templates/owners/ownerDetails.html
+@@ -77,18 +77,7 @@
+     </tr>
+ 
+   </table>
+-  <script>
+-    // Function to hide the success and error messages after 3 seconds
+-    function hideMessages() {
+-      setTimeout(function () {
+-        document.getElementById("success-message").style.display = "none";
+-        document.getElementById("error-message").style.display = "none";
+-      }, 3000); // 3000 milliseconds (3 seconds)
+-    }
+-
+-    // Call the function to hide messages
+-    hideMessages();
+-  </script>
++  <script th:src="@{/resources/js/hide-messages.js}"></script>
+ 
+ </body>
+ 
+diff --git a/src/main/resources/templates/owners/ownersList.html b/src/main/resources/templates/owners/ownersList.html
+index 57ebf80..567fa47 100644
+--- a/src/main/resources/templates/owners/ownersList.html
++++ b/src/main/resources/templates/owners/ownersList.html
+@@ -9,10 +9,10 @@
+   <table id="owners" class="table table-striped">
+     <thead>
+       <tr>
+-        <th th:text="#{name}" style="width: 150px;">Name</th>
+-        <th th:text="#{address}" style="width: 200px;">Address</th>
++        <th th:text="#{name}" class="col-owner-name">Name</th>
++        <th th:text="#{address}" class="col-owner-address">Address</th>
+         <th th:text="#{city}">City</th>
+-        <th th:text="#{telephone}" style="width: 120px">Telephone</th>
++        <th th:text="#{telephone}" class="col-owner-telephone">Telephone</th>
+         <th th:text="#{pets}">Pets</th>
+       </tr>
+     </thead>
+diff --git a/src/main/resources/templates/welcome.html b/src/main/resources/templates/welcome.html
+index e4b69c4..c163423 100644
+--- a/src/main/resources/templates/welcome.html
++++ b/src/main/resources/templates/welcome.html
+@@ -7,7 +7,7 @@
+   <h2 th:text="#{welcome}">Welcome</h2>
+   <div class="row">
+     <div class="col-md-12">
+-      <img class="img-responsive" src="../static/resources/images/pets.png" th:src="@{/resources/images/pets.png}" />
++      <img class="img-responsive" src="../static/resources/images/pets.png" th:src="@{/resources/images/pets.png}" th:alt="#{welcome}" />
+     </div>
+   </div>
+ 
+diff --git a/src/main/scss/petclinic.scss b/src/main/scss/petclinic.scss
+index 6c0c30f..f146a30 100644
+--- a/src/main/scss/petclinic.scss
++++ b/src/main/scss/petclinic.scss
+@@ -19,6 +19,8 @@ $spring-green:      #6db33f;
+ $spring-dark-green: #5fa134;
+ $spring-brown:      #34302D;
+ $spring-grey:       #838789;
++// APF3 A11Y-02: gris del menu con contraste 5.39:1 sobre $spring-brown (WCAG 1.4.3)
++$spring-grey-nav:   #a3a7a9;
+ $spring-light-grey: #f1f1f1;
+ 
+ $body-bg:                           $spring-light-grey;
+@@ -58,7 +60,7 @@ $table-border-color:                      $spring-brown;
+ }
+ 
+ .nav > li > a {
+-  color: $spring-grey;
++  color: $spring-grey-nav;
+ }
+ 
+ .btn-primary {
+@@ -212,3 +214,16 @@ hr {
+ @import "typography.scss";
+ @import "header.scss";
+ @import "responsive.scss";
++
++// APF3 REG-01 (SEC-03): anchos de columnas movidos desde estilos en linea (bloqueados por la CSP)
++.col-owner-name {
++  width: 150px;
++}
++
++.col-owner-address {
++  width: 200px;
++}
++
++.col-owner-telephone {
++  width: 120px;
++}
+diff --git a/src/test/java/org/springframework/samples/petclinic/AccesibilidadBasicaTests.java b/src/test/java/org/springframework/samples/petclinic/AccesibilidadBasicaTests.java
+new file mode 100644
+index 0000000..f8248f4
+--- /dev/null
++++ b/src/test/java/org/springframework/samples/petclinic/AccesibilidadBasicaTests.java
+@@ -0,0 +1,76 @@
++/*
++ * Copyright 2012-2025 the original author or authors.
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      https://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++package org.springframework.samples.petclinic;
++
++import static org.assertj.core.api.Assertions.assertThat;
++
++import java.net.URI;
++import java.net.http.HttpClient;
++import java.net.http.HttpRequest;
++import java.net.http.HttpResponse;
++
++import org.junit.jupiter.api.Test;
++import org.springframework.boot.test.context.SpringBootTest;
++import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
++import org.springframework.boot.test.web.server.LocalServerPort;
++
++/**
++ * APF3: comprobaciones automaticas de los hallazgos de accesibilidad corregidos (A11Y-01
++ * a A11Y-05, WCAG 2.1 A/AA). El contraste (A11Y-02) se verifica con axe-core.
++ */
++@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
++class AccesibilidadBasicaTests {
++
++	@LocalServerPort
++	private int port;
++
++	private final HttpClient client = HttpClient.newHttpClient();
++
++	private String get(String path) throws Exception {
++		HttpRequest request = HttpRequest.newBuilder(URI.create("http://localhost:" + port + path))
++			.header("Accept", "text/html")
++			.GET()
++			.build();
++		return client.send(request, HttpResponse.BodyHandlers.ofString()).body();
++	}
++
++	@Test
++	void a11y01TodasLasPaginasDeclaranIdioma() throws Exception {
++		for (String path : new String[] { "/", "/owners/find", "/owners/1", "/vets.html", "/oups" }) {
++			assertThat(get(path)).as(path).containsPattern("<html[^>]*\\slang=\"[a-z]{2}\"");
++		}
++	}
++
++	@Test
++	void a11y03EnlaceDelLogoTieneNombreAccesible() throws Exception {
++		assertThat(get("/")).containsPattern("<a class=\"navbar-brand\"[^>]*aria-label=\"[^\"]+\"");
++	}
++
++	@Test
++	void a11y04ImagenesTienenTextoAlternativo() throws Exception {
++		for (String path : new String[] { "/", "/oups" }) {
++			assertThat(get(path)).as(path).doesNotContainPattern("<img(?![^>]*\\salt=)[^>]*>");
++		}
++	}
++
++	@Test
++	void a11y05CampoDeBusquedaTieneEtiquetaAsociada() throws Exception {
++		String body = get("/owners/find");
++		assertThat(body).contains("for=\"lastName\"").contains("id=\"lastName\"");
++	}
++
++}
+diff --git a/src/test/java/org/springframework/samples/petclinic/CorreccionesSeguridadTests.java b/src/test/java/org/springframework/samples/petclinic/CorreccionesSeguridadTests.java
+new file mode 100644
+index 0000000..998ebc7
+--- /dev/null
++++ b/src/test/java/org/springframework/samples/petclinic/CorreccionesSeguridadTests.java
+@@ -0,0 +1,109 @@
++/*
++ * Copyright 2012-2025 the original author or authors.
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      https://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++package org.springframework.samples.petclinic;
++
++import static org.assertj.core.api.Assertions.assertThat;
++
++import java.net.URI;
++import java.net.http.HttpClient;
++import java.net.http.HttpRequest;
++import java.net.http.HttpResponse;
++
++import org.junit.jupiter.api.Test;
++import org.springframework.boot.test.context.SpringBootTest;
++import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
++import org.springframework.boot.test.web.server.LocalServerPort;
++
++/**
++ * APF3 - Re-test automatizado de las correcciones de configuración y manejo de errores:
++ * SEC-01 (S02), SEC-03 (S12), SEC-04 (S13), DEF-P01 (S08) y OBS-02 (S07, S09). Usa HTTP
++ * real contra un servidor en puerto aleatorio.
++ */
++@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
++class CorreccionesSeguridadTests {
++
++	@LocalServerPort
++	private int port;
++
++	private final HttpClient client = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NEVER).build();
++
++	private HttpResponse<String> get(String path) throws Exception {
++		return this.client.send(HttpRequest.newBuilder(URI.create("http://localhost:" + this.port + path)).build(),
++				HttpResponse.BodyHandlers.ofString());
++	}
++
++	@Test
++	void s12PaginaPrincipalEnviaCabecerasDefensivas() throws Exception {
++		HttpResponse<String> r = get("/");
++		assertThat(r.statusCode()).isEqualTo(200);
++		assertThat(r.headers().firstValue("X-Content-Type-Options")).hasValue("nosniff");
++		assertThat(r.headers().firstValue("X-Frame-Options")).hasValue("DENY");
++		assertThat(r.headers().firstValue("Content-Security-Policy")).isPresent();
++		assertThat(r.headers().firstValue("Cache-Control")).isPresent();
++	}
++
++	@Test
++	void s02ActuatorSoloExponeEndpointsNoSensibles() throws Exception {
++		assertThat(get("/actuator/health").statusCode()).isEqualTo(200);
++		assertThat(get("/actuator/env").statusCode()).isEqualTo(404);
++		assertThat(get("/actuator/configprops").statusCode()).isEqualTo(404);
++		assertThat(get("/actuator/beans").statusCode()).isEqualTo(404);
++	}
++
++	@Test
++	void s13RedireccionSinIdentificadorDeSesion() throws Exception {
++		HttpRequest post = HttpRequest.newBuilder(URI.create("http://localhost:" + this.port + "/owners/new"))
++			.header("Content-Type", "application/x-www-form-urlencoded")
++			.POST(HttpRequest.BodyPublishers
++				.ofString("firstName=Ana&lastName=SinSesion&address=Av.+Central+123&city=Lima&telephone=9876543210"))
++			.build();
++		HttpResponse<String> r = this.client.send(post, HttpResponse.BodyHandlers.ofString());
++		assertThat(r.statusCode()).isEqualTo(302);
++		assertThat(r.headers().firstValue("Location")).isPresent().get().asString().doesNotContain("jsessionid");
++	}
++
++	@Test
++	void s08MascotaDeOtroPropietarioResponde404() throws Exception {
++		// La mascota 2 (Basil) pertenece a la propietaria 2; se pide desde el propietario
++		// 1
++		HttpResponse<String> r = get("/owners/1/pets/2/edit");
++		assertThat(r.statusCode()).isEqualTo(404);
++		assertThat(r.body()).doesNotContain("Exception").doesNotContain("at org.springframework");
++	}
++
++	@Test
++	void s07VisitaParaMascotaAjenaResponde404() throws Exception {
++		assertThat(get("/owners/1/pets/2/visits/new").statusCode()).isEqualTo(404);
++	}
++
++	@Test
++	void s09PropietarioInexistenteResponde404() throws Exception {
++		assertThat(get("/owners/999999").statusCode()).isEqualTo(404);
++	}
++
++	@Test
++	void r01PaginasSinEstilosEnLineaBloqueadosPorLaCsp() throws Exception {
++		// Regresion REG-01 encontrada en la prueba de compatibilidad: la CSP de SEC-03 bloqueaba
++		// los atributos style de la lista de propietarios y del menu.
++		for (String path : new String[] { "/", "/owners/find", "/owners?lastName=", "/owners/1", "/owners/new",
++				"/owners/1/pets/new", "/owners/1/pets/1/visits/new", "/vets.html" }) {
++			String body = get(path).body();
++			assertThat(body).as(path).doesNotContainPattern("<[^>]*\\sstyle(=|>|\\s)");
++		}
++	}
++
++}
+diff --git a/src/test/java/org/springframework/samples/petclinic/E01ConcurrenciaTests.java b/src/test/java/org/springframework/samples/petclinic/E01ConcurrenciaTests.java
+new file mode 100644
+index 0000000..9afaa3e
+--- /dev/null
++++ b/src/test/java/org/springframework/samples/petclinic/E01ConcurrenciaTests.java
+@@ -0,0 +1,130 @@
++/*
++ * Copyright 2012-2025 the original author or authors.
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      https://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++package org.springframework.samples.petclinic;
++
++import static org.assertj.core.api.Assertions.assertThat;
++
++import java.net.URI;
++import java.net.http.HttpClient;
++import java.net.http.HttpRequest;
++import java.net.http.HttpResponse;
++import java.util.ArrayList;
++import java.util.List;
++import java.util.Map;
++import java.util.concurrent.ConcurrentHashMap;
++import java.util.concurrent.CountDownLatch;
++import java.util.concurrent.ExecutorService;
++import java.util.concurrent.Executors;
++import java.util.concurrent.TimeUnit;
++import java.util.concurrent.atomic.AtomicInteger;
++
++import org.junit.jupiter.api.Test;
++import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.boot.test.context.SpringBootTest;
++import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
++import org.springframework.boot.test.web.server.LocalServerPort;
++import org.springframework.jdbc.core.JdbcTemplate;
++import org.springframework.samples.petclinic.owner.Owner;
++import org.springframework.samples.petclinic.owner.OwnerRepository;
++
++/**
++ * APF3 - Re-test automatizado de E01 (DEF-P02 y DEF-P03). Envía en el mismo instante
++ * cuatro altas de la misma mascota para cada propietario y comprueba que no queden
++ * mascotas sin propietario, que cada propietario tenga una sola mascota con ese nombre y
++ * que ninguna respuesta sea HTTP 5xx.
++ */
++@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
++class E01ConcurrenciaTests {
++
++	private static final int PROPIETARIOS = 5;
++
++	private static final int ENVIOS_POR_PROPIETARIO = 4;
++
++	private static final String NOMBRE = "Gemela";
++
++	@LocalServerPort
++	private int port;
++
++	@Autowired
++	private OwnerRepository owners;
++
++	@Autowired
++	private JdbcTemplate jdbc;
++
++	@Test
++	void altasSimultaneasNoDejanHuerfanasNiErrores500() throws Exception {
++		List<Integer> ids = new ArrayList<>();
++		for (int i = 0; i < PROPIETARIOS; i++) {
++			Owner owner = new Owner();
++			owner.setFirstName("E01");
++			owner.setLastName("Concurrencia" + i);
++			owner.setAddress("Av. Prueba " + i);
++			owner.setCity("Lima");
++			owner.setTelephone("9876543210");
++			ids.add(this.owners.saveAndFlush(owner).getId());
++		}
++		Integer huerfanasAntes = this.jdbc.queryForObject("SELECT COUNT(*) FROM pets WHERE owner_id IS NULL",
++				Integer.class);
++
++		HttpClient client = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NEVER).build();
++		Map<Integer, AtomicInteger> estados = new ConcurrentHashMap<>();
++		ExecutorService pool = Executors.newFixedThreadPool(PROPIETARIOS * ENVIOS_POR_PROPIETARIO);
++		CountDownLatch inicio = new CountDownLatch(1);
++		CountDownLatch fin = new CountDownLatch(PROPIETARIOS * ENVIOS_POR_PROPIETARIO);
++		for (Integer id : ids) {
++			for (int k = 0; k < ENVIOS_POR_PROPIETARIO; k++) {
++				pool.submit(() -> {
++					try {
++						inicio.await();
++						HttpRequest req = HttpRequest
++							.newBuilder(URI.create("http://localhost:" + this.port + "/owners/" + id + "/pets/new"))
++							.header("Content-Type", "application/x-www-form-urlencoded")
++							.POST(HttpRequest.BodyPublishers
++								.ofString("name=" + NOMBRE + "&birthDate=2020-01-01&type=cat"))
++							.build();
++						int status = client.send(req, HttpResponse.BodyHandlers.discarding()).statusCode();
++						estados.computeIfAbsent(status, s -> new AtomicInteger()).incrementAndGet();
++					}
++					catch (Exception ex) {
++						estados.computeIfAbsent(-1, s -> new AtomicInteger()).incrementAndGet();
++					}
++					finally {
++						fin.countDown();
++					}
++				});
++			}
++		}
++		inicio.countDown();
++		assertThat(fin.await(60, TimeUnit.SECONDS)).isTrue();
++		pool.shutdown();
++
++		Integer huerfanasDespues = this.jdbc.queryForObject("SELECT COUNT(*) FROM pets WHERE owner_id IS NULL",
++				Integer.class);
++		System.out.println("E01 respuestas=" + estados + " huerfanasAntes=" + huerfanasAntes + " huerfanasDespues="
++				+ huerfanasDespues);
++
++		assertThat(estados.keySet()).as("ninguna respuesta 5xx ni error de conexión")
++			.allMatch(status -> status >= 200 && status < 500);
++		assertThat(huerfanasDespues).as("mascotas sin propietario").isEqualTo(huerfanasAntes);
++		for (Integer id : ids) {
++			Integer conNombre = this.jdbc.queryForObject("SELECT COUNT(*) FROM pets WHERE owner_id = ? AND name = ?",
++					Integer.class, id, NOMBRE);
++			assertThat(conNombre).as("mascotas '" + NOMBRE + "' del propietario " + id).isEqualTo(1);
++		}
++	}
++
++}
+diff --git a/src/test/java/org/springframework/samples/petclinic/owner/PetControllerTests.java b/src/test/java/org/springframework/samples/petclinic/owner/PetControllerTests.java
+index b45ffd4..275d3e5 100644
+--- a/src/test/java/org/springframework/samples/petclinic/owner/PetControllerTests.java
++++ b/src/test/java/org/springframework/samples/petclinic/owner/PetControllerTests.java
+@@ -35,6 +35,7 @@ import java.util.Optional;
+ import org.springframework.dao.DataIntegrityViolationException;
+ 
+ import static org.mockito.ArgumentMatchers.any;
++import static org.mockito.ArgumentMatchers.eq;
+ import static org.mockito.BDDMockito.given;
+ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+@@ -86,6 +87,13 @@ class PetControllerTests {
+ 		given(this.owners.findById(TEST_OWNER_ID)).willReturn(Optional.of(owner));
+ 	}
+ 
++	@Test
++	void initUpdateFormForPetOfAnotherOwnerReturnsNotFound() throws Exception {
++		// APF3, DEF-P01: antes, NullPointerException y HTTP 500
++		mockMvc.perform(get("/owners/{ownerId}/pets/{petId}/edit", TEST_OWNER_ID, 999))
++			.andExpect(status().isNotFound());
++	}
++
+ 	@Test
+ 	void initCreationForm() throws Exception {
+ 		mockMvc.perform(get("/owners/{ownerId}/pets/new", TEST_OWNER_ID))
+@@ -96,6 +104,8 @@ class PetControllerTests {
+ 
+ 	@Test
+ 	void processCreationFormSuccess() throws Exception {
++		// APF3: el alta ahora usa addPetIfNameAvailable (transacción con bloqueo)
++		given(this.owners.addPetIfNameAvailable(eq(TEST_OWNER_ID), any(Pet.class))).willReturn(true);
+ 		mockMvc
+ 			.perform(post("/owners/{ownerId}/pets/new", TEST_OWNER_ID).param("name", "Betty")
+ 				.param("type", "hamster")
+@@ -162,9 +172,38 @@ class PetControllerTests {
+ 				.andExpect(view().name("pets/createOrUpdatePetForm"));
+ 		}
+ 
++		@Test
++		void processCreationFormWithMySqlDuplicateEntry() throws Exception {
++			// APF3, DEF-P03: mensaje de MySQL para la restricción sin nombre
++			given(owners.addPetIfNameAvailable(eq(TEST_OWNER_ID), any(Pet.class)))
++				.willThrow(new DataIntegrityViolationException("could not execute statement",
++						new java.sql.SQLIntegrityConstraintViolationException(
++								"Duplicate entry '1-Betty' for key 'pets.owner_id'")));
++			mockMvc
++				.perform(post("/owners/{ownerId}/pets/new", TEST_OWNER_ID).param("name", "Betty")
++					.param("type", "hamster")
++					.param("birthDate", "2015-02-12"))
++				.andExpect(model().attributeHasFieldErrorCode("pet", "name", "duplicate"))
++				.andExpect(status().isOk())
++				.andExpect(view().name("pets/createOrUpdatePetForm"));
++		}
++
++		@Test
++		void processCreationFormWithNameTakenWhileWaitingForLock() throws Exception {
++			// APF3, DEF-P02: otra solicitud registró el mismo nombre antes de obtener el
++			// bloqueo
++			given(owners.addPetIfNameAvailable(eq(TEST_OWNER_ID), any(Pet.class))).willReturn(false);
++			mockMvc
++				.perform(post("/owners/{ownerId}/pets/new", TEST_OWNER_ID).param("name", "Betty")
++					.param("type", "hamster")
++					.param("birthDate", "2015-02-12"))
++				.andExpect(model().attributeHasFieldErrorCode("pet", "name", "duplicate"))
++				.andExpect(status().isOk());
++		}
++
+ 		@Test
+ 		void processCreationFormWithDataIntegrityViolation() throws Exception {
+-			given(owners.saveAndFlush(any(Owner.class)))
++			given(owners.addPetIfNameAvailable(eq(TEST_OWNER_ID), any(Pet.class)))
+ 				.willThrow(new DataIntegrityViolationException("Duplicate key: unique_owner_pet_name"));
+ 			mockMvc
+ 				.perform(post("/owners/{ownerId}/pets/new", TEST_OWNER_ID).param("name", "Betty")

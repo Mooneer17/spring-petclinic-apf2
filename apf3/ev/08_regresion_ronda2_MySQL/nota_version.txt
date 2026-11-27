@@ -1,0 +1,1 @@
+Nota (26/11/2026): despues de esta ejecucion se corrigio el identificador de incidencia en dos comentarios y un mensaje de commit (SEC-04 -> REG-01/SEC-03). El codigo ejecutable no cambio; la version final equivalente es 168453f (git diff c6ba298 168453f: solo 3 comentarios).

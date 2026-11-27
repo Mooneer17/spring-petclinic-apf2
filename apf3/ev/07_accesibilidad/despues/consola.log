@@ -1,0 +1,11 @@
+inicio                         violaciones=0 () tab=5 sin_foco=0 sin_label=[] lang='en'
+buscar_propietario             violaciones=0 () tab=8 sin_foco=0 sin_label=[] lang='en'
+lista_propietarios             violaciones=0 () tab=14 sin_foco=0 sin_label=[] lang='en'
+detalle_propietario            violaciones=0 () tab=9 sin_foco=0 sin_label=[] lang='en'
+nuevo_propietario              violaciones=0 () tab=11 sin_foco=0 sin_label=[] lang='en'
+nuevo_propietario_con_errores  violaciones=0 () tab=11 sin_foco=0 sin_label=[] lang='en'
+nueva_mascota                  violaciones=0 () tab=12 sin_foco=1 sin_label=[] lang='en'
+nueva_visita                   violaciones=0 () tab=11 sin_foco=1 sin_label=[] lang='en'
+veterinarios                   violaciones=0 () tab=8 sin_foco=0 sin_label=[] lang='en'
+error                          violaciones=0 () tab=5 sin_foco=0 sin_label=[] lang='en'
+flujo teclado: {'exito': True, 'url_final': '/owners/12'}

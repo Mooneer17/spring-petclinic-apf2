@@ -1,0 +1,10 @@
+GET http://localhost:8081/owners?lastName=FgDBLPD
+
+HTTP 302
+Location: http://localhost:8081/owners/13
+Content-Language: en
+Content-Length: 0
+Date: Thu, 26 Nov 2026 21:50:10 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+

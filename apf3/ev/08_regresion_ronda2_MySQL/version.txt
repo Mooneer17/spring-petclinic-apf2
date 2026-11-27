@@ -1,0 +1,1 @@
+c6ba298 A11Y-01 a A11Y-05: idioma, contraste del menú, nombre del logo, alt y etiqueta de búsqueda

@@ -1,0 +1,15 @@
+GET http://localhost:8082/owners?lastName=FgSWMPD
+
+HTTP 302
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Security-Policy: default-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+Referrer-Policy: strict-origin-when-cross-origin
+Cache-Control: no-cache
+Location: http://localhost:8082/owners/79
+Content-Language: en
+Content-Length: 0
+Date: Thu, 26 Nov 2026 22:10:47 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+

@@ -1,0 +1,3 @@
+D1_escritorio_chrome             desborde=0/9 obj<24px=13 fuente_min=14 errores_consola=1 menu={'aplica': False} tactil=None
+D2_escritorio_firefox            desborde=0/9 obj<24px=12 fuente_min=14 errores_consola=0 menu={'aplica': False} tactil=None
+D3_escritorio_safari_webkit      desborde=0/9 obj<24px=12 fuente_min=14 errores_consola=1 menu={'aplica': False} tactil=None

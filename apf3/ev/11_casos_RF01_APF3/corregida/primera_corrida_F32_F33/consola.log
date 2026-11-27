@@ -1,0 +1,3 @@
+[OK ] F32 Registro rechazado: teléfono vacío -> HTTP 200; mensajes en telephone=['must not be blank', 'Telephone must be a 10-digit number']; no guardado=sí
+[OK ] F33 Registro rechazado: nombre vacío -> HTTP 200; mensajes en firstName=['must not be blank']; no guardado=sí
+{"Aprobado": 2, "Fallido": 0, "Bloqueado": 0, "Observacion": 0, "Total": 2}

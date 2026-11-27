@@ -1,0 +1,250 @@
+From b2e4b91bf17b106921f17ab74e155525e247e7ca Mon Sep 17 00:00:00 2001
+From: Mooneer17 <Mooneer17@users.noreply.github.com>
+Date: Thu, 26 Nov 2026 16:47:20 -0500
+Subject: [PATCH 3/5] =?UTF-8?q?SEC-01,=20SEC-03=20y=20SEC-04:=20Actuator?=
+ =?UTF-8?q?=20restringido,=20cabeceras=20defensivas=20y=20sesi=C3=B3n=20so?=
+ =?UTF-8?q?lo=20por=20cookie?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Actuator expone solo health e info. Un filtro añade X-Content-Type-Options, X-Frame-Options, Content-Security-Policy, Referrer-Policy y Cache-Control. La sesión ya no se agrega a la URL. El script en línea de ownerDetails.html pasa a un archivo estático para permitir script-src 'self'. Se añade CorreccionesSeguridadTests. SEC-02 (CSRF) queda abierto: requiere incorporar Spring Security.
+---
+ .../system/SecurityHeadersFilter.java         | 53 ++++++++++
+ src/main/resources/application.properties     |  6 +-
+ .../static/resources/js/hide-messages.js      | 11 +++
+ .../templates/owners/ownerDetails.html        | 13 +--
+ .../petclinic/CorreccionesSeguridadTests.java | 98 +++++++++++++++++++
+ 5 files changed, 168 insertions(+), 13 deletions(-)
+ create mode 100644 src/main/java/org/springframework/samples/petclinic/system/SecurityHeadersFilter.java
+ create mode 100644 src/main/resources/static/resources/js/hide-messages.js
+ create mode 100644 src/test/java/org/springframework/samples/petclinic/CorreccionesSeguridadTests.java
+
+diff --git a/src/main/java/org/springframework/samples/petclinic/system/SecurityHeadersFilter.java b/src/main/java/org/springframework/samples/petclinic/system/SecurityHeadersFilter.java
+new file mode 100644
+index 0000000..b6ada36
+--- /dev/null
++++ b/src/main/java/org/springframework/samples/petclinic/system/SecurityHeadersFilter.java
+@@ -0,0 +1,53 @@
++/*
++ * Copyright 2012-2025 the original author or authors.
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      https://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++package org.springframework.samples.petclinic.system;
++
++import java.io.IOException;
++
++import org.springframework.stereotype.Component;
++import org.springframework.web.filter.OncePerRequestFilter;
++
++import jakarta.servlet.FilterChain;
++import jakarta.servlet.ServletException;
++import jakarta.servlet.http.HttpServletRequest;
++import jakarta.servlet.http.HttpServletResponse;
++
++/**
++ * APF3, SEC-03: adds basic defensive HTTP headers to every response. Static resources
++ * keep the cache headers configured by Spring; pages get {@code Cache-Control: no-cache}.
++ */
++@Component
++class SecurityHeadersFilter extends OncePerRequestFilter {
++
++	static final String CONTENT_SECURITY_POLICY = "default-src 'self'; img-src 'self' data:; object-src 'none'; "
++			+ "base-uri 'self'; form-action 'self'; frame-ancestors 'none'";
++
++	@Override
++	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
++			throws ServletException, IOException {
++		response.setHeader("X-Content-Type-Options", "nosniff");
++		response.setHeader("X-Frame-Options", "DENY");
++		response.setHeader("Content-Security-Policy", CONTENT_SECURITY_POLICY);
++		response.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
++		String path = request.getRequestURI().substring(request.getContextPath().length());
++		if (!path.startsWith("/resources/") && !path.startsWith("/webjars/")) {
++			response.setHeader("Cache-Control", "no-cache");
++		}
++		chain.doFilter(request, response);
++	}
++
++}
+diff --git a/src/main/resources/application.properties b/src/main/resources/application.properties
+index f7e8a31..a8455ca 100644
+--- a/src/main/resources/application.properties
++++ b/src/main/resources/application.properties
+@@ -18,7 +18,8 @@ spring.messages.basename=messages/messages
+ # Actuator
+ # Expose all actuator endpoints for monitoring and management purposes
+ # Don't do this in production, only for development and testing
+-management.endpoints.web.exposure.include=*
++# APF3, SEC-01: solo endpoints no sensibles (antes: *)
++management.endpoints.web.exposure.include=health,info
+ 
+ # Logging
+ logging.level.org.springframework=INFO
+@@ -27,3 +28,6 @@ logging.level.org.springframework=INFO
+ 
+ # Maximum time static resources should be cached
+ spring.web.resources.cache.cachecontrol.max-age=12h
++
++# APF3, SEC-04: la sesion viaja solo en la cookie, no en la URL (;jsessionid=)
++server.servlet.session.tracking-modes=cookie
+diff --git a/src/main/resources/static/resources/js/hide-messages.js b/src/main/resources/static/resources/js/hide-messages.js
+new file mode 100644
+index 0000000..4319a0c
+--- /dev/null
++++ b/src/main/resources/static/resources/js/hide-messages.js
+@@ -0,0 +1,11 @@
++// Function to hide the success and error messages after 3 seconds
++// (APF3: moved from an inline script so the Content-Security-Policy can use script-src 'self')
++function hideMessages() {
++  setTimeout(function () {
++    document.getElementById("success-message").style.display = "none";
++    document.getElementById("error-message").style.display = "none";
++  }, 3000); // 3000 milliseconds (3 seconds)
++}
++
++// Call the function to hide messages
++hideMessages();
+diff --git a/src/main/resources/templates/owners/ownerDetails.html b/src/main/resources/templates/owners/ownerDetails.html
+index 6c52e6a..7a5804d 100644
+--- a/src/main/resources/templates/owners/ownerDetails.html
++++ b/src/main/resources/templates/owners/ownerDetails.html
+@@ -77,18 +77,7 @@
+     </tr>
+ 
+   </table>
+-  <script>
+-    // Function to hide the success and error messages after 3 seconds
+-    function hideMessages() {
+-      setTimeout(function () {
+-        document.getElementById("success-message").style.display = "none";
+-        document.getElementById("error-message").style.display = "none";
+-      }, 3000); // 3000 milliseconds (3 seconds)
+-    }
+-
+-    // Call the function to hide messages
+-    hideMessages();
+-  </script>
++  <script th:src="@{/resources/js/hide-messages.js}"></script>
+ 
+ </body>
+ 
+diff --git a/src/test/java/org/springframework/samples/petclinic/CorreccionesSeguridadTests.java b/src/test/java/org/springframework/samples/petclinic/CorreccionesSeguridadTests.java
+new file mode 100644
+index 0000000..30b891e
+--- /dev/null
++++ b/src/test/java/org/springframework/samples/petclinic/CorreccionesSeguridadTests.java
+@@ -0,0 +1,98 @@
++/*
++ * Copyright 2012-2025 the original author or authors.
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      https://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++package org.springframework.samples.petclinic;
++
++import static org.assertj.core.api.Assertions.assertThat;
++
++import java.net.URI;
++import java.net.http.HttpClient;
++import java.net.http.HttpRequest;
++import java.net.http.HttpResponse;
++
++import org.junit.jupiter.api.Test;
++import org.springframework.boot.test.context.SpringBootTest;
++import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
++import org.springframework.boot.test.web.server.LocalServerPort;
++
++/**
++ * APF3 - Re-test automatizado de las correcciones de configuración y manejo de errores:
++ * SEC-01 (S02), SEC-03 (S12), SEC-04 (S13), DEF-P01 (S08) y OBS-02 (S07, S09). Usa HTTP
++ * real contra un servidor en puerto aleatorio.
++ */
++@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
++class CorreccionesSeguridadTests {
++
++	@LocalServerPort
++	private int port;
++
++	private final HttpClient client = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NEVER).build();
++
++	private HttpResponse<String> get(String path) throws Exception {
++		return this.client.send(HttpRequest.newBuilder(URI.create("http://localhost:" + this.port + path)).build(),
++				HttpResponse.BodyHandlers.ofString());
++	}
++
++	@Test
++	void s12PaginaPrincipalEnviaCabecerasDefensivas() throws Exception {
++		HttpResponse<String> r = get("/");
++		assertThat(r.statusCode()).isEqualTo(200);
++		assertThat(r.headers().firstValue("X-Content-Type-Options")).hasValue("nosniff");
++		assertThat(r.headers().firstValue("X-Frame-Options")).hasValue("DENY");
++		assertThat(r.headers().firstValue("Content-Security-Policy")).isPresent();
++		assertThat(r.headers().firstValue("Cache-Control")).isPresent();
++	}
++
++	@Test
++	void s02ActuatorSoloExponeEndpointsNoSensibles() throws Exception {
++		assertThat(get("/actuator/health").statusCode()).isEqualTo(200);
++		assertThat(get("/actuator/env").statusCode()).isEqualTo(404);
++		assertThat(get("/actuator/configprops").statusCode()).isEqualTo(404);
++		assertThat(get("/actuator/beans").statusCode()).isEqualTo(404);
++	}
++
++	@Test
++	void s13RedireccionSinIdentificadorDeSesion() throws Exception {
++		HttpRequest post = HttpRequest.newBuilder(URI.create("http://localhost:" + this.port + "/owners/new"))
++			.header("Content-Type", "application/x-www-form-urlencoded")
++			.POST(HttpRequest.BodyPublishers
++				.ofString("firstName=Ana&lastName=SinSesion&address=Av.+Central+123&city=Lima&telephone=9876543210"))
++			.build();
++		HttpResponse<String> r = this.client.send(post, HttpResponse.BodyHandlers.ofString());
++		assertThat(r.statusCode()).isEqualTo(302);
++		assertThat(r.headers().firstValue("Location")).isPresent().get().asString().doesNotContain("jsessionid");
++	}
++
++	@Test
++	void s08MascotaDeOtroPropietarioResponde404() throws Exception {
++		// La mascota 2 (Basil) pertenece a la propietaria 2; se pide desde el propietario
++		// 1
++		HttpResponse<String> r = get("/owners/1/pets/2/edit");
++		assertThat(r.statusCode()).isEqualTo(404);
++		assertThat(r.body()).doesNotContain("Exception").doesNotContain("at org.springframework");
++	}
++
++	@Test
++	void s07VisitaParaMascotaAjenaResponde404() throws Exception {
++		assertThat(get("/owners/1/pets/2/visits/new").statusCode()).isEqualTo(404);
++	}
++
++	@Test
++	void s09PropietarioInexistenteResponde404() throws Exception {
++		assertThat(get("/owners/999999").statusCode()).isEqualTo(404);
++	}
++
++}
+-- 
+2.43.0
+

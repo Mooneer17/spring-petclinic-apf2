@@ -1,0 +1,11 @@
+POST http://localhost:8081/owners/25/pets/new
+BODY: name=NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN&birthDate=2022-05-10&type=dog
+
+HTTP 302
+Location: http://localhost:8081/owners/25
+Content-Language: en
+Content-Length: 0
+Date: Thu, 26 Nov 2026 21:50:11 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+

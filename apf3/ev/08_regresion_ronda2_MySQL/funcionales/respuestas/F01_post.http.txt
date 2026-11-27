@@ -1,0 +1,17 @@
+POST http://localhost:8082/owners/new
+BODY: firstName=Ana&lastName=FaSWMPD&address=Av.+Central+123&city=Lima&telephone=9876543210
+
+HTTP 302
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Security-Policy: default-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+Referrer-Policy: strict-origin-when-cross-origin
+Cache-Control: no-cache
+Set-Cookie: JSESSIONID=5607733C57EB4909683E53B6DB4E2440; Path=/; HttpOnly
+Location: http://localhost:8082/owners/77
+Content-Language: en
+Content-Length: 0
+Date: Thu, 26 Nov 2026 22:10:47 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+

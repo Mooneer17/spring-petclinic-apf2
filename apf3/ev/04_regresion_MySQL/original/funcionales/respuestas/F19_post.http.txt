@@ -1,0 +1,11 @@
+POST http://localhost:8081/owners/24/pets/new
+BODY: name=Hoy&birthDate=2026-11-26&type=dog
+
+HTTP 302
+Location: http://localhost:8081/owners/24
+Content-Language: en
+Content-Length: 0
+Date: Thu, 26 Nov 2026 21:50:11 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+

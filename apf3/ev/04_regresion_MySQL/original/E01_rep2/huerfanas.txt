@@ -1,0 +1,1 @@
+huerfanas_antes=4 huerfanas_despues=8

@@ -1,0 +1,204 @@
+From 168453fec18014690ac23cc137b460eba969eb8f Mon Sep 17 00:00:00 2001
+From: Mooneer17 <Mooneer17@users.noreply.github.com>
+Date: Thu, 26 Nov 2026 17:06:14 -0500
+Subject: [PATCH 5/5] =?UTF-8?q?A11Y-01=20a=20A11Y-05:=20idioma,=20contrast?=
+ =?UTF-8?q?e=20del=20men=C3=BA,=20nombre=20del=20logo,=20alt=20y=20etiquet?=
+ =?UTF-8?q?a=20de=20b=C3=BAsqueda?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Hallazgos de axe-core (WCAG 2.1 A/AA): html sin lang, menú con contraste
+3.6:1 (ahora 5.39:1), enlace del logo sin nombre accesible, imagen sin alt
+y campo de búsqueda sin label asociado. Se agregan pruebas automáticas.
+---
+ .../static/resources/css/petclinic.css        |  2 +-
+ src/main/resources/templates/error.html       |  2 +-
+ .../resources/templates/fragments/layout.html |  4 +-
+ .../templates/owners/findOwners.html          |  2 +-
+ src/main/resources/templates/welcome.html     |  2 +-
+ src/main/scss/petclinic.scss                  |  4 +-
+ .../petclinic/AccesibilidadBasicaTests.java   | 76 +++++++++++++++++++
+ 7 files changed, 85 insertions(+), 7 deletions(-)
+ create mode 100644 src/test/java/org/springframework/samples/petclinic/AccesibilidadBasicaTests.java
+
+diff --git a/src/main/resources/static/resources/css/petclinic.css b/src/main/resources/static/resources/css/petclinic.css
+index 65e9fc3..ab8ebc9 100644
+--- a/src/main/resources/static/resources/css/petclinic.css
++++ b/src/main/resources/static/resources/css/petclinic.css
+@@ -9282,7 +9282,7 @@ textarea.form-control-lg {
+   padding: 9px 12px; }
+ 
+ .nav > li > a {
+-  color: #838789; }
++  color: #a3a7a9; }
+ 
+ .btn-primary {
+   margin-top: 12px;
+diff --git a/src/main/resources/templates/error.html b/src/main/resources/templates/error.html
+index aa40045..ca658b8 100644
+--- a/src/main/resources/templates/error.html
++++ b/src/main/resources/templates/error.html
+@@ -3,7 +3,7 @@
+ <html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'error')}">
+ 
+ <body>
+-  <img src="../static/resources/images/pets.png" th:src="@{/resources/images/pets.png}" />
++  <img src="../static/resources/images/pets.png" th:src="@{/resources/images/pets.png}" alt="" />
+   <!-- Title: Something happened -->
+   <h2 th:text="#{somethingHappened}">Something happened...</h2>
+ 
+diff --git a/src/main/resources/templates/fragments/layout.html b/src/main/resources/templates/fragments/layout.html
+index b7ba45d..1e608e5 100644
+--- a/src/main/resources/templates/fragments/layout.html
++++ b/src/main/resources/templates/fragments/layout.html
+@@ -1,6 +1,6 @@
+ <!DOCTYPE html>
+ 
+-<html th:fragment="layout (template, menu)" xmlns:th="https://www.thymeleaf.org">
++<html th:fragment="layout (template, menu)" xmlns:th="https://www.thymeleaf.org" th:lang="${#locale.language}">
+ 
+ <head>
+ 
+@@ -19,7 +19,7 @@
+ 
+   <nav class="navbar navbar-expand-lg navbar-dark" role="navigation">
+     <div class="container-fluid">
+-      <a class="navbar-brand" th:href="@{/}"><span></span></a>
++      <a class="navbar-brand" th:href="@{/}" th:attr="aria-label=#{home}"><span></span></a>
+       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-navbar">
+         <span class="navbar-toggler-icon"></span>
+       </button>
+diff --git a/src/main/resources/templates/owners/findOwners.html b/src/main/resources/templates/owners/findOwners.html
+index 2b0a685..611b1db 100644
+--- a/src/main/resources/templates/owners/findOwners.html
++++ b/src/main/resources/templates/owners/findOwners.html
+@@ -9,7 +9,7 @@
+   <form th:object="${owner}" th:action="@{/owners}" method="get" class="form-horizontal" id="search-owner-form">
+     <div class="form-group">
+       <div class="control-group" id="lastNameGroup">
+-        <label class="col-sm-2 control-label" th:text="#{lastName}">Last name </label>
++        <label class="col-sm-2 control-label" for="lastName" th:text="#{lastName}">Last name </label>
+         <div class="col-sm-10">
+           <input class="form-control" th:field="*{lastName}" size="30" maxlength="80" />
+           <span class="help-inline">
+diff --git a/src/main/resources/templates/welcome.html b/src/main/resources/templates/welcome.html
+index e4b69c4..c163423 100644
+--- a/src/main/resources/templates/welcome.html
++++ b/src/main/resources/templates/welcome.html
+@@ -7,7 +7,7 @@
+   <h2 th:text="#{welcome}">Welcome</h2>
+   <div class="row">
+     <div class="col-md-12">
+-      <img class="img-responsive" src="../static/resources/images/pets.png" th:src="@{/resources/images/pets.png}" />
++      <img class="img-responsive" src="../static/resources/images/pets.png" th:src="@{/resources/images/pets.png}" th:alt="#{welcome}" />
+     </div>
+   </div>
+ 
+diff --git a/src/main/scss/petclinic.scss b/src/main/scss/petclinic.scss
+index d33201d..f146a30 100644
+--- a/src/main/scss/petclinic.scss
++++ b/src/main/scss/petclinic.scss
+@@ -19,6 +19,8 @@ $spring-green:      #6db33f;
+ $spring-dark-green: #5fa134;
+ $spring-brown:      #34302D;
+ $spring-grey:       #838789;
++// APF3 A11Y-02: gris del menu con contraste 5.39:1 sobre $spring-brown (WCAG 1.4.3)
++$spring-grey-nav:   #a3a7a9;
+ $spring-light-grey: #f1f1f1;
+ 
+ $body-bg:                           $spring-light-grey;
+@@ -58,7 +60,7 @@ $table-border-color:                      $spring-brown;
+ }
+ 
+ .nav > li > a {
+-  color: $spring-grey;
++  color: $spring-grey-nav;
+ }
+ 
+ .btn-primary {
+diff --git a/src/test/java/org/springframework/samples/petclinic/AccesibilidadBasicaTests.java b/src/test/java/org/springframework/samples/petclinic/AccesibilidadBasicaTests.java
+new file mode 100644
+index 0000000..f8248f4
+--- /dev/null
++++ b/src/test/java/org/springframework/samples/petclinic/AccesibilidadBasicaTests.java
+@@ -0,0 +1,76 @@
++/*
++ * Copyright 2012-2025 the original author or authors.
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      https://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++package org.springframework.samples.petclinic;
++
++import static org.assertj.core.api.Assertions.assertThat;
++
++import java.net.URI;
++import java.net.http.HttpClient;
++import java.net.http.HttpRequest;
++import java.net.http.HttpResponse;
++
++import org.junit.jupiter.api.Test;
++import org.springframework.boot.test.context.SpringBootTest;
++import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
++import org.springframework.boot.test.web.server.LocalServerPort;
++
++/**
++ * APF3: comprobaciones automaticas de los hallazgos de accesibilidad corregidos (A11Y-01
++ * a A11Y-05, WCAG 2.1 A/AA). El contraste (A11Y-02) se verifica con axe-core.
++ */
++@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
++class AccesibilidadBasicaTests {
++
++	@LocalServerPort
++	private int port;
++
++	private final HttpClient client = HttpClient.newHttpClient();
++
++	private String get(String path) throws Exception {
++		HttpRequest request = HttpRequest.newBuilder(URI.create("http://localhost:" + port + path))
++			.header("Accept", "text/html")
++			.GET()
++			.build();
++		return client.send(request, HttpResponse.BodyHandlers.ofString()).body();
++	}
++
++	@Test
++	void a11y01TodasLasPaginasDeclaranIdioma() throws Exception {
++		for (String path : new String[] { "/", "/owners/find", "/owners/1", "/vets.html", "/oups" }) {
++			assertThat(get(path)).as(path).containsPattern("<html[^>]*\\slang=\"[a-z]{2}\"");
++		}
++	}
++
++	@Test
++	void a11y03EnlaceDelLogoTieneNombreAccesible() throws Exception {
++		assertThat(get("/")).containsPattern("<a class=\"navbar-brand\"[^>]*aria-label=\"[^\"]+\"");
++	}
++
++	@Test
++	void a11y04ImagenesTienenTextoAlternativo() throws Exception {
++		for (String path : new String[] { "/", "/oups" }) {
++			assertThat(get(path)).as(path).doesNotContainPattern("<img(?![^>]*\\salt=)[^>]*>");
++		}
++	}
++
++	@Test
++	void a11y05CampoDeBusquedaTieneEtiquetaAsociada() throws Exception {
++		String body = get("/owners/find");
++		assertThat(body).contains("for=\"lastName\"").contains("id=\"lastName\"");
++	}
++
++}
+-- 
+2.43.0
+

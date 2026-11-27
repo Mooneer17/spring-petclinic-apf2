@@ -1,0 +1,12 @@
+POST http://localhost:8081/owners/new
+BODY: firstName=Ana&lastName=FaDBLPD&address=Av.+Central+123&city=Lima&telephone=9876543210
+
+HTTP 302
+Set-Cookie: JSESSIONID=921338269A9A5FD0BC9B95065CA1DD22; Path=/; HttpOnly
+Location: http://localhost:8081/owners/11;jsessionid=921338269A9A5FD0BC9B95065CA1DD22
+Content-Language: en
+Content-Length: 0
+Date: Thu, 26 Nov 2026 21:50:09 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+

@@ -1,0 +1,16 @@
+POST http://localhost:8082/owners/105/edit
+BODY: firstName=Ana&lastName=SaWWMPD&address=Av.+Central+123&city=Cusco&telephone=9876543210&id=106
+
+HTTP 302
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Security-Policy: default-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+Referrer-Policy: strict-origin-when-cross-origin
+Cache-Control: no-cache
+Location: http://localhost:8082/owners/105
+Content-Language: en
+Content-Length: 0
+Date: Thu, 26 Nov 2026 22:10:51 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+

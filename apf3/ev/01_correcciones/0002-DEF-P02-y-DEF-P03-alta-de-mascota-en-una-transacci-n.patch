@@ -1,0 +1,339 @@
+From df7eeea27785c47aff5fa95c0534c77dcd5672d3 Mon Sep 17 00:00:00 2001
+From: Mooneer17 <Mooneer17@users.noreply.github.com>
+Date: Thu, 26 Nov 2026 16:44:53 -0500
+Subject: [PATCH 2/5] =?UTF-8?q?DEF-P02=20y=20DEF-P03:=20alta=20de=20mascot?=
+ =?UTF-8?q?a=20en=20una=20transacci=C3=B3n=20con=20el=20propietario=20bloq?=
+ =?UTF-8?q?ueado?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+El alta relee al propietario con SELECT ... FOR UPDATE dentro de una transacción, de modo que dos solicitudes simultáneas ya no guardan copias desactualizadas que desvinculan mascotas (owner_id nulo). El duplicado de MySQL (restricción sin nombre, 'pets.owner_id') se reconoce y se responde con error de validación en lugar de HTTP 500. Se ajusta el doble de prueba de PetControllerTests y se añaden pruebas de las correcciones, incluida E01ConcurrenciaTests.
+---
+ .../petclinic/owner/OwnerRepository.java      |  40 ++++++
+ .../petclinic/owner/PetController.java        |  19 ++-
+ .../petclinic/E01ConcurrenciaTests.java       | 130 ++++++++++++++++++
+ .../petclinic/owner/PetControllerTests.java   |  41 +++++-
+ 4 files changed, 223 insertions(+), 7 deletions(-)
+ create mode 100644 src/test/java/org/springframework/samples/petclinic/E01ConcurrenciaTests.java
+
+diff --git a/src/main/java/org/springframework/samples/petclinic/owner/OwnerRepository.java b/src/main/java/org/springframework/samples/petclinic/owner/OwnerRepository.java
+index d2b3dde..e4168e2 100644
+--- a/src/main/java/org/springframework/samples/petclinic/owner/OwnerRepository.java
++++ b/src/main/java/org/springframework/samples/petclinic/owner/OwnerRepository.java
+@@ -20,6 +20,12 @@ import java.util.Optional;
+ import org.springframework.data.domain.Page;
+ import org.springframework.data.domain.Pageable;
+ import org.springframework.data.jpa.repository.JpaRepository;
++import org.springframework.data.jpa.repository.Lock;
++import org.springframework.data.jpa.repository.Query;
++import org.springframework.data.repository.query.Param;
++import org.springframework.transaction.annotation.Transactional;
++
++import jakarta.persistence.LockModeType;
+ 
+ /**
+  * Repository class for <code>Owner</code> domain objects. All method names are compliant
+@@ -59,4 +65,38 @@ public interface OwnerRepository extends JpaRepository<Owner, Integer> {
+ 	 */
+ 	Optional<Owner> findById(Integer id);
+ 
++	/**
++	 * Retrieve an {@link Owner} locking its row until the current transaction ends
++	 * (SELECT ... FOR UPDATE), so that concurrent requests for the same owner are
++	 * serialized.
++	 * @param id the id to search for
++	 * @return the locked owner, if found
++	 */
++	@Lock(LockModeType.PESSIMISTIC_WRITE)
++	@Query("SELECT owner FROM Owner owner WHERE owner.id = :id")
++	Optional<Owner> findByIdForUpdate(@Param("id") Integer id);
++
++	/**
++	 * Add a new pet to the owner inside one transaction, re-reading the owner with a
++	 * pessimistic lock. Two simultaneous requests can no longer save stale copies of the
++	 * owner that unlink each other's pets (DEF-P02), and the second request sees the pet
++	 * saved by the first one, so a duplicate name is rejected instead of failing in the
++	 * database (DEF-P03).
++	 * @param ownerId the owner id
++	 * @param pet the new pet
++	 * @return {@code true} if the pet was added, {@code false} if the owner already has a
++	 * pet with the same name
++	 */
++	@Transactional
++	default boolean addPetIfNameAvailable(Integer ownerId, Pet pet) {
++		Owner owner = findByIdForUpdate(ownerId)
++			.orElseThrow(() -> new IllegalStateException("Owner not found with id: " + ownerId));
++		if (owner.getPet(pet.getName(), true) != null) {
++			return false;
++		}
++		owner.addPet(pet);
++		saveAndFlush(owner);
++		return true;
++	}
++
+ }
+diff --git a/src/main/java/org/springframework/samples/petclinic/owner/PetController.java b/src/main/java/org/springframework/samples/petclinic/owner/PetController.java
+index 896d47f..4a2229a 100644
+--- a/src/main/java/org/springframework/samples/petclinic/owner/PetController.java
++++ b/src/main/java/org/springframework/samples/petclinic/owner/PetController.java
+@@ -116,8 +116,8 @@ class PetController {
+ 	}
+ 
+ 	@PostMapping("/pets/new")
+-	public String processCreationForm(Owner owner, @Valid Pet pet, BindingResult result,
+-			RedirectAttributes redirectAttributes) {
++	public String processCreationForm(@PathVariable("ownerId") int ownerId, Owner owner, @Valid Pet pet,
++			BindingResult result, RedirectAttributes redirectAttributes) {
+ 
+ 		if (StringUtils.hasText(pet.getName()) && pet.isNew() && owner.getPet(pet.getName(), true) != null) {
+ 			result.rejectValue("name", "duplicate", "already exists");
+@@ -132,14 +132,18 @@ class PetController {
+ 			return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
+ 		}
+ 
++		boolean added;
+ 		try {
+-			owner.addPet(pet);
+-			this.owners.saveAndFlush(owner);
++			// DEF-P02: alta dentro de una transacción con el propietario bloqueado
++			added = this.owners.addPetIfNameAvailable(ownerId, pet);
+ 		}
+ 		catch (DataIntegrityViolationException ex) {
+ 			if (!isDuplicatePetNameViolation(ex)) {
+ 				throw ex;
+ 			}
++			added = false;
++		}
++		if (!added) {
+ 			result.rejectValue("name", "duplicate", "already exists");
+ 			return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
+ 		}
+@@ -211,8 +215,11 @@ class PetController {
+ 	}
+ 
+ 	private boolean isDuplicatePetNameViolation(DataIntegrityViolationException ex) {
+-		String message = ex.getMessage();
+-		return message != null && message.toLowerCase().contains("unique_owner_pet_name");
++		// DEF-P03: en H2 la restricción se llama unique_owner_pet_name; en MySQL no
++		// tiene nombre y el mensaje es "Duplicate entry '...' for key 'pets.owner_id'"
++		String message = (ex.getMessage() + " " + ex.getMostSpecificCause().getMessage()).toLowerCase();
++		return message.contains("unique_owner_pet_name")
++				|| (message.contains("duplicate entry") && message.contains("pets.owner_id"));
+ 	}
+ 
+ }
+diff --git a/src/test/java/org/springframework/samples/petclinic/E01ConcurrenciaTests.java b/src/test/java/org/springframework/samples/petclinic/E01ConcurrenciaTests.java
+new file mode 100644
+index 0000000..9afaa3e
+--- /dev/null
++++ b/src/test/java/org/springframework/samples/petclinic/E01ConcurrenciaTests.java
+@@ -0,0 +1,130 @@
++/*
++ * Copyright 2012-2025 the original author or authors.
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      https://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++package org.springframework.samples.petclinic;
++
++import static org.assertj.core.api.Assertions.assertThat;
++
++import java.net.URI;
++import java.net.http.HttpClient;
++import java.net.http.HttpRequest;
++import java.net.http.HttpResponse;
++import java.util.ArrayList;
++import java.util.List;
++import java.util.Map;
++import java.util.concurrent.ConcurrentHashMap;
++import java.util.concurrent.CountDownLatch;
++import java.util.concurrent.ExecutorService;
++import java.util.concurrent.Executors;
++import java.util.concurrent.TimeUnit;
++import java.util.concurrent.atomic.AtomicInteger;
++
++import org.junit.jupiter.api.Test;
++import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.boot.test.context.SpringBootTest;
++import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
++import org.springframework.boot.test.web.server.LocalServerPort;
++import org.springframework.jdbc.core.JdbcTemplate;
++import org.springframework.samples.petclinic.owner.Owner;
++import org.springframework.samples.petclinic.owner.OwnerRepository;
++
++/**
++ * APF3 - Re-test automatizado de E01 (DEF-P02 y DEF-P03). Envía en el mismo instante
++ * cuatro altas de la misma mascota para cada propietario y comprueba que no queden
++ * mascotas sin propietario, que cada propietario tenga una sola mascota con ese nombre y
++ * que ninguna respuesta sea HTTP 5xx.
++ */
++@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
++class E01ConcurrenciaTests {
++
++	private static final int PROPIETARIOS = 5;
++
++	private static final int ENVIOS_POR_PROPIETARIO = 4;
++
++	private static final String NOMBRE = "Gemela";
++
++	@LocalServerPort
++	private int port;
++
++	@Autowired
++	private OwnerRepository owners;
++
++	@Autowired
++	private JdbcTemplate jdbc;
++
++	@Test
++	void altasSimultaneasNoDejanHuerfanasNiErrores500() throws Exception {
++		List<Integer> ids = new ArrayList<>();
++		for (int i = 0; i < PROPIETARIOS; i++) {
++			Owner owner = new Owner();
++			owner.setFirstName("E01");
++			owner.setLastName("Concurrencia" + i);
++			owner.setAddress("Av. Prueba " + i);
++			owner.setCity("Lima");
++			owner.setTelephone("9876543210");
++			ids.add(this.owners.saveAndFlush(owner).getId());
++		}
++		Integer huerfanasAntes = this.jdbc.queryForObject("SELECT COUNT(*) FROM pets WHERE owner_id IS NULL",
++				Integer.class);
++
++		HttpClient client = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NEVER).build();
++		Map<Integer, AtomicInteger> estados = new ConcurrentHashMap<>();
++		ExecutorService pool = Executors.newFixedThreadPool(PROPIETARIOS * ENVIOS_POR_PROPIETARIO);
++		CountDownLatch inicio = new CountDownLatch(1);
++		CountDownLatch fin = new CountDownLatch(PROPIETARIOS * ENVIOS_POR_PROPIETARIO);
++		for (Integer id : ids) {
++			for (int k = 0; k < ENVIOS_POR_PROPIETARIO; k++) {
++				pool.submit(() -> {
++					try {
++						inicio.await();
++						HttpRequest req = HttpRequest
++							.newBuilder(URI.create("http://localhost:" + this.port + "/owners/" + id + "/pets/new"))
++							.header("Content-Type", "application/x-www-form-urlencoded")
++							.POST(HttpRequest.BodyPublishers
++								.ofString("name=" + NOMBRE + "&birthDate=2020-01-01&type=cat"))
++							.build();
++						int status = client.send(req, HttpResponse.BodyHandlers.discarding()).statusCode();
++						estados.computeIfAbsent(status, s -> new AtomicInteger()).incrementAndGet();
++					}
++					catch (Exception ex) {
++						estados.computeIfAbsent(-1, s -> new AtomicInteger()).incrementAndGet();
++					}
++					finally {
++						fin.countDown();
++					}
++				});
++			}
++		}
++		inicio.countDown();
++		assertThat(fin.await(60, TimeUnit.SECONDS)).isTrue();
++		pool.shutdown();
++
++		Integer huerfanasDespues = this.jdbc.queryForObject("SELECT COUNT(*) FROM pets WHERE owner_id IS NULL",
++				Integer.class);
++		System.out.println("E01 respuestas=" + estados + " huerfanasAntes=" + huerfanasAntes + " huerfanasDespues="
++				+ huerfanasDespues);
++
++		assertThat(estados.keySet()).as("ninguna respuesta 5xx ni error de conexión")
++			.allMatch(status -> status >= 200 && status < 500);
++		assertThat(huerfanasDespues).as("mascotas sin propietario").isEqualTo(huerfanasAntes);
++		for (Integer id : ids) {
++			Integer conNombre = this.jdbc.queryForObject("SELECT COUNT(*) FROM pets WHERE owner_id = ? AND name = ?",
++					Integer.class, id, NOMBRE);
++			assertThat(conNombre).as("mascotas '" + NOMBRE + "' del propietario " + id).isEqualTo(1);
++		}
++	}
++
++}
+diff --git a/src/test/java/org/springframework/samples/petclinic/owner/PetControllerTests.java b/src/test/java/org/springframework/samples/petclinic/owner/PetControllerTests.java
+index b45ffd4..275d3e5 100644
+--- a/src/test/java/org/springframework/samples/petclinic/owner/PetControllerTests.java
++++ b/src/test/java/org/springframework/samples/petclinic/owner/PetControllerTests.java
+@@ -35,6 +35,7 @@ import java.util.Optional;
+ import org.springframework.dao.DataIntegrityViolationException;
+ 
+ import static org.mockito.ArgumentMatchers.any;
++import static org.mockito.ArgumentMatchers.eq;
+ import static org.mockito.BDDMockito.given;
+ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+@@ -86,6 +87,13 @@ class PetControllerTests {
+ 		given(this.owners.findById(TEST_OWNER_ID)).willReturn(Optional.of(owner));
+ 	}
+ 
++	@Test
++	void initUpdateFormForPetOfAnotherOwnerReturnsNotFound() throws Exception {
++		// APF3, DEF-P01: antes, NullPointerException y HTTP 500
++		mockMvc.perform(get("/owners/{ownerId}/pets/{petId}/edit", TEST_OWNER_ID, 999))
++			.andExpect(status().isNotFound());
++	}
++
+ 	@Test
+ 	void initCreationForm() throws Exception {
+ 		mockMvc.perform(get("/owners/{ownerId}/pets/new", TEST_OWNER_ID))
+@@ -96,6 +104,8 @@ class PetControllerTests {
+ 
+ 	@Test
+ 	void processCreationFormSuccess() throws Exception {
++		// APF3: el alta ahora usa addPetIfNameAvailable (transacción con bloqueo)
++		given(this.owners.addPetIfNameAvailable(eq(TEST_OWNER_ID), any(Pet.class))).willReturn(true);
+ 		mockMvc
+ 			.perform(post("/owners/{ownerId}/pets/new", TEST_OWNER_ID).param("name", "Betty")
+ 				.param("type", "hamster")
+@@ -162,9 +172,38 @@ class PetControllerTests {
+ 				.andExpect(view().name("pets/createOrUpdatePetForm"));
+ 		}
+ 
++		@Test
++		void processCreationFormWithMySqlDuplicateEntry() throws Exception {
++			// APF3, DEF-P03: mensaje de MySQL para la restricción sin nombre
++			given(owners.addPetIfNameAvailable(eq(TEST_OWNER_ID), any(Pet.class)))
++				.willThrow(new DataIntegrityViolationException("could not execute statement",
++						new java.sql.SQLIntegrityConstraintViolationException(
++								"Duplicate entry '1-Betty' for key 'pets.owner_id'")));
++			mockMvc
++				.perform(post("/owners/{ownerId}/pets/new", TEST_OWNER_ID).param("name", "Betty")
++					.param("type", "hamster")
++					.param("birthDate", "2015-02-12"))
++				.andExpect(model().attributeHasFieldErrorCode("pet", "name", "duplicate"))
++				.andExpect(status().isOk())
++				.andExpect(view().name("pets/createOrUpdatePetForm"));
++		}
++
++		@Test
++		void processCreationFormWithNameTakenWhileWaitingForLock() throws Exception {
++			// APF3, DEF-P02: otra solicitud registró el mismo nombre antes de obtener el
++			// bloqueo
++			given(owners.addPetIfNameAvailable(eq(TEST_OWNER_ID), any(Pet.class))).willReturn(false);
++			mockMvc
++				.perform(post("/owners/{ownerId}/pets/new", TEST_OWNER_ID).param("name", "Betty")
++					.param("type", "hamster")
++					.param("birthDate", "2015-02-12"))
++				.andExpect(model().attributeHasFieldErrorCode("pet", "name", "duplicate"))
++				.andExpect(status().isOk());
++		}
++
+ 		@Test
+ 		void processCreationFormWithDataIntegrityViolation() throws Exception {
+-			given(owners.saveAndFlush(any(Owner.class)))
++			given(owners.addPetIfNameAvailable(eq(TEST_OWNER_ID), any(Pet.class)))
+ 				.willThrow(new DataIntegrityViolationException("Duplicate key: unique_owner_pet_name"));
+ 			mockMvc
+ 				.perform(post("/owners/{ownerId}/pets/new", TEST_OWNER_ID).param("name", "Betty")
+-- 
+2.43.0
+

@@ -1,0 +1,112 @@
+{
+  "bd": "MySQL 8.0.46 (corregida)",
+  "propietarios": 10,
+  "solicitudes_por_propietario": 4,
+  "conteo_respuestas": {
+    "302": 10,
+    "200_error_name": 30
+  },
+  "propietarios_con_mas_de_una": 0,
+  "detalle": [
+    {
+      "owner": 47,
+      "respuestas": [
+        "302",
+        "200_error_name",
+        "200_error_name",
+        "200_error_name"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 48,
+      "respuestas": [
+        "200_error_name",
+        "200_error_name",
+        "302",
+        "200_error_name"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 49,
+      "respuestas": [
+        "200_error_name",
+        "200_error_name",
+        "200_error_name",
+        "302"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 50,
+      "respuestas": [
+        "200_error_name",
+        "302",
+        "200_error_name",
+        "200_error_name"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 51,
+      "respuestas": [
+        "200_error_name",
+        "200_error_name",
+        "200_error_name",
+        "302"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 52,
+      "respuestas": [
+        "200_error_name",
+        "302",
+        "200_error_name",
+        "200_error_name"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 53,
+      "respuestas": [
+        "200_error_name",
+        "200_error_name",
+        "302",
+        "200_error_name"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 54,
+      "respuestas": [
+        "302",
+        "200_error_name",
+        "200_error_name",
+        "200_error_name"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 55,
+      "respuestas": [
+        "200_error_name",
+        "200_error_name",
+        "200_error_name",
+        "302"
+      ],
+      "mascotas_guardadas": 1
+    },
+    {
+      "owner": 56,
+      "respuestas": [
+        "302",
+        "200_error_name",
+        "200_error_name",
+        "200_error_name"
+      ],
+      "mascotas_guardadas": 1
+    }
+  ]
+}

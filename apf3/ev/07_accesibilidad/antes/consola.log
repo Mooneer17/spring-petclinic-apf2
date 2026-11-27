@@ -1,0 +1,11 @@
+inicio                         violaciones=4 (color-contrast:3, html-has-lang:1, image-alt:1, link-name:1) tab=5 sin_foco=0 sin_label=[] lang=''
+buscar_propietario             violaciones=4 (color-contrast:3, html-has-lang:1, label:1, link-name:1) tab=8 sin_foco=0 sin_label=['lastName'] lang=''
+lista_propietarios             violaciones=3 (color-contrast:3, html-has-lang:1, link-name:1) tab=11 sin_foco=0 sin_label=[] lang=''
+detalle_propietario            violaciones=3 (color-contrast:3, html-has-lang:1, link-name:1) tab=9 sin_foco=0 sin_label=[] lang=''
+nuevo_propietario              violaciones=3 (color-contrast:3, html-has-lang:1, link-name:1) tab=11 sin_foco=0 sin_label=[] lang=''
+nuevo_propietario_con_errores  violaciones=3 (color-contrast:3, html-has-lang:1, link-name:1) tab=11 sin_foco=0 sin_label=[] lang=''
+nueva_mascota                  violaciones=3 (color-contrast:3, html-has-lang:1, link-name:1) tab=12 sin_foco=1 sin_label=[] lang=''
+nueva_visita                   violaciones=3 (color-contrast:3, html-has-lang:1, link-name:1) tab=11 sin_foco=1 sin_label=[] lang=''
+veterinarios                   violaciones=3 (color-contrast:3, html-has-lang:1, link-name:1) tab=6 sin_foco=0 sin_label=[] lang=''
+error                          violaciones=4 (color-contrast:3, html-has-lang:1, image-alt:1, link-name:1) tab=5 sin_foco=0 sin_label=[] lang=''
+flujo teclado: {'exito': False, 'url_final': '/owners/new'}

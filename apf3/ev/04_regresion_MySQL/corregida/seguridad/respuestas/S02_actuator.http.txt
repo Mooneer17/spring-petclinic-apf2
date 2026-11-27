@@ -1,0 +1,15 @@
+GET http://localhost:8082/actuator
+
+HTTP 200
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Security-Policy: default-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+Referrer-Policy: strict-origin-when-cross-origin
+Cache-Control: no-cache
+Content-Type: application/vnd.spring-boot.actuator.v3+json
+Content-Length: 315
+Date: Thu, 26 Nov 2026 21:50:19 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+
+{"_links":{"self":{"href":"http://localhost:8082/actuator","templated":false},"info":{"href":"http://localhost:8082/actuator/info","templated":false},"health":{"href":"http://localhost:8082/actuator/health","templated":false},"health-path":{"href":"http://localhost:8082/actuator/health/{*path}","templated":true}}}

@@ -1,0 +1,17 @@
+POST http://localhost:8082/owners/new
+BODY: firstName=Ana&lastName=FaIBLPD&address=Av.+Central+123&city=Lima&telephone=9876543210
+
+HTTP 302
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Security-Policy: default-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+Referrer-Policy: strict-origin-when-cross-origin
+Cache-Control: no-cache
+Set-Cookie: JSESSIONID=F82AAFC1CA3BA154254F81A9C8EC3F5D; Path=/; HttpOnly
+Location: http://localhost:8082/owners/11
+Content-Language: en
+Content-Length: 0
+Date: Thu, 26 Nov 2026 21:50:14 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+

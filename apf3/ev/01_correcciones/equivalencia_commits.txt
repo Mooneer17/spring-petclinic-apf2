@@ -1,0 +1,13 @@
+Equivalencia entre los commits de la copia local de trabajo (usados al generar las evidencias)
+y los commits publicados en GitHub (rama correcciones-apf3 de Mooneer17/spring-petclinic-apf2).
+El contenido de proyecto/ es identico; cambian los identificadores porque el repositorio publicado
+guarda el codigo dentro de la carpeta proyecto/ junto con la documentacion.
+
+Local     GitHub    Mensaje
+8ecb2ec   5f76e05   Base: Spring Petclinic 500158f con las pruebas del APF2 (rama main)
+5ece9b7   f29532e   DEF-P01 y OBS-02
+df7eeea   9a7a344   DEF-P02 y DEF-P03
+b2e4b91   d354bd2   SEC-01, SEC-03 y SEC-04
+2847021   4061dd6   REG-01 (SEC-03)
+168453f   aea22f6   A11Y-01 a A11Y-05
+c6ba298   (aea22f6) Version usada en la ronda 2; difiere de 168453f solo en tres comentarios

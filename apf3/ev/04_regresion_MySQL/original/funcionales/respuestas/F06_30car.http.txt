@@ -1,0 +1,11 @@
+POST http://localhost:8081/owners/new
+BODY: firstName=Ana&lastName=AAAAAAAAAAAAAAAAAAAAAAAAADBLPD&address=Av.+Central+123&city=Lima&telephone=9876543210
+
+HTTP 302
+Location: http://localhost:8081/owners/12
+Content-Language: en
+Content-Length: 0
+Date: Thu, 26 Nov 2026 21:50:09 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+

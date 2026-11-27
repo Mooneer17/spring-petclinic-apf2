@@ -1,0 +1,17 @@
+POST http://localhost:8082/owners/new
+BODY: firstName=Ana&lastName=SnWWMPD&address=Av.+Central+123&city=Lima&telephone=9876543210
+
+HTTP 302
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Security-Policy: default-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+Referrer-Policy: strict-origin-when-cross-origin
+Cache-Control: no-cache
+Set-Cookie: JSESSIONID=CE9329A5E07E2F849A8E81E6A9DE3B9C; Path=/; HttpOnly
+Location: http://localhost:8082/owners/112
+Content-Language: en
+Content-Length: 0
+Date: Thu, 26 Nov 2026 22:10:51 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+

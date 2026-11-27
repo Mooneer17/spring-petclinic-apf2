@@ -1,0 +1,142 @@
+From 5ece9b78ee47fbccdc611f2c1d86321cb60d8dec Mon Sep 17 00:00:00 2001
+From: Mooneer17 <Mooneer17@users.noreply.github.com>
+Date: Thu, 26 Nov 2026 16:38:55 -0500
+Subject: [PATCH 1/5] DEF-P01 y OBS-02: responder 404 cuando el propietario o
+ la mascota no existen o no corresponden
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Antes, editar la mascota de otro propietario (S08) producía una NullPointerException (HTTP 500), y un propietario o una mascota inexistentes (S07, S09) respondían HTTP 500. Ahora responden HTTP 404 sin traza.
+---
+ .../petclinic/owner/OwnerController.java        | 12 +++++++-----
+ .../samples/petclinic/owner/PetController.java  | 17 ++++++++++++++---
+ .../petclinic/owner/VisitController.java        |  8 ++++++--
+ 3 files changed, 27 insertions(+), 10 deletions(-)
+
+diff --git a/src/main/java/org/springframework/samples/petclinic/owner/OwnerController.java b/src/main/java/org/springframework/samples/petclinic/owner/OwnerController.java
+index e5edf5b..ea4a7c1 100644
+--- a/src/main/java/org/springframework/samples/petclinic/owner/OwnerController.java
++++ b/src/main/java/org/springframework/samples/petclinic/owner/OwnerController.java
+@@ -22,10 +22,12 @@ import java.util.Optional;
+ import org.springframework.data.domain.Page;
+ import org.springframework.data.domain.PageRequest;
+ import org.springframework.data.domain.Pageable;
++import org.springframework.http.HttpStatus;
+ import org.springframework.stereotype.Controller;
+ import org.springframework.ui.Model;
+ import org.springframework.validation.BindingResult;
+ import org.springframework.web.bind.WebDataBinder;
++import org.springframework.web.server.ResponseStatusException;
+ import org.springframework.web.bind.annotation.GetMapping;
+ import org.springframework.web.bind.annotation.InitBinder;
+ import org.springframework.web.bind.annotation.ModelAttribute;
+@@ -63,10 +65,9 @@ class OwnerController {
+ 
+ 	@ModelAttribute("owner")
+ 	public Owner findOwner(@PathVariable(name = "ownerId", required = false) Integer ownerId) {
+-		return ownerId == null ? new Owner()
+-				: this.owners.findById(ownerId)
+-					.orElseThrow(() -> new IllegalArgumentException("Owner not found with id: " + ownerId
+-							+ ". Please ensure the ID is correct " + "and the owner exists in the database."));
++		return ownerId == null ? new Owner() : this.owners.findById(ownerId)
++			.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner not found with id: " + ownerId
++					+ ". Please ensure the ID is correct " + "and the owner exists in the database."));
+ 	}
+ 
+ 	@GetMapping("/owners/new")
+@@ -179,7 +180,8 @@ class OwnerController {
+ 	public ModelAndView showOwner(@PathVariable("ownerId") int ownerId) {
+ 		ModelAndView mav = new ModelAndView("owners/ownerDetails");
+ 		Optional<Owner> optionalOwner = this.owners.findById(ownerId);
+-		Owner owner = optionalOwner.orElseThrow(() -> new IllegalArgumentException(
++		Owner owner = optionalOwner.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
++
+ 				"Owner not found with id: " + ownerId + ". Please ensure the ID is correct "));
+ 		mav.addObject(owner);
+ 		return mav;
+diff --git a/src/main/java/org/springframework/samples/petclinic/owner/PetController.java b/src/main/java/org/springframework/samples/petclinic/owner/PetController.java
+index 845c116..896d47f 100644
+--- a/src/main/java/org/springframework/samples/petclinic/owner/PetController.java
++++ b/src/main/java/org/springframework/samples/petclinic/owner/PetController.java
+@@ -21,12 +21,14 @@ import java.util.Objects;
+ import java.util.Optional;
+ 
+ import org.springframework.dao.DataIntegrityViolationException;
++import org.springframework.http.HttpStatus;
+ import org.springframework.stereotype.Controller;
+ import org.springframework.ui.ModelMap;
+ import org.springframework.util.Assert;
+ import org.springframework.util.StringUtils;
+ import org.springframework.validation.BindingResult;
+ import org.springframework.web.bind.WebDataBinder;
++import org.springframework.web.server.ResponseStatusException;
+ import org.springframework.web.bind.annotation.GetMapping;
+ import org.springframework.web.bind.annotation.InitBinder;
+ import org.springframework.web.bind.annotation.ModelAttribute;
+@@ -67,7 +69,8 @@ class PetController {
+ 	@ModelAttribute("owner")
+ 	public Owner findOwner(@PathVariable("ownerId") int ownerId) {
+ 		Optional<Owner> optionalOwner = this.owners.findById(ownerId);
+-		Owner owner = optionalOwner.orElseThrow(() -> new IllegalArgumentException(
++		Owner owner = optionalOwner.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
++
+ 				"Owner not found with id: " + ownerId + ". Please ensure the ID is correct "));
+ 		return owner;
+ 	}
+@@ -81,9 +84,17 @@ class PetController {
+ 		}
+ 
+ 		Optional<Owner> optionalOwner = this.owners.findById(ownerId);
+-		Owner owner = optionalOwner.orElseThrow(() -> new IllegalArgumentException(
++		Owner owner = optionalOwner.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
++
+ 				"Owner not found with id: " + ownerId + ". Please ensure the ID is correct "));
+-		return owner.getPet(petId);
++		Pet pet = owner.getPet(petId);
++		if (pet == null) {
++			// DEF-P01: la mascota no pertenece a este propietario; antes producía HTTP
++			// 500
++			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
++					"Pet with id " + petId + " not found for owner with id " + ownerId + ".");
++		}
++		return pet;
+ 	}
+ 
+ 	@InitBinder("owner")
+diff --git a/src/main/java/org/springframework/samples/petclinic/owner/VisitController.java b/src/main/java/org/springframework/samples/petclinic/owner/VisitController.java
+index b8b2700..cb8a9d8 100644
+--- a/src/main/java/org/springframework/samples/petclinic/owner/VisitController.java
++++ b/src/main/java/org/springframework/samples/petclinic/owner/VisitController.java
+@@ -19,9 +19,11 @@ import java.time.LocalDate;
+ import java.util.Map;
+ import java.util.Optional;
+ 
++import org.springframework.http.HttpStatus;
+ import org.springframework.stereotype.Controller;
+ import org.springframework.validation.BindingResult;
+ import org.springframework.web.bind.WebDataBinder;
++import org.springframework.web.server.ResponseStatusException;
+ import org.springframework.web.bind.annotation.GetMapping;
+ import org.springframework.web.bind.annotation.InitBinder;
+ import org.springframework.web.bind.annotation.ModelAttribute;
+@@ -64,12 +66,14 @@ class VisitController {
+ 	public Visit loadPetWithVisit(@PathVariable("ownerId") int ownerId, @PathVariable("petId") int petId,
+ 			Map<String, Object> model) {
+ 		Optional<Owner> optionalOwner = owners.findById(ownerId);
+-		Owner owner = optionalOwner.orElseThrow(() -> new IllegalArgumentException(
++		Owner owner = optionalOwner.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
++
+ 				"Owner not found with id: " + ownerId + ". Please ensure the ID is correct "));
+ 
+ 		Pet pet = owner.getPet(petId);
+ 		if (pet == null) {
+-			throw new IllegalArgumentException(
++			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
++
+ 					"Pet with id " + petId + " not found for owner with id " + ownerId + ".");
+ 		}
+ 		model.put("pet", pet);
+-- 
+2.43.0
+

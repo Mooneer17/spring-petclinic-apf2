@@ -1,0 +1,8 @@
+$ curl -sI http://localhost:8081/
+HTTP/1.1 200 
+Content-Type: text/html;charset=UTF-8
+Content-Language: en
+Date: Thu, 26 Nov 2026 23:04:06 GMT
+
+$ curl -s -o /dev/null -D - -X POST http://localhost:8081/owners/new --data-urlencode firstName=Ana ... telephone=9876543210 | grep -i location
+Location: http://localhost:8081/owners/11;jsessionid=C12DE7932C8193E4197B50FB173424CA
